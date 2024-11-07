@@ -1,0 +1,25 @@
+geomesa: {
+  converters: {
+  "flightpoint-data" = {
+      type   = "delimited-text",
+      format = "CSV",
+      options = {
+        skip-lines = 1
+        delimiter  = ","
+      }
+      id-field = "uuid()",  
+      fields = [
+        { name = "flightId",  transform = "$1::int"  }  
+        { name = "timestamp",  transform = "isoLocalDateTime($2)" }  
+        { name = "airplaneType",   transform = "emptyToNull($3)"  }  
+        { name = "origin",  transform = "emptyToNull($4)"  }  
+        { name = "destination",  transform = "emptyToNull($5)"  }  
+        { name = "track",  transform = "emptyToNull($6)"  }
+        { name = "latitude",  transform = "$7::double"  }
+        { name = "longitude",  transform = "$8::double"  }  
+        { name = "altitude",  transform = "$9::double"  } 
+        { name = "geom",       transform = "point($longitude, $latitude)" } 
+      ]
+      }
+  }
+}

@@ -1,0 +1,9 @@
+# Exclude data
+data/
+
+# Exclude .terraform directories
+.terraform/
+
+# Exclude all terraform state files
+terraform.tfstate
+terraform.tfstate.backup

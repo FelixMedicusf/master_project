@@ -1,0 +1,29 @@
+geomesa: {
+  converters: {
+  "flightpoint-data" = {
+      type   = "delimited-text",
+      format = "CSV",
+      options = {
+        skip-lines = 1
+        delimiter  = ","
+      }
+      id-field = "uuid()",  
+      fields = [
+        { name = "timestamp",  transform = "isoLocalDateTime($1)"  }  
+        { name = "icao",       transform = "emptyToNull($2)"  }  
+        { name = "latitude",   transform = "$3::double"  }  
+        { name = "longitude",  transform = "$4::double"  }  
+        { name = "geom",       transform = "point($longitude, $latitude)" }  
+        { name = "velocity",   transform = "$5::double"  }  
+        { name = "heading",    transform = "$6::double"  }
+        { name = "vertrate",   transform = "$7::double"  } 
+        { name = "callsign",   transform = "emptyToNull($8)"  }
+        { name = "onground",   transform = "$9::boolean"  }  
+        { name = "alert",      transform = "$10::boolean"  }  
+        { name = "spi",        transform = "$11::boolean"  }
+        { name = "squawk",     transform = "$12::int"  } 
+        { name = "altitude",   transform = "$13::double"  }  
+      ]
+      }
+  }
+}
