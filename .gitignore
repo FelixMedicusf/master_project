@@ -7,3 +7,14 @@ data/
 # Exclude all terraform state files
 terraform.tfstate
 terraform.tfstate.backup
+
+.terraform.lock.hcl
+
+.idea/
+.gradle/
+build/
+
+*.iml
+*.log
+*.class
+out/
