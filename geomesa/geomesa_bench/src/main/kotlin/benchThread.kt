@@ -1,0 +1,4 @@
+package geomesa
+
+class benchThread {
+}

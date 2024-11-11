@@ -1,3 +1,5 @@
+package EuroControlData
+
 import java.sql.DriverManager
 
 val distributedDatabase = true
