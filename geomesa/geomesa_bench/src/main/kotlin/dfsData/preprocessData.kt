@@ -11,8 +11,8 @@ import java.time.format.DateTimeFormatter
 fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
 
 
-    val inputDirectory = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData"
-    val outputCsvFile = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightPointsGeomesa.csv"
+    val inputDirectory = "../../data/dfsData"
+    val outputCsvFile = "../../data/dfsData/output/FlightPointsGeomesa.csv"
 
     val directory = File(inputDirectory)
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
@@ -31,6 +31,7 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
     var trackEndDay: LocalDate?
     var trackEndTime: LocalTime?
     var endDateTime: LocalDateTime? = null
+    var flightTimestamps: MutableList<String> = mutableListOf("")
 
     var counter = 0
     if (directory.exists() && directory.isDirectory) {
@@ -40,7 +41,7 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
         val writer = CSVWriter(FileWriter(outputCsvFile))
         val header = "flightId,timestamp,airplaneType,originAirport,destinationAirport,track,latitude,longitude,altitude"
         writer.writeNext(header.split(",").toTypedArray())
-        //expFiles?.forEach { currentExpFile ->
+
         for (currentExpFile in expFiles){
             if(counter==totalNumberRows)break
             println("Processing file: ${currentExpFile.name}")
@@ -63,6 +64,9 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                         try {
 
                             if (record.size > 4) {
+
+                                if (flightId!=record[0])flightTimestamps.clear()
+
                                 flightId = record[0]
                                 airplaneType = record[1]
                                 originAirport = record[2]
@@ -77,7 +81,9 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 endDateTime = LocalDateTime.of(trackEndDay, trackEndTime)
 
                                 var numberTrackPoints = record[10]
-                                metaData = true
+
+                                metaData = !record.any { entry -> entry.isEmpty() }
+
 
                             } else {
 
@@ -90,7 +96,8 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 val writeRecord = arrayOfNulls<String>(9)
 
                                 writeRecord[0] = flightId
-                                writeRecord[1] = startDateTime?.plusSeconds(seconds.toDouble().toLong())?.format(formatter)
+                                var actualTime = startDateTime?.plusSeconds(seconds.toDouble().toLong())?.format(formatter)
+                                writeRecord[1] = actualTime
                                 writeRecord[2] = airplaneType
                                 writeRecord[3] = originAirport
                                 writeRecord[4] = destinationAirport
@@ -99,9 +106,13 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 writeRecord[7] = degreePos.longitude.toString()
                                 writeRecord[8] = altitude
 
-                                if (metaData) {
+                                if (metaData && record.none { entry -> entry.isEmpty() } && !flightTimestamps.contains(actualTime)) {
                                     writer.writeNext(writeRecord)
                                     counter++
+                                }
+
+                                if (actualTime != null) {
+                                    flightTimestamps.add(actualTime)
                                 }
                             }
                         }catch (e: Exception){
@@ -126,15 +137,17 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
     }
 }
 
-fun createFlightTripsGeomesa() {
-    val inputPath = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightPointsGeomesa.csv"
-    val outputCsvFile = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightTripsGeomesa.csv"
+fun createFlightTripsGeomesa(splitTracks: Boolean = false) {
+    val inputPath = "../../data/dfsData/output/FlightPointsGeomesa.csv"
+    val outputCsvFile = "../../data/dfsData/output/FlightTripsGeomesa.csv"
 
     val inputFile = File(inputPath)
 
     val writeRecord = arrayOfNulls<String>(7)
     var sameFlight: Boolean
+    var sameTrack = true
     var firstEntry = true
+
 
     if (inputFile.exists() && inputFile.isFile) {
 
@@ -162,6 +175,7 @@ fun createFlightTripsGeomesa() {
                     var airplaneType = record[2]
                     var origin = record[3]
                     var destination = record[4]
+                    var track = record[5]
                     var latitude = record[6]
                     var longitude = record[7]
                     var altitude = record[8]
@@ -173,13 +187,19 @@ fun createFlightTripsGeomesa() {
                         writeRecord[2] = origin
                         writeRecord[3] = destination
                         writeRecord[4] = timestamp
-                        writeRecord[5] = "MULTIPOINT(($latitude $longitude)"
+                        writeRecord[5] = "MULTILINESTRING(($longitude $latitude"
                         writeRecord[6] = altitude
                         firstEntry=false
 
                     }else{
                         writeRecord[4] = writeRecord[4] + ",$timestamp"
-                        writeRecord[5] = writeRecord[5] + ", ($latitude $longitude)"
+
+                        if (splitTracks) {
+                            if (sameTrack) writeRecord[5] = writeRecord[5] + ", $longitude $latitude" else writeRecord[5] = writeRecord[5] + "), ($longitude $latitude"
+                        }
+                        else writeRecord[5] = writeRecord[5] + ", $longitude $latitude"
+
+
                         writeRecord[6] = writeRecord[6] + ",$altitude"
 
                     }
@@ -190,12 +210,15 @@ fun createFlightTripsGeomesa() {
                     if (record == null)break
 
                     var nextFlightId = record[0]
+                    var nextTrack = record[5]
 
 
                     sameFlight=flightId==nextFlightId
+                    sameTrack=track==nextTrack
+
 
                     if(!sameFlight){
-                        writeRecord[5] = writeRecord[5] + ")"
+                        writeRecord[5] = writeRecord[5] + "))"
                         rows ++
                         writer.writeNext(writeRecord)
                         firstEntry=true
@@ -227,5 +250,5 @@ fun main(){
     createFlightPointsGeomesa(10_000_000)
 
     // creates trips for flights of all flight points
-    createFlightTripsGeomesa()
+    createFlightTripsGeomesa(true)
 }

@@ -8,14 +8,14 @@ import java.io.FileWriter
 import java.time.*
 import java.time.format.DateTimeFormatter
 
-fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
+fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
 
 
-    val inputDirectory = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData"
-    val outputCsvFile = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightPointsGeomesa.csv"
+    val inputDirectory = "../../data/dfsData"
+    val outputCsvFile = "../../data/dfsData/output/FlightPointsMobilityDB.csv"
 
     val directory = File(inputDirectory)
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
     var metaData = false
 
     val utmZone = 32
@@ -31,16 +31,18 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
     var trackEndDay: LocalDate?
     var trackEndTime: LocalTime?
     var endDateTime: LocalDateTime? = null
+    var flightTimestamps: MutableList<String> = mutableListOf("")
 
     var counter = 0
     if (directory.exists() && directory.isDirectory) {
+
 
         val expFiles = directory.listFiles { file -> file.extension == "exp" }
 
         val writer = CSVWriter(FileWriter(outputCsvFile))
         val header = "flightId,timestamp,airplaneType,originAirport,destinationAirport,track,latitude,longitude,altitude"
         writer.writeNext(header.split(",").toTypedArray())
-        //expFiles?.forEach { currentExpFile ->
+
         for (currentExpFile in expFiles){
             if(counter==totalNumberRows)break
             println("Processing file: ${currentExpFile.name}")
@@ -63,6 +65,9 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                         try {
 
                             if (record.size > 4) {
+
+                                if (flightId!=record[0])flightTimestamps.clear()
+
                                 flightId = record[0]
                                 airplaneType = record[1]
                                 originAirport = record[2]
@@ -77,7 +82,9 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 endDateTime = LocalDateTime.of(trackEndDay, trackEndTime)
 
                                 var numberTrackPoints = record[10]
-                                metaData = true
+
+                                metaData = !record.any { entry -> entry.isEmpty() }
+
 
                             } else {
 
@@ -90,7 +97,8 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 val writeRecord = arrayOfNulls<String>(9)
 
                                 writeRecord[0] = flightId
-                                writeRecord[1] = startDateTime?.plusSeconds(seconds.toDouble().toLong())?.format(formatter)
+                                var actualTime = startDateTime?.plusSeconds(seconds.toDouble().toLong())?.format(formatter)
+                                writeRecord[1] = actualTime
                                 writeRecord[2] = airplaneType
                                 writeRecord[3] = originAirport
                                 writeRecord[4] = destinationAirport
@@ -99,9 +107,13 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
                                 writeRecord[7] = degreePos.longitude.toString()
                                 writeRecord[8] = altitude
 
-                                if (metaData) {
+                                if (metaData && record.none { entry -> entry.isEmpty() } && !flightTimestamps.contains(actualTime)) {
                                     writer.writeNext(writeRecord)
                                     counter++
+                                }
+
+                                if (actualTime != null) {
+                                    flightTimestamps.add(actualTime)
                                 }
                             }
                         }catch (e: Exception){
@@ -126,106 +138,12 @@ fun createFlightPointsGeomesa(totalNumberRows: Int = -1) {
     }
 }
 
-fun createFlightTripsGeomesa() {
-    val inputPath = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightPointsGeomesa.csv"
-    val outputCsvFile = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\data\\dfsData\\output\\FlightTripsGeomesa.csv"
-
-    val inputFile = File(inputPath)
-
-    val writeRecord = arrayOfNulls<String>(7)
-    var sameFlight: Boolean
-    var firstEntry = true
-
-    if (inputFile.exists() && inputFile.isFile) {
-
-        val writer = CSVWriter(FileWriter(outputCsvFile), ';', CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.DEFAULT_ESCAPE_CHARACTER, CSVWriter.DEFAULT_LINE_END)
-        val header = "flightId,airplaneType,originAirport,destinationAirport,timestamps,geoms,altitudes"
-        writer.writeNext(header.split(",").toTypedArray())
-
-        println("Processing file ${inputFile.name} to create Flight Trips.")
-
-        val reader = CSVReader(FileReader(inputFile))
-
-        var rows = 0
-        val inputHeader = reader.readNext()
-
-        try {
-
-            var record: Array<String>? = reader.readNext()
-
-            while (record != null) {
-
-                try {
-
-                    var flightId = record[0]
-                    var timestamp = record[1]
-                    var airplaneType = record[2]
-                    var origin = record[3]
-                    var destination = record[4]
-                    var latitude = record[6]
-                    var longitude = record[7]
-                    var altitude = record[8]
-
-                    if (firstEntry) {
-
-                        writeRecord[0] = flightId
-                        writeRecord[1] = airplaneType
-                        writeRecord[2] = origin
-                        writeRecord[3] = destination
-                        writeRecord[4] = timestamp
-                        writeRecord[5] = "MULTIPOINT(($latitude $longitude)"
-                        writeRecord[6] = altitude
-                        firstEntry=false
-
-                    }else{
-                        writeRecord[4] = writeRecord[4] + ",$timestamp"
-                        writeRecord[5] = writeRecord[5] + ", ($latitude $longitude)"
-                        writeRecord[6] = writeRecord[6] + ",$altitude"
-
-                    }
-
-                    record = reader.readNext()
-
-                    //if (row==300)break
-                    if (record == null)break
-
-                    var nextFlightId = record[0]
-
-
-                    sameFlight=flightId==nextFlightId
-
-                    if(!sameFlight){
-                        writeRecord[5] = writeRecord[5] + ")"
-                        rows ++
-                        writer.writeNext(writeRecord)
-                        firstEntry=true
-                    } else {
-                        firstEntry=false
-                    }
-
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-
-        } finally {
-            println("Number of Rows in trip dataset: $rows.")
-            reader.close()
-        }
-
-        writer.close()
-
-    } else {
-        println("File does not exist or is not a directory")
-    }
-
-}
 
 fun main(){
 
     // specify as parameter total number of rows the flightpoint data should contain. If all rows of the files should be included omit the parameter
-    createFlightPointsGeomesa(10_000_000)
+    createFlightPointsMobilityDB(10_000_000)
 
     // creates trips for flights of all flight points
-    createFlightTripsGeomesa()
+    // createFlightTripsGeomesa()
 }

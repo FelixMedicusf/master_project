@@ -5,7 +5,7 @@ resource "google_compute_address" "static_ip" {
 
 resource "google_compute_instance" "mobilitydb" {
   name = var.instance-name
-  machine_type = "c2d-standard-4"
+  machine_type = "e2-standard-2"
   zone = var.zone
   tags = ["allow-traffic", "allow-ssh"]
 

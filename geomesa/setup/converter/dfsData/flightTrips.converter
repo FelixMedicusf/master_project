@@ -14,7 +14,7 @@ geomesa: {
         { name = "origin",  transform = "emptyToNull($3)"  }  
         { name = "destination",  transform = "emptyToNull($4)"  }  
         { name = "timestamp",  transform = "parseList('Date', $5)"  }  
-        { name = "trip",  transform = "multipoint($6)"  }
+        { name = "trip",  transform = "multilinestring($6)"  }
         { name = "altitude",  transform = "parseList('double', $7)"  }  
       ]
       }

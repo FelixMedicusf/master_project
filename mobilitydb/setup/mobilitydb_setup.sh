@@ -38,7 +38,9 @@ citus.max_parallel_workers_per_query = 4
 citus.task_scheduler_slots = 8
 "
 
-google_drive_resource_id="1Gnu3-dA4877iGZeU6-Yjhl5v5mS1lu-3"
+flight_data_resource_id="1REu74vRj6tsoPKO7J7bfOEjjdaWEY4Dm"
+city_data_resource_id="1Zbd5fgokx1l5glAbMgJ0jRhBDEazBBvK"
+
 
 user="felix"
 user_password="master"
@@ -57,7 +59,7 @@ instanceGroupName=${name:-mobilitydb-node}
 declare -a ipAdresses
 
 # Loop through all deployed nodes to provision them Postgresql instances
-for (( i=1; i <= $nodeNumber; ++i ))
+for (( i=1; i <= nodeNumber; ++i ))
 do 
 firstInstanceName="${instanceGroupName}-1"
 currentInstanceName="${instanceGroupName}-$i"
@@ -78,21 +80,22 @@ firstInstanceName=$currentInstanceName
 fi
 
 # Install PostgreSQL
-gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt install gnupg2 && sudo sh -c 'echo \"deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main\" > /etc/apt/sources.list.d/pgdg.list'"
+gcloud compute ssh $currentInstanceName --zone $zone -- \
+  "sudo apt install -y gnupg2 && \
+   sudo sh -c 'echo \"deb http://apt.postgresql.org/pub/repos/apt/ \$(lsb_release -cs)-pgdg main\" > /etc/apt/sources.list.d/pgdg.list'"
+
 gcloud compute ssh $currentInstanceName --zone $zone -- "curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && sudo apt update"
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt install -y postgresql-$pg_version postgresql-contrib-$pg_version"
 
 # configuring the postgresql database to allow external connections
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo sed -i \"s/#listen_addresses = 'localhost'/listen_addresses = '*'/g\" $pg_config_file"
 
-
 # PostGIS installation
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt install -y postgresql-$pg_version-postgis-3"
 
 # MobilityDB Installation 
 gcloud compute ssh $currentInstanceName --zone $zone -- "git clone https://github.com/MobilityDB/MobilityDB"
-gcloud compute ssh $currentInstanceName --zone $zone -- "mkdir MobilityDB/build && cd MobilityDB/build"
-gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt install -y cmake && sudo apt install -y g++"
+gcloud compute ssh $currentInstanceName --zone $zone -- "mkdir MobilityDB/build && cd MobilityDB/build && sudo apt install -y cmake && sudo apt install -y g++"
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt install -y libgeos-dev && sudo apt install -y libproj-dev && sudo apt install -y libjson-c-dev && sudo apt install -y libgsl-dev && sudo apt install -y libpq-dev"
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt-get -y install postgresql-server-dev-$pg_version"
 gcloud compute ssh $currentInstanceName --zone $zone -- "cd MobilityDB/build || true && cmake .. && make && sudo make install"
@@ -138,7 +141,7 @@ fi
 
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo sed -i '\$a\host    all             all             0.0.0.0/0               md5' $pg_hba_file"
 
-gcloud compute ssh $currentInstanceName --zone $zone -- "sudo sysctl -w kernel.shmmax=2147483648 && sudo sysctl -w kernel.shmall=524288 && sudo ulimit -n 10000"
+gcloud compute ssh $currentInstanceName --zone $zone -- "sudo sysctl -w kernel.shmmax=2147483648 && sudo sysctl -w kernel.shmall=524288"
 gcloud compute ssh $currentInstanceName --zone $zone -- "echo \"$CONFIG\" | sudo tee -a $pg_config_file"
 
 
@@ -146,7 +149,7 @@ gcloud compute ssh $currentInstanceName --zone $zone -- "sudo systemctl restart 
 
 echo "Started mobiltyDB node (${i}) in ${currentInstanceName}"
 
-ipAdresses[$i]=$nodeInternalIp
+ipAdresses[i]=$nodeInternalIp
 
 done
 
@@ -168,8 +171,7 @@ fi
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y python3-pip && pip install gdown"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && cd $HOME && $HOME/.local/bin/gdown $google_drive_resource_id"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv && ~/.local/bin/gdown $city_data_resource_id && sudo mv /home/felix/nrw_cities.csv /tmp/nrw_cities.csv"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo chmod 777 $HOME && sudo chmod 777 $HOME/FlightData.csv"
 
 

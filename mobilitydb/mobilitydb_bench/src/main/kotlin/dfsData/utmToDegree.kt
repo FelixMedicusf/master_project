@@ -9,14 +9,14 @@ class utmToDegree(UTM: String) {
 
     init {
         val parts = UTM.split(" ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        val Zone = parts[0].toInt()
-        val Letter = parts[1].uppercase()[0]
-        val Easting = parts[2].toDouble()
-        val Northing = parts[3].toDouble()
-        val Hem: Double
-        Hem = if (Letter > 'M') 'N'.code.toDouble() else 'S'.code.toDouble()
+        val zone = parts[0].toInt()
+        val letter = parts[1].uppercase()[0]
+        val easting = parts[2].toDouble()
+        val northing = parts[3].toDouble()
+        val hemisphere: Double
+        hemisphere = if (letter > 'M') 'N'.code.toDouble() else 'S'.code.toDouble()
         val north: Double
-        north = if (Hem == 'S'.code.toDouble()) Northing - 10000000 else Northing
+        north = if (hemisphere == 'S'.code.toDouble()) northing - 10000000 else northing
         latitude =
             (north / 6366197.724 / 0.9996 + (1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0) - 0.006739496742 * sin(
                 north / 6366197.724 / 0.9996
@@ -24,17 +24,17 @@ class utmToDegree(UTM: String) {
                 cos(
                     atan(
                         (exp(
-                            (Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            (easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
                             ))).pow(2.0) / 2 * cos(north / 6366197.724 / 0.9996).pow(2.0) / 3)
                         ) - exp(
-                            -(Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            -(easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
@@ -52,7 +52,7 @@ class utmToDegree(UTM: String) {
                                 2 * north / 6366197.724 / 0.9996
                             ) * cos(north / 6366197.724 / 0.9996).pow(2.0) * cos(north / 6366197.724 / 0.9996).pow(2.0)) / 3)) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
@@ -72,7 +72,7 @@ class utmToDegree(UTM: String) {
                         2 * north / 6366197.724 / 0.9996
                     ) * cos(north / 6366197.724 / 0.9996).pow(2.0) * cos(north / 6366197.724 / 0.9996).pow(2.0)) / 3)) / (0.9996 * 6399593.625 / sqrt(
                         1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                    )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                    )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                         1 + 0.006739496742 * cos(
                             north / 6366197.724 / 0.9996
                         ).pow(2.0)
@@ -82,17 +82,17 @@ class utmToDegree(UTM: String) {
                 cos(
                     atan(
                         (exp(
-                            (Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            (easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
                             ))).pow(2.0) / 2 * cos(north / 6366197.724 / 0.9996).pow(2.0) / 3)
                         ) - exp(
-                            -(Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            -(easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
@@ -110,7 +110,7 @@ class utmToDegree(UTM: String) {
                                 2 * north / 6366197.724 / 0.9996
                             ) * cos(north / 6366197.724 / 0.9996).pow(2.0) * cos(north / 6366197.724 / 0.9996).pow(2.0)) / 3)) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                            )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                            )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                                 1 + 0.006739496742 * cos(
                                     north / 6366197.724 / 0.9996
                                 ).pow(2.0)
@@ -130,7 +130,7 @@ class utmToDegree(UTM: String) {
                         2 * north / 6366197.724 / 0.9996
                     ) * cos(north / 6366197.724 / 0.9996).pow(2.0) * cos(north / 6366197.724 / 0.9996).pow(2.0)) / 3)) / (0.9996 * 6399593.625 / sqrt(
                         1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                    )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                    )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                         1 + 0.006739496742 * cos(
                             north / 6366197.724 / 0.9996
                         ).pow(2.0)
@@ -141,17 +141,17 @@ class utmToDegree(UTM: String) {
         latitude = latitude / 10000000
         longitude = atan(
             (exp(
-                (Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                (easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(
                         2.0
                     )
-                )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
                 ))).pow(2.0) / 2 * cos(north / 6366197.724 / 0.9996).pow(2.0) / 3)
             ) - exp(
-                -(Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                -(easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(
                         north / 6366197.724 / 0.9996
                     ).pow(2.0)
@@ -169,13 +169,13 @@ class utmToDegree(UTM: String) {
                     2 * north / 6366197.724 / 0.9996
                 ) * cos(north / 6366197.724 / 0.9996).pow(2.0) * cos(north / 6366197.724 / 0.9996).pow(2.0)) / 3)) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(north / 6366197.724 / 0.9996).pow(2.0)
-                )) * (1 - 0.006739496742 * ((Easting - 500000) / (0.9996 * 6399593.625 / sqrt(
+                )) * (1 - 0.006739496742 * ((easting - 500000) / (0.9996 * 6399593.625 / sqrt(
                     1 + 0.006739496742 * cos(
                         north / 6366197.724 / 0.9996
                     ).pow(2.0)
                 ))).pow(2.0) / 2 * cos(north / 6366197.724 / 0.9996).pow(2.0)) + north / 6366197.724 / 0.9996
             )
-        ) * 180 / Math.PI + Zone * 6 - 183
+        ) * 180 / Math.PI + zone * 6 - 183
         longitude = Math.round(longitude * 10000000).toDouble()
         longitude = longitude / 10000000
     }
