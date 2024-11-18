@@ -1,9 +1,10 @@
 package dfsData
 import java.sql.DriverManager
+import java.sql.Statement
 
 val distributedDatabase = true
 
-val mobilityDBIp = "34.38.153.212"
+val mobilityDBIp = "34.38.56.113"
 
 val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/aviation_data"
 val user = "felix"
@@ -16,7 +17,7 @@ val statement = connection.createStatement()
 fun main(){
     insertFlightPoints()
     createTrajectories()
-    insertCities()
+    insertStateData()
 }
 // val header = "flightId,timestamp,airplaneType,originAirport,destinationAirport,track,latitude,longitude,altitude"
 
@@ -35,7 +36,7 @@ fun insertFlightPoints(){
                 latitude float,
                 longitude float,
                 altitude float,
-                Geom geometry(Point, 4326)
+                Geom geometry(Point, 25832)
         )
         """.trimIndent()
 
@@ -100,7 +101,7 @@ fun insertFlightPoints(){
 
     try {
         val updateGeoms = """
-            UPDATE flightPoints SET Geom = ST_SetSRID( ST_MakePoint( longitude, latitude ), 4326);
+            SET Geom = ST_Transform(ST_SetSRID(ST_MakePoint(longitude, latitude), 4326), 25832);
         """.trimIndent()
 
         println("Updating database to hold geometry points made of latitude and longitude.")
@@ -123,7 +124,7 @@ fun createTrajectories () {
             destination,
             ttextSeq(array_agg(ttext(track, timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL)),
             tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL)),
-            tgeompointSeq(array_agg(tgeompoint( ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL))
+            tgeompointSeq(array_agg(tgeompoint( ST_Transform(Geom, 25832), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL))
             FROM flightPoints 
             GROUP BY flightId, airplaneType, origin, destination;
         """.trimIndent()
@@ -139,11 +140,11 @@ fun createTrajectories () {
 
     try {
         val alterTableflights = """
-            ALTER TABLE flights ADD COLUMN Traj geometry;
+            ALTER TABLE flights ADD COLUMN traj geometry;
         """.trimIndent()
 
         val alterTraj = """
-            UPDATE flights SET Traj = trajectory(trip);
+            UPDATE flights SET traj = trajectory(trip);
         """.trimIndent()
 
         println("Create column for trajectories in flights table.")
@@ -175,10 +176,9 @@ fun createTrajectories () {
     }
 }
 
-fun insertCities(){
+fun insertStateData(){
 
     try {
-
 
     val createTable = """
         CREATE TABLE cityData (
@@ -194,7 +194,6 @@ fun insertCities(){
 
     val tablesAffected = statement.executeUpdate(createTable)
 
-
     val copyDataFromCsvFile = """
             COPY cityData
             (area, 
@@ -203,21 +202,80 @@ fun insertCities(){
              district, 
              name, 
              population
-             ) FROM '/tmp/nrw_cities.csv' DELIMITER ',' CSV HEADER;
+             ) FROM '/tmp/staedte.csv' DELIMITER ',' CSV HEADER;
         """.trimIndent()
 
     statement.executeUpdate(copyDataFromCsvFile)
 
-
-    val updateGeoms = """
-            UPDATE cityData SET Geom = ST_SetSRID( ST_MakePoint( lon, lat ), 4326);
+    val updateCityGeoms = """
+            UPDATE cityData SET Geom = ST_SetSRID( ST_MakePoint( lon, lat ), 25832);
         """.trimIndent()
 
-    statement.executeUpdate(updateGeoms)
+    statement.executeUpdate(updateCityGeoms)
+
 
     }catch (e: Exception){
         e.printStackTrace()
         println("Could not create table containing cities")
     }
+
+    createRegTable(statement, "gemeinden")
+    createRegTable(statement, "kreise")
+    createRegTable(statement, "regierungsbezirke")
+
+}
+fun createRegTable(statement: Statement, region: String){
+    var createTempTable = """
+        CREATE TEMP TABLE temp_$region (
+            name VARCHAR(255),
+            latitude DOUBLE PRECISION,
+            longitude DOUBLE PRECISION
+        );
+    """.trimIndent()
+
+    statement.executeQuery(createTempTable)
+
+    var copyTempData = """
+        COPY temp_$region(name, latitude, longitude)
+        FROM '/tmp/$region.csv' WITH (FORMAT csv, HEADER true
+        );
+        """.trimIndent()
+
+    statement.executeQuery(copyTempData)
+
+    var createRegTable = """
+    CREATE TABLE $region (               
+        name VARCHAR(255),              
+        Geom Geometry(Polygon) NOT NULL
+    )
+    """.trimIndent()
+
+    statement.executeUpdate(createRegTable)
+
+    var fillRegTable = """
+        INSERT INTO $region (name, Geom)
+        SELECT name,
+               ST_GeomFromText(
+                   'POLYGON((' || string_agg(longitude || ' ' || latitude, ', ') || '))', 4326
+               )
+        FROM temp_$region
+        GROUP BY name;
+    """.trimIndent()
+
+    statement.executeUpdate(fillRegTable)
+
+    var dropTempTable = """
+        DROP TABLE IF EXISTS temp_$region;
+    """.trimIndent()
+
+    statement.executeUpdate(dropTempTable)
+
+    var updateSRID = """
+        UPDATE $region
+        SET Geom = ST_Transform(Geom, 25832)
+        WHERE ST_SRID(Geom) = 4326;
+    """.trimIndent()
+
+    statement.executeUpdate(updateSRID)
 
 }

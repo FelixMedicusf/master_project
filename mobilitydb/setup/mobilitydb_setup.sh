@@ -39,8 +39,10 @@ citus.task_scheduler_slots = 8
 "
 
 flight_data_resource_id="1REu74vRj6tsoPKO7J7bfOEjjdaWEY4Dm"
-city_data_resource_id="1Zbd5fgokx1l5glAbMgJ0jRhBDEazBBvK"
-
+staedte_resource_id="15MejUfVMN7lgedLItvP3Em3TdrEFAz1C"
+gemeinden_resource_id="1OQoq24BWGQkAFAbXCrwOM5WzVxFR7zy_"
+kreise_resource_id="1RHv4hueyptUNi3FPPePYoVQgz5Yfuggw"
+bezirke_resource_id="1ZbQgojdhhW172fIKU0-0wYf8rZEM-yl0"
 
 user="felix"
 user_password="master"
@@ -171,7 +173,8 @@ fi
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y python3-pip && pip install gdown"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv && ~/.local/bin/gdown $city_data_resource_id && sudo mv /home/felix/nrw_cities.csv /tmp/nrw_cities.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv"
 
 
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && ~/.local/bin/gdown $staedte_resource_id && ~/.local/bin/gdown $gemeinden_resource_id && ~/.local/bin/gdown $kreise_resource_id && ~/.local/bin/gdown $bezirke_resource_id"
 
