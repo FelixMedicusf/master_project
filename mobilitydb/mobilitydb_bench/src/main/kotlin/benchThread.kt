@@ -1,125 +1,137 @@
-import java.sql.DriverManager
+import java.sql.Connection
+import java.sql.DriverManager.getConnection
+import java.sql.ResultSet
 import java.sql.Statement
+import java.time.Instant
+import java.util.concurrent.CountDownLatch
 
 class BenchThread(
-    mobilityDBIp: String,
-    databaseName: String,
-    user: String,
-    password: String
+    private val threadName: String,
+    private val mobilityDBIp: String,
+    private val databaseName: String,
+    private val user: String,
+    private val password: String,
+    private val queries: List<QueryTask>,
+    private val log: MutableList<QueryExecutionLog>,
+    private val startLatch: CountDownLatch
+) : Thread(threadName) {
 
-    ) : Thread() {
+    init {
 
-
-    val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/$databaseName"
-    val connection = DriverManager.getConnection(connectionString, user, password)
-    val statement = connection.createStatement()
-
+        this.uncaughtExceptionHandler = UncaughtExceptionHandler { thread, exception ->
+            println("Error in thread ${thread.name}: ${exception.message}")
+            exception.printStackTrace()
+        }
+    }
 
     override fun run() {
+        var connection: Connection? = null
+        var statement: Statement? = null
+        try {
+            connection = getConnection(
+                "jdbc:postgresql://$mobilityDBIp/$databaseName", user, password
+            )
 
+            statement = connection.createStatement()
 
-        println("Execution of Thread ${currentThread().id} started.")
+            // Ensure all threads start at the same time
+            startLatch.await()
 
-        val countQuery = """
-            SELECT COUNT(*) FROM flights;
-        """.trimIndent()
+            println("$threadName started executing at ${Instant.now()} with ${queries.size} queries.")
+            println()
 
-        var response = statement.executeQuery(countQuery)
+            for (task in queries) {
+                if (task.use) {
+                    val sqlQuery = if (task.params != null) {
+                        this.formatSQLStatement(task.sql, task.params)
+                    } else {
+                        task.sql
+                    }
 
-        while (response.next()) {
-            println(response.getInt(1))
+                    val startTime = Instant.now().toEpochMilli()
+
+                    printSQLResponse(statement.executeQuery(sqlQuery))
+
+                    val endTime = Instant.now().toEpochMilli()
+
+                    synchronized(log) {
+                        log.add(
+                            QueryExecutionLog(
+                                threadName = threadName,
+                                queryName = task.queryName,
+                                queryType = task.type,
+                                params = task.params,
+                                round = 0,
+                                executionIndex = 0,
+                                startTime = startTime,
+                                endTime = endTime,
+                                latency = (endTime - startTime)/1000
+                            )
+                        )
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            // Catch any unexpected exceptions and print them to the console
+            println("An error occurred in thread $threadName: ${e.message}")
+            e.printStackTrace()
+        } finally {
+            try {
+                statement?.close()
+            } catch (e: Exception) {
+                println("Failed to close statement: ${e.message}")
+            }
+
+            try {
+                connection?.close()
+            } catch (e: Exception) {
+                println("Failed to close connection: ${e.message}")
+            }
         }
-
-
-        closePlanes(statement, 100000)
-
-
-        response.close()
-        statement.close()
-        connection.close()
     }
 
-    // spatiotemporal query
-    // list the 10 closest flights to a city from cityData during a time period from periods
-    fun minDistanceQuery (statement: Statement, city: String, timePeriod: String? = null) {
 
-        var minDistanceQuery = ""
-
-        if (timePeriod == null) {
-            minDistanceQuery = """
-            SELECT c.name, f.flightid, MIN(ST_DistanceSphere(trajectory(f.trip), c.Geom)) AS MinDistance
-            FROM citydata c, flights f
-            WHERE c.name = '$city'
-            GROUP BY c.name, f.flightid
-            ORDER BY MinDistance
-            LIMIT 10;
-            """.trimIndent()
-        }else{
-            minDistanceQuery = """
-            SELECT c.name, f.flightid, MIN(ST_DistanceSphere(trajectory(f.trip), c.Geom)) AS MinDistance
-            FROM citydata c, flights f
-            WHERE c.name = '$city'
-            GROUP BY c.name, f.flightid
-            ORDER BY MinDistance
-            LIMIT 10;
-            """.trimIndent()
+    private fun formatSQLStatement(sql: String, params: Map<String, Any>): String {
+        var parsedSql = sql
+        for ((key, value) in params) {
+            val replacement = when (value) {
+                is String -> "'$value'"
+                is Int, is Double -> value.toString()
+                is Boolean -> if (value) "TRUE" else "FALSE"
+                else -> throw IllegalArgumentException("Unsupported type for key: $key")
+            }
+            parsedSql = parsedSql.replace(":$key", replacement)
         }
-
-        var response = statement.executeQuery(minDistanceQuery)
-
-
-        while (response.next()) {
-            val city = response.getString("name")
-            val flightId = response.getString("flightid")
-            val minDistance = response.getDouble("MinDistance")
-            println("City: $city, Flight ID: $flightId, Minimum Distance: ${minDistance/1000} km")
-        }
-        response.close()
-
+        return parsedSql
     }
 
+    fun printSQLResponse(resultSet: ResultSet) {
+        try {
 
-    // Spationtemporal join
-    // Airplanes that come closer than X meters to one another
-    fun closePlanes(statement: Statement, distance: Int){
+            val metaData = resultSet.metaData
+            val columnCount = metaData.columnCount
 
-        var closePlanesQuery = """
-            SELECT P1.flightid, P2.flightid, P1.traj, P2.traj,
-            shortestLine(P1.trip, P2.trip) as Approach
-            FROM flights P1, flights P2
-            WHERE P1.flightid > P2.flightid AND
-            adwithin(P1.trip, P2.trip, 100000)
-        """.trimIndent()
+            // Print column names
+            for (i in 1..columnCount) {
+                print("${metaData.getColumnName(i)}\t")
+            }
+            println()
 
-        var response = statement.executeQuery(closePlanesQuery)
 
-        while(response.next()){
-            println("${response.getInt(1)}, ${response.getInt(2)}, ${response.getInt(3)}")
+            while (resultSet.next()) {
+                for (i in 1..columnCount) {
+                    print("${resultSet.getString(i)}\t")
+                }
+                println()
+            }
+
+            println()
+
+        } catch (e: Exception) {
+            println("Error while processing ResultSet: ${e.message}")
+            e.printStackTrace()
         }
-
-        response.close()
     }
 
-    fun speedMetrics (statement: Statement){
-
-        val avgSpeed = """
-            SELECT MIN(twavg(speed(trip))) * 3.6, MAX(twavg(speed(trip))) * 3.6,
-              AVG(twavg(speed(trip))) * 3.6
-            FROM flights;
-        """.trimIndent()
-
-        var response = statement.executeQuery(avgSpeed)
-
-        while (response.next()){
-            println("${response.getInt(1)}, ${response.getInt(2)}, ${response.getInt(3)}, " +
-                    "${response.getInt(4)}, ${response.getInt(5)}")
-        }
-        response.close()
-    }
 }
-
-
-
-
-
-

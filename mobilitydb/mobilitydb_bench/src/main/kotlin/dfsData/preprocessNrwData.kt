@@ -37,18 +37,36 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
         val transformFactory = CoordinateTransformFactory()
         val transform = transformFactory.createTransform(srcCrs, dstCrs)
         var region = ""
+        var firstLocation = ""
+        var counter = 0
+        var firstEntry = true
+        var ignoreEntries = false
         while (record != null) {
 
                 if(record.size > 3){
-                    region = record[4]
+                    region = record[4].replace("ö", "oe").replace("ß", "ss").replace("ä", "ae").replace("ü", "ue")
+                    firstEntry = true
+                    counter = 0
+                    ignoreEntries=false
+                } else {
+                    if (firstEntry){
+                        firstLocation=record[1]+record[2]
+                        firstEntry=false
+                    }
+                    if (record[1]+record[2] == firstLocation)counter++
 
-                }else {
-                    val sourceCoordinates = ProjCoordinate(record[1].toDouble(), record[2].toDouble())
-                    val targetCoordinates = ProjCoordinate()
-                    var transformedCoordinates = transform.transform(sourceCoordinates, targetCoordinates)
-                    var outputLine = "$region,${transformedCoordinates.x},${transformedCoordinates.y}"
 
-                    writer.writeNext(outputLine.split(",").toTypedArray())
+
+                    if(!ignoreEntries) {
+
+                        val sourceCoordinates = ProjCoordinate(record[1].toDouble(), record[2].toDouble())
+                        val targetCoordinates = ProjCoordinate()
+                        var transformedCoordinates = transform.transform(sourceCoordinates, targetCoordinates)
+                        var outputLine = "$region,${transformedCoordinates.x},${transformedCoordinates.y}"
+
+                        writer.writeNext(outputLine.split(",").toTypedArray())
+                    }
+                    if (counter==2)ignoreEntries=true
                 }
 
                 record = reader.readNext()

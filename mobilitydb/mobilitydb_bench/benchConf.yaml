@@ -1,0 +1,87 @@
+benchmark:
+  sut: "MobilityDB"
+  nodes:
+    - "34.38.53.54"
+    - "256.021.2.123"
+  threads: 2
+
+queryConfigs:
+  - name: flightCloseness
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT
+      P1.flightid AS flight1,
+      P2.flightid AS flight2,
+      minDistance(P1.trip, P2.trip) AS exact_distance,
+      intersection(P1.trip, P2.trip) AS close_time
+      FROM
+      flights P1, flights P2
+      WHERE
+      P1.flightid > P2.flightid AND
+      minDistance(P1.trip, P2.trip) < :distance AND
+      intersects(P1.trip, P2.trip);
+    repetition: 5
+    param_sets:
+      - params:
+          distance: 100
+
+  - name: FlightsInArea
+    use: True
+    type: spatial
+    sql: > 
+      SELECT f.flightId 
+      FROM flightpoints as f 
+      WHERE ST_DWithin(f.geom,  ST_Transform(ST_SetSRID(ST_Point(:lon, :lat), 4326), 25832), :radius);
+    repetition: 5
+    param_sets:
+      - params:
+          lon: 7.122809
+          lat: 51.448519
+          radius: 50
+      - params:
+          lon: 7.122809
+          lat: 51.448519
+          radius: 100
+      - params:
+          lon: 7.122809
+          lat: 51.448519
+          radius: 150
+      - params:
+          lon: 7.122809
+          lat: 51.448519
+          radius: 200
+
+  - name: FlightInAllKreise
+    use: True
+    type: spatial
+    sql: > 
+      SELECT DISTINCT k.name, f.flightId
+      FROM flights f, kreise k
+      WHERE ST_Intersects(f.traj, geom_etrs)
+      ORDER BY f.flightId, k.name
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+      - params:
+          limit: 100
+      - params:
+          limit: 500
+      - params:
+          limit: 1000
+
+  - name: FlightsInSpecificGemeinden
+    use: True
+    type: spatial
+    sql: >
+      SELECT DISTINCT g.name, f.flightId
+      FROM flights f, gemeinden g
+      WHERE ST_Intersects(f.traj, geom_etrs) AND g.name = :gemeinde
+      ORDER BY f.flightId, g.name
+      LIMIT 10;
+    param_sets:
+      - params:
+          gemeinde: 'Gem Nettetal'
+      - params:
+          gemeinde: 'Gem Olsberg'
+    repetition: 5

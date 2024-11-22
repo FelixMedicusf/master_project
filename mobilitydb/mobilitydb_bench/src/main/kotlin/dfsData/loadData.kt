@@ -4,7 +4,7 @@ import java.sql.Statement
 
 val distributedDatabase = true
 
-val mobilityDBIp = "34.38.56.113"
+val mobilityDBIp = "34.38.53.54"
 
 val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/aviation_data"
 val user = "felix"
@@ -100,8 +100,8 @@ fun insertFlightPoints(){
     }
 
     try {
-        val updateGeoms = """
-            SET Geom = ST_Transform(ST_SetSRID(ST_MakePoint(longitude, latitude), 4326), 25832);
+        var updateGeoms = """
+            UPDATE flightPoints SET Geom = ST_Transform ( ST_SetSRID( ST_MakePoint( longitude, latitude ), 4326), 25832);
         """.trimIndent()
 
         println("Updating database to hold geometry points made of latitude and longitude.")
@@ -181,34 +181,34 @@ fun insertStateData(){
     try {
 
     val createTable = """
-        CREATE TABLE cityData (
+        CREATE TABLE cities (
             area NUMERIC(8, 3),
             lat NUMERIC(8, 5),
             lon NUMERIC(8, 5),
             district VARCHAR(50),
             name VARCHAR(50),
             population INTEGER,
-            Geom geometry(Point, 4326)
+            Geom geometry(Point, 25832)
         )
         """.trimIndent()
 
     val tablesAffected = statement.executeUpdate(createTable)
 
     val copyDataFromCsvFile = """
-            COPY cityData
+            COPY cities
             (area, 
              lat, 
              lon, 
              district, 
              name, 
              population
-             ) FROM '/tmp/staedte.csv' DELIMITER ',' CSV HEADER;
+             ) FROM '/tmp/regData/staedte.csv' DELIMITER ',' CSV HEADER;
         """.trimIndent()
 
     statement.executeUpdate(copyDataFromCsvFile)
 
     val updateCityGeoms = """
-            UPDATE cityData SET Geom = ST_SetSRID( ST_MakePoint( lon, lat ), 25832);
+            UPDATE cities SET Geom = ST_Transform(ST_SetSRID( ST_MakePoint( lon, lat ), 4326), 25832);
         """.trimIndent()
 
     statement.executeUpdate(updateCityGeoms)
@@ -225,28 +225,32 @@ fun insertStateData(){
 
 }
 fun createRegTable(statement: Statement, region: String){
+
+    println("Inserting Data for $region.")
+
     var createTempTable = """
         CREATE TEMP TABLE temp_$region (
+            row_number SERIAL PRIMARY KEY,
             name VARCHAR(255),
             latitude DOUBLE PRECISION,
             longitude DOUBLE PRECISION
         );
     """.trimIndent()
 
-    statement.executeQuery(createTempTable)
+    statement.executeUpdate(createTempTable)
 
     var copyTempData = """
         COPY temp_$region(name, latitude, longitude)
-        FROM '/tmp/$region.csv' WITH (FORMAT csv, HEADER true
+        FROM '/tmp/regData/$region.csv' WITH (FORMAT csv, HEADER true
         );
         """.trimIndent()
 
-    statement.executeQuery(copyTempData)
+    statement.executeUpdate(copyTempData)
 
     var createRegTable = """
     CREATE TABLE $region (               
         name VARCHAR(255),              
-        Geom Geometry(Polygon) NOT NULL
+        Geom Geometry(Polygon, 4326) NOT NULL
     )
     """.trimIndent()
 
@@ -254,12 +258,17 @@ fun createRegTable(statement: Statement, region: String){
 
     var fillRegTable = """
         INSERT INTO $region (name, Geom)
-        SELECT name,
-               ST_GeomFromText(
-                   'POLYGON((' || string_agg(longitude || ' ' || latitude, ', ') || '))', 4326
-               )
+        SELECT
+            name,
+            ST_MakePolygon(
+                ST_GeomFromText(
+                    'LINESTRING(' || 
+                    string_agg(latitude || ' ' || longitude, ', ' ORDER BY row_number) || 
+                    ')'
+                )
+            )::geometry(Polygon, 4326)
         FROM temp_$region
-        GROUP BY name;
+GROUP BY name;
     """.trimIndent()
 
     statement.executeUpdate(fillRegTable)
@@ -270,10 +279,17 @@ fun createRegTable(statement: Statement, region: String){
 
     statement.executeUpdate(dropTempTable)
 
+
+    var addColumn = """
+        ALTER TABLE $region
+        ADD COLUMN geom_etrs Geometry(Polygon, 25832)
+    """.trimIndent()
+
+    statement.executeUpdate(addColumn)
+
     var updateSRID = """
         UPDATE $region
-        SET Geom = ST_Transform(Geom, 25832)
-        WHERE ST_SRID(Geom) = 4326;
+        SET geom_etrs = ST_Transform(geom, 25832);
     """.trimIndent()
 
     statement.executeUpdate(updateSRID)
