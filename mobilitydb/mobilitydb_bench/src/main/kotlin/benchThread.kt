@@ -3,6 +3,7 @@ import java.sql.DriverManager.getConnection
 import java.sql.ResultSet
 import java.sql.Statement
 import java.time.Instant
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 
 class BenchThread(
@@ -11,7 +12,7 @@ class BenchThread(
     private val databaseName: String,
     private val user: String,
     private val password: String,
-    private val queries: List<QueryTask>,
+    private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch
 ) : Thread(threadName) {
@@ -37,10 +38,11 @@ class BenchThread(
             // Ensure all threads start at the same time
             startLatch.await()
 
-            println("$threadName started executing at ${Instant.now()} with ${queries.size} queries.")
+            println("$threadName started executing at ${Instant.now()}.")
             println()
 
-            for (task in queries) {
+            while (true) {
+                val task = queryQueue.poll() ?: break
                 if (task.use) {
                     val sqlQuery = if (task.params != null) {
                         this.formatSQLStatement(task.sql, task.params)
@@ -50,9 +52,12 @@ class BenchThread(
 
                     val startTime = Instant.now().toEpochMilli()
 
-                    printSQLResponse(statement.executeQuery(sqlQuery))
+                    val response = statement.executeQuery(sqlQuery)
 
                     val endTime = Instant.now().toEpochMilli()
+
+                    println(sqlQuery)
+                    printSQLResponse(response)
 
                     synchronized(log) {
                         log.add(
@@ -77,6 +82,7 @@ class BenchThread(
             println("An error occurred in thread $threadName: ${e.message}")
             e.printStackTrace()
         } finally {
+
             try {
                 statement?.close()
             } catch (e: Exception) {
@@ -96,7 +102,7 @@ class BenchThread(
         var parsedSql = sql
         for ((key, value) in params) {
             val replacement = when (value) {
-                is String -> "'$value'"
+                is String -> if (key == "table" || key == "period") "$value" else "'$value'"
                 is Int, is Double -> value.toString()
                 is Boolean -> if (value) "TRUE" else "FALSE"
                 else -> throw IllegalArgumentException("Unsupported type for key: $key")
@@ -106,7 +112,7 @@ class BenchThread(
         return parsedSql
     }
 
-    fun printSQLResponse(resultSet: ResultSet) {
+    private fun printSQLResponse(resultSet: ResultSet) {
         try {
 
             val metaData = resultSet.metaData

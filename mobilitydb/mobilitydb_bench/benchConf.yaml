@@ -1,87 +1,430 @@
 benchmark:
   sut: "MobilityDB"
   nodes:
-    - "34.38.53.54"
-    - "256.021.2.123"
-  threads: 2
+    - "34.79.123.210"
+    - "35.241.183.106"
+    - "34.77.93.148"
+  threads: 1
 
 queryConfigs:
-  - name: flightCloseness
-    use: False
-    type: spatiotemporal
+
+    # Temporal queries
+  - name: CountAllActiveFlightsDuringPeriod
+    use: True
+    type: temporal query - instant temporal aggregate query
     sql: >
-      SELECT
-      P1.flightid AS flight1,
-      P2.flightid AS flight2,
-      minDistance(P1.trip, P2.trip) AS exact_distance,
-      intersection(P1.trip, P2.trip) AS close_time
-      FROM
-      flights P1, flights P2
-      WHERE
-      P1.flightid > P2.flightid AND
-      minDistance(P1.trip, P2.trip) < :distance AND
-      intersects(P1.trip, P2.trip);
+      SELECT COUNT(*), :period, TCOUNT(attime(f.trip, :period))
+      FROM flights f
+      WHERE f.trip && :period
+      GROUP BY :period
+      ORDER BY :period;
     repetition: 5
     param_sets:
       - params:
-          distance: 100
-
-  - name: FlightsInArea
+          period: "tstzspan'[2023-01-02 10:00:00, 2023-01-02 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-06-01 10:00:00, 2023-06-01 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-07-01 10:00:00, 2023-07-01 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-08-01 10:00:00, 2023-08-01 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-03-01 12:30:00, 2023-12-01 15:00:00]'"
+      - params:
+          period: "tstzspan'[2023-02-01 14:00:00, 2023-08-02 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-02-04 10:00:00, 2023-04-01 12:00:00]'"
+  - name: LocationOfAirplaneTypeAtInstant
     use: True
-    type: spatial
-    sql: > 
-      SELECT f.flightId 
-      FROM flightpoints as f 
-      WHERE ST_DWithin(f.geom,  ST_Transform(ST_SetSRID(ST_Point(:lon, :lat), 4326), 25832), :radius);
-    repetition: 5
+    type: temporal no aggregate query
+    sql: >
+      SELECT flightid, ST_Geometry(f.geom), :instant
+      FROM flights f
+      WHERE f.airplanetype = :type
+    repetition: 4
     param_sets:
       - params:
-          lon: 7.122809
-          lat: 51.448519
-          radius: 50
+          type: "E295"
+          instant: "timestamptz '2023-02-10 12:15:00'"
       - params:
-          lon: 7.122809
-          lat: 51.448519
-          radius: 100
+          type: "PC12"
+          instant: "timestamptz '2023-03-13 12:12:00'"
       - params:
-          lon: 7.122809
-          lat: 51.448519
-          radius: 150
+          type: "A321"
+          instant: "timestamptz '2023-02-13 20:12:00'"
       - params:
-          lon: 7.122809
-          lat: 51.448519
-          radius: 200
-
-  - name: FlightInAllKreise
+          type: "A320"
+          instant: "timestamptz '2023-05-13 08:12:00'"
+      - params:
+          type: "A333"
+          instant: "timestamptz '2023-09-12 09:12:00'"
+      - params:
+          type: "B77L"
+          instant: "timestamptz '2023-02-13 15:12:00'"
+      - params:
+          type: "PA44"
+          instant: "timestamptz '2023-12-13 00:12:00'"
+  - name: FightTimeLowAltitude
     use: True
-    type: spatial
+    type: temporal aggregation query
+    repetition: 1
+    sql: >
+      SELECT f.flightid, (duration_below_5000 / total_duration) * 100 AS time_below_5000
+      FROM ( SELECT f.flightid, T_Duration(f.altitude) AS total_duration,
+      T_Duration(f.altitude < 5000) AS duration_below_5000
+      FROM flights f
+      ) subquery;
+  - name: AverageHourlyFlightsPerMonth
+    use: true
+    type: temporal aggregation query
+    sql: >
+      WITH hourly_flights AS (
+      SELECT f.flightid, DATE_PART('month', T_BBox(f.trip)) AS month, DATE_PART('hour', unnest(T_InstantTimestamps(f.trip))) AS hour,                                  
+      FROM flights f
+      WHERE DATE_PART('year', T_BBox(trip)) = 2023),
+      hourly_traffic AS (
+      SELECT month, hour, COUNT(flightid) AS flight_count                     
+      FROM hourly_flights
+      GROUP BY month, hour
+      )
+      SELECT month, hour, MAX(flight_count) AS max_flights
+      FROM hourly_traffic
+      GROUP BY month, hour
+      ORDER BY month, max_flights DESC;
+  - name: FlightsWithLocalOriginDestinationDuringPeriod
+    use: True
+    type: temporal no aggregate query
+    sql: >
+      SELECT f.flightid, f.origin as origin, f.destination as destination
+      FROM flights f
+      WHERE (f.origin IN (
+      SELECT a.city
+      FROM airports a
+      JOIN cities c ON a.city = c.name
+      )
+      OR
+      f.destination IN (
+      SELECT a.city
+      FROM airports a
+      JOIN cities c ON a.city = c.name
+      ))
+      AND f.trip && :period
+      ORDER BY origin, destination, f.flightid;
+    repetition: 4
+    param_sets:
+      - params:
+          period: "tstzspan'[2023-03-02 10:00:00, 2023-12-10 15:00:00]'"
+      - params:
+          period: "tstzspan'[2023-03-02 17:50:00, 2023-05-04 15:20:00]'"
+      - params:
+          period: "tstzspan'[2023-06-02 13:30:00, 2023-08-02 21:20:00]'"
+      - params:
+          period: "tstzspan'[2023-06-02 12:00:00, 2023-10-10 18:40:00]'"
+      - params:
+          period: "tstzspan'[2023-02-02 10:00:00, 2023-02-13 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-04-02 15:00:00, 2023-07-03 12:00:00]'"
+      - params:
+          period: "tstzspan'[2023-06-02 17:34:00, 2023-009-02 12:00:00]'"
+  - name: FlightCountInSeasonForAirports
+    use: True
+    type: temporal aggregation query
+    sql: >
+      
+
+
+
+
+  - name: FlightsInCityArea
+    use: True
+    type: spatial range-query
     sql: > 
-      SELECT DISTINCT k.name, f.flightId
-      FROM flights f, kreise k
-      WHERE ST_Intersects(f.traj, geom_etrs)
-      ORDER BY f.flightId, k.name
+      SELECT f.flightId, c.name
+      FROM flightpoints as f, cities as c
+      WHERE ST_DWithin(f.geom, c.geom, :radius) AND c.name = :city
       LIMIT :limit;
     repetition: 5
     param_sets:
       - params:
-          limit: 100
+          city: 'Aachen'
+          radius: 200
+          limit: 10
       - params:
-          limit: 500
+          city: 'Dortmund'
+          radius: 100
+          limit: 10
       - params:
-          limit: 1000
+          city: 'Duesseldorf'
+          radius: 50
+          limit: 10
+      - params:
+          city: 'Koeln'
+          radius: 100
+          limit: 10
 
-  - name: FlightsInSpecificGemeinden
+  - name: FlightsInAllRegions
     use: True
-    type: spatial
-    sql: >
-      SELECT DISTINCT g.name, f.flightId
-      FROM flights f, gemeinden g
-      WHERE ST_Intersects(f.traj, geom_etrs) AND g.name = :gemeinde
-      ORDER BY f.flightId, g.name
-      LIMIT 10;
+    type: spatial range-query
+    sql: > 
+      SELECT DISTINCT t.name, f.flightId
+      FROM flights f, :table t
+      WHERE ST_Intersects(f.traj, geom_etrs)
+      ORDER BY f.flightId, t.name
+      LIMIT :limit;
+    repetition: 5
     param_sets:
       - params:
-          gemeinde: 'Gem Nettetal'
+          table: 'gemeinden'
+          limit: 100
       - params:
-          gemeinde: 'Gem Olsberg'
+          table: 'kreise'
+          limit: 100
+      - params:
+          table: 'regierungsbezirke'
+          limit: 1000
+
+  - name: FlightsInSpecificRegions
+    use: True
+    type: spatial range-query
+    sql: >
+      SELECT DISTINCT t.name, f.flightId
+      FROM flights f, :table t
+      WHERE ST_Intersects(f.traj, t.geom_etrs) AND t.name = :region
+      ORDER BY f.flightId, t.name
+      LIMIT 10;
     repetition: 5
+    param_sets:
+      - params:
+          table: 'gemeinden'
+          region: 'Gem Nettetal'
+      - params:
+          table: 'gemeinden'
+          region: 'Gem Olsberg'
+      - params:
+          table: 'kreise'
+          region: 'Krs Duesseldorf'
+      - params:
+          table: 'kreise'
+          region: 'Krs Rhein-Kreis Neuss'
+      - params:
+          table: 'regierungsbezirke'
+          region: 'Rbz Arnsberg'
+      - params:
+          table: 'regierungsbezirke'
+          region: 'Rbz Koeln'
+
+
+  - name: FlightsInRegionDuringPeriod
+    use: True
+    type: spatiotemporal range-query
+    sql: >
+      SELECT t.name, :period, f.flightid
+      FROM flights f, :table t
+      WHERE t.name = :region AND f.trip && stbox(t.geom_etrs, :period) AND eintersects(attime(f.trip, :period), t.geom_etrs)
+      ORDER BY f.flightId, t.name
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+      - params:
+          period: "tstzspan'[2023-01-01 10:00:00, 2023-01-10 10:00:00]'"
+          table: 'gemeinden'
+          region: 'Gem Buende'
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-02-01 10:00:00, 2023-02-10 10:00:00]'"
+          table: 'gemeinden'
+          region: 'Gem Bochum'
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-03-01 10:00:00, 2023-03-18 10:00:00]'"
+          table: 'kreise'
+          region: 'Krs Duisburg'
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-04-01 10:00:00, 2023-04-24 10:00:00]'"
+          table: 'kreise'
+          region: 'Krs Guetersloh'
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-05-01 10:00:00, 2023-07-10 10:00:00]'"
+          table: 'regierungsbezirke'
+          region: 'Rbz Muenster'
+          limit: 10
+
+  - name: PairOfFlightsInRegionDuringPeriod
+    use: False
+    type: spatiotemporal range join-query
+    sql: >
+      SELECT DISTINCT f1.flightId AS flightid1, f2.flightid AS flightid2, :period, t.name
+      FROM flights f1, flights f2, :table t
+      WHERE f1.flightid < f2.flightid AND t.name = :region AND f1.trip && stbox(t.geom_etrs, :period) AND
+      f2.Trip && stbox(t.geom_etrs, :period) AND
+      eintersects(attime(f1.trip, :period), t.geom_etrs) AND
+      eintersects(attime(f2.trip, :period), t.geom_etrs)
+      ORDER BY f1.flightid, f2.flightid, t.name, :period
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+        - params:
+            period: "tstzspan'[2023-01-01 10:00:00, 2023-01-20 10:00:00]'"
+            table: 'gemeinden'
+            region: 'Gem Ahlen'
+            limit: 10
+        - params:
+            period: "tstzspan'[2023-02-01 10:00:00, 2023-02-20 10:00:00]'"
+            table: 'gemeinden'
+            region: 'Gem Datteln'
+            limit: 10
+        - params:
+            period: "tstzspan'[2023-03-01 10:00:00, 2023-03-20 10:00:00]'"
+            table: 'kreise'
+            region: 'Krs Minden-Luebbecke'
+            limit: 10
+        - params:
+            period: "tstzspan'[2023-04-01 10:00:00, 2023-04-20 10:00:00]'"
+            table: 'kreise'
+            region: 'Krs Lippe'
+            limit: 10
+        - params:
+            period: "tstzspan'[2023-05-01 10:00:00, 2023-05-20 10:00:00]'"
+            table: 'regierungsbezirke'
+            region: 'Rbz Detmold'
+            limit: 10
+
+  - name: CountActiveFlightsHourlyDuringPeriod
+    use: False
+    type: span temporal aggregate query
+    sql: >
+      WITH timesplit(period) AS (
+      SELECT period(H, H + interval '1 hour')
+      FROM generate_series(timestamptz :start_time,
+      timestamptz :end_time, interval '1 hour') AS H )
+      SELECT s.period, COUNT(*)
+      FROM timesplit s, flights f
+      WHERE s.period && f.trip AND attime(f.trip, s.period) IS NOT NULL
+      GROUP BY s.period
+      ORDER BY s.period;
+    repetition: 5
+    param_sets:
+      - params:
+          start_time: "2023-10-01 10:00:00"
+          end_time: "2023-10-01 24:00:00'"
+      - params:
+          start_time: "2023-10-01 10:00:00"
+          end_time: "2023-10-01 24:00:00"
+      - params:
+          start_time: "2023-10-01 10:00:00"
+          end_time: "2023-10-01 24:00:00"
+      - params:
+          start_time: "2023-10-01 10:00:00"
+          end_time: "2023-10-01 24:00:00"
+
+  # Distance Queries
+  - name: FlightDistanceDuringPeriod
+    use: True
+    type: spatiotemporal distance query
+    sql: >
+      SELECT f.flightid, :period, SUM(length(attime(f.trip, :period))) AS Distance
+      FROM flights f
+      WHERE f.trip && :period
+      GROUP BY f.flightid, :period
+      ORDER BY Distance DESC, f.flightid, :period
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+      - params:
+          period: "tstzspan'[2023-10-01 12:00:00, 2023-10-01 13:00:00]'"
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-02-03 12:00:00, 2023-02-03 12:30:00]'"
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-07-10 14:00:00, 2023-07-10 14:20:00]'"
+          limit: 10
+      - params:
+          period: "tstzspan'[2023-02-04 10:00:00, 2023-02-04 10:10:00]'"
+          limit: 10
+
+  - name: MinimumDistancesToCity
+    use: True
+    type: distance query
+    sql: >
+      SELECT c.name, f.flightid, MIN(trajectory(f.trip) <-> c.geom) AS MinDistance
+      FROM flights f, cities c
+      WHERE c.name = :city
+      GROUP BY f.flightid, c.name
+      ORDER BY MinDistance, f.flightid, c.name
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+      - params:
+          city: 'Aachen'
+          limit: 50
+      - params:
+          city: 'Detmold'
+          limit: 50
+      - params:
+          city: 'Bonn'
+          limit: 50
+      - params:
+          city: 'Bottrop'
+          limit: 50
+
+  - name: ClosestBetweenToPlanes
+    use: False
+    type: spatiotemporal distance query
+    sql: >
+      SELECT f1.flightid, f2.flightid, f1.trip |=| f2.trip As MinDistance
+      FROM flights f1, flights f2
+      WHERE f1.trip |=| f2.trip < :min_value AND f1.flightid < f2.flightid AND f1.airplanetype = :type AND f2.airplanetype = :type
+      ORDER BY MinDistance ASC
+      LIMIT :limit;
+    repetition: 5
+    param_sets:
+      - params:
+          min_value: 1000
+          limit: 10
+          type: "B737"
+      - params:
+          min_value: 1500
+          limit: 10
+          type: 'A320'
+
+  - name: TimeNearestAirplaneTypeToCity
+    use: True
+    type: spatiotemporal? query
+    sql: >
+      SELECT f.flightid, c.name, f.airplanetype, gettime(nearestApproachInstant(f.trip, c.geom)) AS instant, nearestApproachDistance(f.trip, c.geom) AS distance
+      FROM flights f, cities c
+      WHERE c.name = :city AND f.airplanetype = :type
+      ORDER BY nearestApproachDistance(f.trip, c.geom), f.flightid
+      LIMIT :limit;
+    repetition: 2
+    param_sets:
+      - params:
+          city: 'Leverkusen'
+          type: 'A320'
+          limit: 10
+      - params:
+          city: 'Muenster'
+          type: 'B737'
+          limit: 10
+      - params:
+          city: 'Bonn'
+          type: 'B737'
+          limit: 10
+      - params:
+          city: 'Aachen'
+          type: 'B737'
+          limit: 10
+
+
+
+
+
+
+
+
+
+
+

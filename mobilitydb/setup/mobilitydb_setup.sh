@@ -43,6 +43,7 @@ staedte_resource_id="15MejUfVMN7lgedLItvP3Em3TdrEFAz1C"
 gemeinden_resource_id="1OQoq24BWGQkAFAbXCrwOM5WzVxFR7zy_"
 kreise_resource_id="1RHv4hueyptUNi3FPPePYoVQgz5Yfuggw"
 bezirke_resource_id="1ZbQgojdhhW172fIKU0-0wYf8rZEM-yl0"
+airports_resource_id="12wJfKnIdXFihn4zKSi0K1QaxB2dNTppK"
 
 user="felix"
 user_password="master"
@@ -176,5 +177,5 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv"
 
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $staedte_resource_id && ~/.local/bin/gdown $gemeinden_resource_id && ~/.local/bin/gdown $kreise_resource_id && ~/.local/bin/gdown $bezirke_resource_id"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $staedte_resource_id && ~/.local/bin/gdown $gemeinden_resource_id && ~/.local/bin/gdown $kreise_resource_id && ~/.local/bin/gdown $bezirke_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
 

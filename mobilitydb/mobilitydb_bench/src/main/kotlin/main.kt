@@ -5,6 +5,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -41,6 +42,7 @@ fun main() {
 
     val allQueries: MutableList<QueryTask> = mutableListOf()
 
+
     for (queryConfig in config.queryConfigs){
         if (queryConfig.paramSets != null){
             for (params in queryConfig.paramSets) {
@@ -53,10 +55,13 @@ fun main() {
             allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql, null, queryConfig.use))
         }
     }
+
+
     val startLatch = CountDownLatch(1)
     val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
     val benchThreads = Executors.newFixedThreadPool(threadCount)
 
+    /*
     val threadsQueryList: MutableList<MutableList<QueryTask>> =
         MutableList(threadCount) { mutableListOf() }
 
@@ -67,8 +72,16 @@ fun main() {
             password, queries, executionLogs, startLatch))
     }
 
+     */
+
+    val queryQueue = ConcurrentLinkedQueue(allQueries)
+
+    for (i in 1..threadCount){
+        benchThreads.submit(BenchThread("thread-$i", nodes[0], database, user, password, queryQueue, executionLogs, startLatch))
+    }
+
     // Signal all threads to start
-    println("Releasing threads to start execution.")
+    println("Releasing $threadCount threads to start execution.")
     startLatch.countDown()
 
 
@@ -87,68 +100,3 @@ fun distributeQueryTasks(sourceList: MutableList<QueryTask>, targetList: Mutable
     }
 }
 
-/*
-
-    // Group tasks by rounds (parameter sets)
-    val tasksByRound = mutableListOf<List<QueryTask>>()
-    val maxRounds = config.queries.maxOf { it.paramSets.size }
-    repeat(maxRounds) { roundIndex ->
-        val roundTasks = config.queries.flatMap { query ->
-            query.paramSets.getOrNull(roundIndex)?.let { paramSet ->
-                QueryTask(
-                    queryName = query.name,
-                    sql = query.sql,
-                    params = paramSet.params,
-                    executions = paramSet.executions
-                )
-            } ?: emptyList()
-        }
-        tasksByRound.add(roundTasks)
-    }
-
-    // Distribute tasks by rounds across threads
-    val threadTasksByRound = List(threadCount) { mutableListOf<List<QueryTask>>() }
-    tasksByRound.forEachIndexed { roundIndex, roundTasks ->
-        val threadChunkedTasks = roundTasks.chunked((roundTasks.size + threadCount - 1) / threadCount)
-        threadChunkedTasks.forEachIndexed { threadIndex, tasks ->
-            threadTasksByRound[threadIndex].add(tasks)
-        }
-    }
-
-    // Latch to ensure threads start simultaneously
-    val startLatch = CountDownLatch(1)
-
-    // Create a fixed thread pool
-    val benchThreads = Executors.newFixedThreadPool(threadCount)
-
-    // Submit threads to the pool
-    threadTasksByRound.forEachIndexed { index, tasksByThreadRound ->
-        benchThreads.submit(
-            BenchThread(
-                threadName = "Thread-${index + 1}",
-                mobilityDBIp = "127.0.0.1",
-                databaseName = "mobilitydb",
-                user = "postgres",
-                password = "password",
-                tasksByRound = tasksByThreadRound,
-                log = executionLogs,
-                startLatch = startLatch
-            )
-        )
-    }
-
-    // Signal all threads to start
-    println("Releasing threads to start execution.")
-    startLatch.countDown()
-
-    // Wait for all threads to complete
-    benchThreads.shutdown()
-    benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
-
-    println("All threads completed.")
-
-    // Output logs
-    outputExecutionLogs(executionLogs)
-}
-
-*/
