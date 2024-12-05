@@ -20,7 +20,13 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
 
 
     println("Processing File $inputFile")
-    val writer = CSVWriter(FileWriter(outputFile))
+    val writer = CSVWriter(
+        FileWriter(outputFile),
+        CSVWriter.DEFAULT_SEPARATOR, // Use default separator (`,`)
+        CSVWriter.NO_QUOTE_CHARACTER, // Disable quotes
+        CSVWriter.DEFAULT_ESCAPE_CHARACTER,
+        CSVWriter.DEFAULT_LINE_END
+    )
 
     val header = "name,latitude,longitude"
     writer.writeNext(header.split(",").toTypedArray())

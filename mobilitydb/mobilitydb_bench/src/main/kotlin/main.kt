@@ -1,7 +1,9 @@
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
@@ -9,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 fun main() {
 
@@ -17,6 +20,11 @@ fun main() {
     val database = "aviation_data"
 
     val path = Paths.get("benchConf.yaml")
+
+    val seed = 123L
+    val random = Random(seed)
+
+    val benchmarkLogsPath = "src/main/resources/benchmark_execution_logs.txt"
 
     val mapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(
@@ -29,7 +37,11 @@ fun main() {
                 .configure(KotlinFeature.StrictNullChecks, false)
                 .build()
         )
+        configure(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT, true)
+        configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, true)
+        configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
     }
+
 
     // read and parse the yaml file and deserialize it into the data classes
     val config: BenchmarkConfiguration = Files.newBufferedReader(path).use { bufferedReader ->
@@ -43,19 +55,21 @@ fun main() {
     val allQueries: MutableList<QueryTask> = mutableListOf()
 
 
-    for (queryConfig in config.queryConfigs){
-        if (queryConfig.paramSets != null){
-            for (params in queryConfig.paramSets) {
-                for ((_, value) in params) {
-                    allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql, value, queryConfig.use))
+    for(queryConfig in config.queryConfigs){
+        if (queryConfig.use){
+            if (queryConfig.parameters != null){
+                repeat(queryConfig.repetition) {
+                    allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql, queryConfig.parameters))
+                }
+            } else {
+                repeat(queryConfig.repetition) {
+                    allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql))
                 }
             }
         }
-        else {
-            allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql, null, queryConfig.use))
-        }
     }
 
+    allQueries.shuffle(random)
 
     val startLatch = CountDownLatch(1)
     val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
@@ -87,8 +101,10 @@ fun main() {
 
     benchThreads.shutdown()
     benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
-    println("These are the logs:\n")
-    executionLogs.forEach { log -> println(log) }
+
+    File(benchmarkLogsPath).writeText(executionLogs.joinToString(separator = "\n"))
+
+    println("Execution logs have been written to $benchmarkLogsPath")
 
 
 }
@@ -97,6 +113,16 @@ fun distributeQueryTasks(sourceList: MutableList<QueryTask>, targetList: Mutable
     for ((index, element) in sourceList.withIndex()) {
         val targetIndex = index % targetList.size
         targetList[targetIndex].add(element)
+    }
+}
+
+fun castToNaturalType(input: String): Any {
+    return when {
+        input.equals("true", ignoreCase = true) -> true // Check for boolean true
+        input.equals("false", ignoreCase = true) -> false // Check for boolean false
+        input.toIntOrNull() != null -> input.toInt() // Check if it's an integer
+        input.toDoubleOrNull() != null -> input.toDouble() // Check if it's a floating-point number
+        else -> input // Default to the original string
     }
 }
 

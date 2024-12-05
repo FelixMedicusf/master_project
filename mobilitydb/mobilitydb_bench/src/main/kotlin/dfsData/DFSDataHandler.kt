@@ -125,8 +125,8 @@ class DFSDataHandler {
                     origin, 
                     destination,
                     ttextSeq(array_agg(ttext(track, timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL)),
-                    tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL)),
-                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 25832), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL))
+                    tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL), 'step'),
+                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 25832), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
                 FROM flightPoints 
                 GROUP BY flightId, airplaneType, origin, destination;
                 """.trimIndent()
@@ -181,7 +181,7 @@ class DFSDataHandler {
             statement.executeUpdate(
                 """
                 COPY cities (area, lat, lon, district, name, population)
-                FROM '/tmp/regData/staedte.csv' DELIMITER ',' CSV HEADER;
+                FROM '/tmp/regData/cities.csv' DELIMITER ',' CSV HEADER;
                 """.trimIndent()
             )
             statement.executeUpdate(
@@ -196,7 +196,7 @@ class DFSDataHandler {
             e.printStackTrace()
         }
 
-        listOf("gemeinden", "kreise", "regierungsbezirke").forEach {
+        listOf("municipalities", "counties", "districts").forEach {
             createRegTable(it)
         }
     }
@@ -212,16 +212,20 @@ class DFSDataHandler {
                     ICAO CHAR(4),
                     AirportName VARCHAR(255) NOT NULL,
                     Country VARCHAR(100) NOT NULL,
-                    City VARCHAR(100),
-                    PRIMARY KEY (ICAO)
+                    City VARCHAR(100)
                 )
                 """.trimIndent()
             )
 
-        statement.executeUpdate("""
-            COPY airports (IATA, ICAO, AirportName, Country, City)
-            FROM '/tmp/regData/airports.csv' DELIMITER ';' CSV HEADER;
-            """.trimIndent()
+
+
+            statement.executeUpdate("""
+                COPY airports (IATA, ICAO, AirportName, Country, City)
+                FROM '/tmp/regData/airports.csv' 
+                DELIMITER ';' 
+                CSV HEADER 
+                ENCODING 'WIN1252';
+                """.trimIndent()
             )
 
         }catch (e: Exception){
