@@ -403,19 +403,19 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "split -l 5000000 Fli
 # geomesa-accumulo stats-count -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
 # geomesa-accumulo export -i accumulo-node-1 -z localhost -u root -p master -c flightpointcatalog -f flightpointfeature -m 50
 
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f flightpoints -s "flightId:Integer,timestamp:Date,airplaneType:String,origin:String,destination:String,track:String,latitude:Double,longitude:Double,altitude:Double,geom:Point:srid=4326"
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f counties -s "name:String,geom:Polygon:srid=4326"
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f districts -s "name:String,geom:Polygon:srid=4326"
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f municipalities -s "name:String,geom:Polygon:srid=4326"
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f cities -s "IATA:String,ICAO:String,Airportname:String,Country:String,City:String"
-geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f airports -s "area:Double,lat:Double,long:Double,district:String,name:String,population:Integer,geom:Point:srid=4326"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f flightpoints -s \"flightId:Integer,timestamp:Date,airplaneType:String,origin:String,destination:String,track:String,latitude:Double,longitude:Double,altitude:Double,geom:Point:srid=4326\""
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f counties -s \"name:String,geom:Polygon:srid=4326\""
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f districts -s \"name:String,geom:Polygon:srid=4326\""
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f municipalities -s \"name:String,geom:Polygon:srid=4326\""
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f cities -s \"IATA:String,ICAO:String,Airportname:String,Country:String,City:String\""
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f airports -s \"area:Double,lat:Double,long:Double,district:String,name:String,population:Integer,geom:Point:srid=4326\""
 
-geomesa-accumulo ingest -C ~/flightPoints.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpoints -t 1 ~/FlightPointsGeomesa.csv
-geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f counties -t 1 ~/geomesa-counties.csv
-geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f municipalities -t 1 ~/geomesa-municipalities.csv
-geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f districts -t 1 ~/geomesa-districts.csv
-geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f airports -t 1 ~/airports.csv
-geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f cities -t 1 ~/cities.csv
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/flightPoints.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpoints -t 1 ~/FlightPointsGeomesa.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f counties -t 1 ~/geomesa-counties.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f municipalities -t 1 ~/geomesa-municipalities.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f districts -t 1 ~/geomesa-districts.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f airports -t 1 ~/airports.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f cities -t 1 ~/cities.csv"
 
 
 
