@@ -1,0 +1,20 @@
+geomesa: {
+  converters: {
+  "flightpoint-data" = {
+      type   = "delimited-text",
+      format = "CSV",
+      options = {
+        skip-lines = 1
+        delimiter  = ";"
+      }
+      id-field = "uuid()",  
+      fields = [
+        { name = "IATA",  transform = "emptyToNull($1)"  }
+        { name = "ICAO",  transform = "emptyToNull($2)"  } 
+        { name = "Airport name",  transform = "emptyToNull($3)"  }
+        { name = "Country",  transform = "emptyToNull($4)"  }  
+        { name = "City",  transform = "emptyToNull($5)"  }  
+      ]
+      }
+  }
+}

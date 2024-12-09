@@ -26,9 +26,17 @@ GEOMESA_HOME="$HOME/geomesa-accumulo_${GEOMESA_VERSION}"
 # data_path="Flight_Points_Actual_20220601_20220630.csv"
 flightpoints_resource_id="15nXnXbJrYqKow4ckEtbmPc2W-tyZLI7Q"
 flighttrips_resource_id="1JVIm0JPjWKYqO9xCsb8ELDtSrdhhgppQ"
+counties_resource_id="1XVXtuIhcgGk7OZhiO7Q56Lv-tgcb9swz"
+districts_resource_id="1sN1r8YdIMCxH8ux-RdeiYA5p2O2TNDkZ"
+municipalities_resource_id="1XkAlUjXR2RYLDaNEOfZWS63VmfFYi91x"
+airports_resource_id="1k1NcL5XOFpMz0jX-KKl0_PjF-4ReOtYH"
+cities_resource_id="1KPNtXMNCAIH2wgGeWQYnCbBfakhlOJz5"
 
 flightpoints_converter_resource_id="16GRpXquKNhOEucczoXM58xSVhJkWbGRb"
 flighttrips_converter_resource_id="1ydssKxKXJ6X1ulmyeebwxejmtHAzVd3-"
+regions_converter_resource_id="1XxefNd4gATjNWW6bPtCDi47KfeLVejNf"
+airports_converter_resource_id="1EpBUYnO3ztcX1jlYddZ3-WEv3iFvkC2i"
+cities_converter_resource_id="1dngxE8cIS38H5PrWeDG2jHri76PENmL0"
 
 user="felix"
 user_password="master"
@@ -384,7 +392,7 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "source ~/.bashrc && 
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y python3-pip && pip install gdown"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata and converter' && $HOME/.local/bin/gdown $flightpoints_resource_id && $HOME/.local/bin/gdown $flighttrips_resource_id && $HOME/.local/bin/gdown $flightpoints_converter_resource_id && $HOME/.local/bin/gdown $flighttrips_converter_resource_id"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata and converter' && $HOME/.local/bin/gdown $flightpoints_resource_id && $HOME/.local/bin/gdown $flighttrips_resource_id && $HOME/.local/bin/gdown $flightpoints_converter_resource_id && $HOME/.local/bin/gdown $flighttrips_converter_resource_id && $HOME/.local/bin/gdown $regions_converter_resource_id && $HOME/.local/bin/gdown $counties_resource_id && $HOME/.local/bin/gdown $municipalities_resource_id && && $HOME/.local/bin/gdown $districts_resource_id && $HOME/.local/bin/gdown $cities_resource_id && $HOME/.local/bin/gdown $airports_resource_id && $HOME/.local/bin/gdown $airports_converter_resource_id && $HOME/.local/bin/gdown $cities_converter_resource_id"
 # split datasets so more than 1 thread can insert the data into accumulo simultaneously
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "split -l 5000000 FlightPointsGeomesa.csv splitted_flight_points_ && split -l 35000 FlightTripsGeomesa.csv"
 
@@ -393,12 +401,27 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "split -l 5000000 Fli
 # geomesa-accumulo delete-features -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
 # geomesa-accumulo remove-schema -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
 # geomesa-accumulo stats-count -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
-
 # geomesa-accumulo export -i accumulo-node-1 -z localhost -u root -p master -c flightpointcatalog -f flightpointfeature -m 50
 
-# geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f flightpoints -s "flightId:Integer,timestamp:Date,airplaneType:String,origin:String,destination:String,track:String,latitude:Double,longitude:Double,altitude:Double,geom:Point:srid=4326"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f flightpoints -s "flightId:Integer,timestamp:Date,airplaneType:String,origin:String,destination:String,track:String,latitude:Double,longitude:Double,altitude:Double,geom:Point:srid=4326"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f counties -s "name:String,geom:Polygon:srid=4326"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f districts -s "name:String,geom:Polygon:srid=4326"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f municipalities -s "name:String,geom:Polygon:srid=4326"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f cities -s "IATA:String,ICAO:String,Airportname:String,Country:String,City:String"
+geomesa-accumulo create-schema -i accumulo-node-1 -z localhost -u root -p master -c flightcatalog -f airports -s "area:Double,lat:Double,long:Double,district:String,name:String,population:Integer,geom:Point:srid=4326"
+
+geomesa-accumulo ingest -C ~/flightPoints.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpoints -t 1 ~/FlightPointsGeomesa.csv
+geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f counties -t 1 ~/geomesa-counties.csv
+geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f municipalities -t 1 ~/geomesa-municipalities.csv
+geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f districts -t 1 ~/geomesa-districts.csv
+geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f airports -t 1 ~/airports.csv
+geomesa-accumulo ingest -C ~/regions.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f cities -t 1 ~/cities.csv
+
+
+
+
 # geomesa-accumulo ingest -C ~/dfsFlightPoints.converter -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature -t 2 ~/splitted_flight_data_*
-# geomesa-accumulo ingest -C ~/flightPoints.converter -c flightcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpoints -t 1 ~/FlightPointsGeomesa.csv
+
 # geomesa-accumulo delete-features -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
 # geomesa-accumulo remove-schema -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature
 # geomesa-accumulo stats-count -c flightpointcatalog -i accumulo-node-1 -z localhost -u root -p master -f flightpointfeature

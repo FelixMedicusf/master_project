@@ -127,7 +127,10 @@ class BenchThread(
 
         for (param in params){
             val replacement = when (param) {
-                "period" -> generateRandomTimeSpan(formatter = this.formatter, random = this.random)
+                "period_short" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=1)
+                "period_medium" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=2)
+                "period_long" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=3)
+                "period" -> generateRandomTimeSpan(formatter = this.formatter, year=2023, random = this.random)
                 "instant" -> generateRandomTimestamp(formatter = this.formatter, random = this.random)
                 "city" -> getRandomPlace(this.cities, "name", this.random)
                 "municipality" -> getRandomPlace(this.municipalities, "name", this.random)
@@ -191,32 +194,56 @@ class BenchThread(
     }
 
     // Function to generate a random time span (period) within 2023
-    private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter): String {
-        val year = 2023
+    private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter, year: Int, mode: Int = 0): String {
 
-        // Generate two random timestamps
-        val dayOfYear1 = random.nextInt(1, 366)
-        val dayOfYear2 = random.nextInt(1, 366)
+        // Generate pseudo random timestamps based on the mode
+        // 1: for short time range (0-2 days), 2: for medium time range (2 days - 1 month), 3: for long time range (1 - 12 Month)
+        // 0: Full random (0 days to 12 months)
+        val startDayOfYear = random.nextInt(1, 366)
+        val startHour = random.nextInt(0, 24)
+        val startMinute = random.nextInt(0, 60)
+        val startSecond = random.nextInt(0, 60)
 
-        val hour1 = random.nextInt(0, 24)
-        val minute1 = random.nextInt(0, 60)
-        val second1 = random.nextInt(0, 60)
+        val date1 = LocalDate.ofYearDay(year, startDayOfYear)
+        val timestamp1 = LocalDateTime.of(date1, java.time.LocalTime.of(startHour, startMinute, startSecond))
 
-        val hour2 = random.nextInt(0, 24)
-        val minute2 = random.nextInt(0, 60)
-        val second2 = random.nextInt(0, 60)
+        // Calculate the end timestamp based on the mode
+        val endDate: LocalDateTime = when (mode) {
+            1 -> {
+                // Up to 2 days
+                val daysToAdd = random.nextLong(0, 2 + 1)
+                val tentativeEnd = timestamp1.plusDays(daysToAdd)
+                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+            }
+            2 -> {
+                // Between 2 days and 1 month
+                val daysToAdd = random.nextLong(2, 30 + 1)
+                val tentativeEnd = timestamp1.plusDays(daysToAdd)
+                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+            }
+            3 -> {
+                // Between 1 and 12 months
+                val monthsToAdd = random.nextLong(1, 12 + 1)
+                val tentativeEnd = timestamp1.plusMonths(monthsToAdd)
+                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+            }
+            else -> {
 
-        val date1 = LocalDate.ofYearDay(year, dayOfYear1)
-        val date2 = LocalDate.ofYearDay(year, dayOfYear2)
+                val randomDay = random.nextInt(1, 366)
+                val randomHour = random.nextInt(0, 24)
+                val randomMinute = random.nextInt(0, 60)
+                val randomSecond = random.nextInt(0, 60)
 
-        val timestamp1 = LocalDateTime.of(date1, java.time.LocalTime.of(hour1, minute1, second1))
-        val timestamp2 = LocalDateTime.of(date2, java.time.LocalTime.of(hour2, minute2, second2))
+                val date2 = LocalDate.ofYearDay(year, randomDay)
+                LocalDateTime.of(date2, java.time.LocalTime.of(randomHour, randomMinute, randomSecond))
+            }
+        }
 
-        // Ensure start is before end
-        val (start, end) = if (timestamp1.isBefore(timestamp2)) {
-            timestamp1 to timestamp2
+        //Ensure start is before end
+        val (start, end) = if (timestamp1.isBefore(endDate)) {
+            timestamp1 to endDate
         } else {
-            timestamp2 to timestamp1
+            endDate to timestamp1
         }
 
         return "tstzspan'[${start.format(formatter)}, ${end.format(formatter)}]'"
@@ -271,4 +298,5 @@ class BenchThread(
     }
 
 }
+
 

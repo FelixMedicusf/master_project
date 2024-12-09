@@ -1,0 +1,17 @@
+geomesa: {
+  converters: {
+  "regional-data" = {
+      type   = "delimited-text",
+      format = "CSV",
+      options = {
+        skip-lines = 1
+        delimiter  = ";"
+      }
+      id-field = "uuid()",  
+      fields = [
+        { name = "name",  transform = "emptyToNull($1)"  }  
+        { name = "geom",  transform = "polygon($2)" }  
+      ]
+      }
+  }
+}

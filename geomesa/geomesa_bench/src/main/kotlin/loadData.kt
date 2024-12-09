@@ -30,65 +30,12 @@ fun main(){
         val pointsDataStore = getDataStore(connectionParams)
         println("Connected to the datastore: $pointsDataStore")
 
-        for (typeName in pointsDataStore.typeNames) {
-            println("Found Feature: $typeName")
 
-        }
-
-        var pointsSource = pointsDataStore.getFeatureSource(points)
-        var tripsSource = pointsDataStore.getFeatureSource(trips)
-
-        var pointsSchema = pointsSource.schema
-        var tripsSchema = tripsSource.schema
-
-        println()
-        println("This is the Schema for the FlightPoints: ")
-        println()
-        for (descriptor in pointsSchema.attributeDescriptors) {
-            println(descriptor.localName + " - " + descriptor.type.binding)
-        }
-
-        println()
-        println("This is the Schema for the FlightTrips: ")
-        println()
-        for (descriptor in tripsSchema.attributeDescriptors) {
-            println(descriptor.localName + " - " + descriptor.type.binding)
-        }
-
-        var filter: Filter? = null
-
-        try {
-            filter = CQL.toFilter("flightId=69491084")
-        }catch (e: Exception){
-            e.printStackTrace()
-            println("Failed to set filter.")
-        }
-
-
-        var filteredPoints = pointsSource.getFeatures(filter)
-        var filteredTrips = tripsSource.getFeatures(filter)
-
-        var it = filteredPoints.features()
-
-        println("Filtered Flightpoints: \n")
-        while (it.hasNext()) {
-            val feature = it.next()
-            println("${feature.getAttribute("flightId")}, ${feature.getAttribute("timestamp")}, ${feature.getAttribute("airplaneType")}, ${feature.getAttribute("origin")}, ${feature.getAttribute("destination")}, ${feature.getAttribute("geom")}, ${feature.getAttribute("altitude")}")
-        }
-        println()
-        it.close()
-
-        it = filteredTrips.features()
-
-        println("Filtered Flighttrips: \n")
-        while (it.hasNext()) {
-            val feature = it.next()
-            println("${feature.getAttribute(0)}, ${feature.getAttribute(1)}, ${feature.getAttribute(2)}, ${feature.getAttribute(3)}, ${feature.getAttribute(4)}, ${feature.getAttribute(5)}, ${feature.getAttribute(6)}")
-        }
-        println()
-        it.close()
 
     }catch (e: Exception){
         println("Could not connect to Accumulo DataStore!")
+
+        val countiesSource: SimpleFeatureSource = countiesDataStore.getFeatureSource("counties")
+        val flightpointsSource: SimpleFeatureSource = flightpointsDataStore.getFeatureSource("flightpoints")
     }
 }

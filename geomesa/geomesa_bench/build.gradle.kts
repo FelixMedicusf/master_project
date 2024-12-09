@@ -23,6 +23,7 @@ dependencies {
     implementation("org.locationtech.geomesa:geomesa-filter_2.12:5.1.0")
     implementation("org.apache.accumulo:accumulo-core:2.1.3")
     implementation("org.slf4j:slf4j-simple:2.0.10")
+    implementation ("org.locationtech.proj4j:proj4j:1.1.0")
 
 
 }

@@ -1,0 +1,22 @@
+geomesa: {
+  converters: {
+  "flightpoint-data" = {
+      type   = "delimited-text",
+      format = "CSV",
+      options = {
+        skip-lines = 1
+        delimiter  = ","
+      }
+      id-field = "uuid()",  
+      fields = [
+        { name = "area",  transform = "$1::double"  }
+        { name = "lat",  transform = "$2::double"  }  
+        { name = "long",  transform = "$3::double"  }  
+        { name = "district",   transform = "emptyToNull($4)"  }
+        { name = "name",   transform = "emptyToNull($5)"  }    
+        { name = "population",   transform = "$6::int"  }
+        { name = "geom",       transform = "point($long, $lat)" } 
+      ]
+      }
+  }
+}

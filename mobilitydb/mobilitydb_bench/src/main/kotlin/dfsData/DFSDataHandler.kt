@@ -65,7 +65,7 @@ class DFSDataHandler {
                     latitude FLOAT,
                     longitude FLOAT,
                     altitude FLOAT,
-                    Geom GEOMETRY(Point, 25832)
+                    Geom GEOMETRY(Point, 4326)
                 )
                 """.trimIndent()
             )
@@ -101,6 +101,7 @@ class DFSDataHandler {
             e.printStackTrace()
         }
 
+        /*
         try {
             val updateGeoms = """
                 UPDATE flightPoints 
@@ -112,6 +113,13 @@ class DFSDataHandler {
             println("Could not update Geometry Points.")
             e.printStackTrace()
         }
+
+         */
+        val updateGeoms = """
+                UPDATE flightPoints 
+                SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
+            """.trimIndent()
+        val updatedRows = statement.executeUpdate(updateGeoms)
     }
 
     private fun createTrajectories() {
@@ -126,7 +134,7 @@ class DFSDataHandler {
                     destination,
                     ttextSeq(array_agg(ttext(track, timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL)),
                     tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL), 'step'),
-                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 25832), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
+                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
                 FROM flightPoints 
                 GROUP BY flightId, airplaneType, origin, destination;
                 """.trimIndent()

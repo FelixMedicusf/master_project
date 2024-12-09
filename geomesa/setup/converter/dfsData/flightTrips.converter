@@ -1,6 +1,6 @@
 geomesa: {
   converters: {
-  "flightpoint-data" = {
+  "flighttrips-data" = {
       type   = "delimited-text",
       format = "CSV",
       options = {
