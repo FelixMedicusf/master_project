@@ -1,6 +1,6 @@
 geomesa: {
   converters: {
-  "flightpoint-data" = {
+  "cities-data" = {
       type   = "delimited-text",
       format = "CSV",
       options = {

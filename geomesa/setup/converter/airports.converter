@@ -1,6 +1,6 @@
 geomesa: {
   converters: {
-  "flightpoint-data" = {
+  "airports-data" = {
       type   = "delimited-text",
       format = "CSV",
       options = {
@@ -9,11 +9,11 @@ geomesa: {
       }
       id-field = "uuid()",  
       fields = [
-        { name = "IATA",  transform = "emptyToNull($1)"  }
-        { name = "ICAO",  transform = "emptyToNull($2)"  } 
-        { name = "Airport name",  transform = "emptyToNull($3)"  }
-        { name = "Country",  transform = "emptyToNull($4)"  }  
-        { name = "City",  transform = "emptyToNull($5)"  }  
+        { name = "iata",  transform = "emptyToNull($1)"  }
+        { name = "icao",  transform = "emptyToNull($2)"  } 
+        { name = "name",  transform = "emptyToNull($3)"  }
+        { name = "country",  transform = "emptyToNull($4)"  }  
+        { name = "city",  transform = "emptyToNull($5)"  }  
       ]
       }
   }
