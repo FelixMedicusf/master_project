@@ -1,22 +1,23 @@
-package dfsData
-
-import BenchmarkConfiguration
-import BenchmarkSettings
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.mongodb.MongoClientSettings
+import com.mongodb.MongoCredential
+import com.mongodb.ServerAddress
+import com.mongodb.client.MongoClients
+import com.mongodb.client.MongoCollection
+import com.mongodb.client.MongoDatabase
+import com.mongodb.connection.ClusterSettings
+import org.bson.Document
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.Statement
+import kotlin.reflect.jvm.internal.impl.builtins.StandardNames
+
 
 class DFSDataHandler {
 
     private val conf: BenchmarkConfiguration
-    private val connection: Connection
-    private val statement: Statement
 
     init {
         val path = Paths.get("benchConf.yaml")
@@ -37,266 +38,76 @@ class DFSDataHandler {
             mapper.readValue(reader, BenchmarkConfiguration::class.java)
         }
 
-        val mobilityDBIp = conf.benchmarkSettings.nodes[0]
-        val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/aviation_data"
+        val mongodbIps = conf.benchmarkSettings.nodes
         val user = "felix"
         val password = "master"
+        val connectionString = "mongodb://$user:$password@${mongodbIps.joinToString(",") { "$it:27017" }}/" +
+                "<database>?replicaSet=<replicaSetName>&retryWrites=true&w=majority"
 
-        connection = DriverManager.getConnection(connectionString, user, password)
-        statement = connection.createStatement()
-    }
 
-    fun processFlightData() {
-        insertFlightPoints()
-        createTrajectories()
-    }
+        val mongdbClientPort = 27017;
 
-    private fun insertFlightPoints() {
-        try {
-            statement.executeUpdate(
-                """
-                CREATE TABLE flightPoints(
-                    flightId INTEGER, 
-                    timestamp TIMESTAMP, 
-                    airplaneType VARCHAR(8), 
-                    origin VARCHAR(8), 
-                    destination VARCHAR(8), 
-                    track VARCHAR(8),
-                    latitude FLOAT,
-                    longitude FLOAT,
-                    altitude FLOAT,
-                    Geom GEOMETRY(Point, 4326)
-                )
-                """.trimIndent()
-            )
-            println("Created Table flightPoints.")
-        } catch (e: Exception) {
-            println("Could not create Table flightPoints.")
-            e.printStackTrace()
+        var mongodbHosts = ArrayList<ServerAddress>();
+        mongodbHosts.add(ServerAddress(mongodbIps[0], mongdbClientPort))
+        mongodbHosts.add(ServerAddress(mongodbIps[1], mongdbClientPort))
+        mongodbHosts.add(ServerAddress(mongodbIps[2], mongdbClientPort))
+
+        val databaseName = "aviation_data"
+
+        val conn = MongoClients.create(
+            MongoClientSettings.builder()
+                .applyToClusterSettings { builder: ClusterSettings.Builder ->
+                    builder.hosts(
+                        mongodbHosts
+                    )
+                }
+                //.credential(MongoCredential.createCredential(user, databaseName, password.toCharArray()))
+                .build())
+
+        val database = conn.getDatabase(databaseName)
+
+
+        fun createFlightPointsCollection(database: MongoDatabase){
+            database.getCollection("flightpoints")
+            val filePath = "flightpoints.csv"
+
         }
 
-        if (conf.benchmarkSettings.nodes.size != 1) {
-            try {
-                statement.executeQuery(
-                    "SELECT create_distributed_table('flightpoints', 'flightid');"
-                )
-                println("Distributed Table flightPoints with flightId as sharding key.")
-            } catch (e: Exception) {
-                println("Could not distribute table flightPoints.")
-                e.printStackTrace()
-            }
-        }
+        val collection: MongoCollection<Document> = database.getCollection("flightPoints")
 
-        try {
-            statement.executeUpdate("SET DateStyle = 'ISO, DMY';")
-            val copyDataFromCsv = """
-                COPY flightPoints
-                (flightId, timestamp, airplaneType, origin, destination, track, latitude, longitude, altitude)
-                FROM '/tmp/FlightPointsMobilityDB.csv' DELIMITER ',' CSV HEADER;
-            """.trimIndent()
-            statement.executeUpdate(copyDataFromCsv)
-            println("Data copied into flightPoints table.")
-        } catch (e: Exception) {
-            println("Could not load data into flightPoints table.")
-            e.printStackTrace()
-        }
+        collection.insertOne(Document("key", "value"))
+
+        conn.close();
 
         /*
-        try {
-            val updateGeoms = """
-                UPDATE flightPoints 
-                SET Geom = ST_Transform(ST_SetSRID(ST_MakePoint(longitude, latitude), 4326), 25832);
-            """.trimIndent()
-            val updatedRows = statement.executeUpdate(updateGeoms)
-            println("Updated $updatedRows rows with geometry points.")
-        } catch (e: Exception) {
-            println("Could not update Geometry Points.")
-            e.printStackTrace()
-        }
+        val settings = MongoClientSettings.builder()
+            .applyConnectionString(ConnectionString(connectionString))
+            .build()
 
-         */
-        val updateGeoms = """
-                UPDATE flightPoints 
-                SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
-            """.trimIndent()
-        val updatedRows = statement.executeUpdate(updateGeoms)
-    }
+        val mongoClient = MongoClients.create(settings)
 
-    private fun createTrajectories() {
-        try {
-            statement.executeUpdate(
-                """
-                CREATE TABLE flights(flightId, airplaneType, origin, destination, track, altitude, trip) AS
-                SELECT 
-                    flightId,
-                    airplaneType,
-                    origin, 
-                    destination,
-                    ttextSeq(array_agg(ttext(track, timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL)),
-                    tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL), 'step'),
-                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
-                FROM flightPoints 
-                GROUP BY flightId, airplaneType, origin, destination;
-                """.trimIndent()
-            )
-            println("Created flights table with trajectories.")
-        } catch (e: Exception) {
-            println("Could not create flights table.")
-            e.printStackTrace()
-        }
+        val databaseName = "aviation_data"
+        val database: MongoDatabase = mongoClient.getDatabase(databaseName)
 
-        try {
-            statement.executeUpdate("ALTER TABLE flights ADD COLUMN traj GEOMETRY;")
-            statement.executeUpdate("UPDATE flights SET traj = trajectory(trip);")
-            println("Added and populated traj column in flights table.")
-        } catch (e: Exception) {
-            println("Could not create or populate traj column.")
-            e.printStackTrace()
-        }
+        val collectionName = "flightPoints"
+        val collection = database.getCollection(collectionName)
+        val sampleDocument = org.bson.Document("name", "testDocument")
+            .append("createdAt", System.currentTimeMillis())
 
-        try {
-            val resultSet = statement.executeQuery("SELECT COUNT(*) FROM flights;")
-            if (resultSet.next()) {
-                println("Flights table contains trajectories for ${resultSet.getInt(1)} flight trips.")
-            }
-        } catch (e: Exception) {
-            println("Could not count flight trajectories.")
-            e.printStackTrace()
-        }
-    }
+        collection.insertOne(sampleDocument)
 
-    fun processLocationsData() {
-        insertStateData()
-        insertAirportData()
+        println("Database '$databaseName' and collection '$collectionName' created successfully!")
+
+        // Close the client
+        mongoClient.close()
+        */
 
     }
 
-    private fun insertStateData() {
-        try {
-            statement.executeUpdate(
-                """
-                CREATE TABLE cities (
-                    area NUMERIC(8, 3),
-                    lat NUMERIC(8, 5),
-                    lon NUMERIC(8, 5),
-                    district VARCHAR(50),
-                    name VARCHAR(50),
-                    population INTEGER,
-                    Geom GEOMETRY(Point, 25832)
-                )
-                """.trimIndent()
-            )
-            statement.executeUpdate(
-                """
-                COPY cities (area, lat, lon, district, name, population)
-                FROM '/tmp/regData/cities.csv' DELIMITER ',' CSV HEADER;
-                """.trimIndent()
-            )
-            statement.executeUpdate(
-                """
-                UPDATE cities 
-                SET Geom = ST_Transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 25832);
-                """.trimIndent()
-            )
-            println("Inserted city data.")
-        } catch (e: Exception) {
-            println("Could not create or populate cities table.")
-            e.printStackTrace()
-        }
 
-        listOf("municipalities", "counties", "districts").forEach {
-            createRegTable(it)
-        }
-    }
-
-    private fun insertAirportData(){
-        println("Creating Table for airports.")
-
-        try {
-
-            statement.executeUpdate("""
-                CREATE TABLE airports (
-                    IATA CHAR(3) NOT NULL,
-                    ICAO CHAR(4),
-                    AirportName VARCHAR(255) NOT NULL,
-                    Country VARCHAR(100) NOT NULL,
-                    City VARCHAR(100)
-                )
-                """.trimIndent()
-            )
-
-
-
-            statement.executeUpdate("""
-                COPY airports (IATA, ICAO, AirportName, Country, City)
-                FROM '/tmp/regData/airports.csv' 
-                DELIMITER ';' 
-                CSV HEADER 
-                ENCODING 'WIN1252';
-                """.trimIndent()
-            )
-
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }
-
-    private fun createRegTable(region: String) {
-        try {
-            println("Processing region data for $region.")
-            statement.executeUpdate(
-                """
-                CREATE TEMP TABLE temp_$region (
-                    row_number SERIAL PRIMARY KEY,
-                    name VARCHAR(255),
-                    latitude DOUBLE PRECISION,
-                    longitude DOUBLE PRECISION
-                );
-                """.trimIndent()
-            )
-            statement.executeUpdate(
-                """
-                COPY temp_$region(name, latitude, longitude)
-                FROM '/tmp/regData/$region.csv' WITH (FORMAT csv, HEADER true);
-                """.trimIndent()
-            )
-            statement.executeUpdate(
-                """
-                CREATE TABLE $region (
-                    name VARCHAR(255),
-                    Geom GEOMETRY(Polygon, 4326) NOT NULL
-                );
-                """.trimIndent()
-            )
-            statement.executeUpdate("""
-                    INSERT INTO $region (name, Geom)
-                    SELECT
-                        name,
-                        ST_MakePolygon(
-                            ST_GeomFromText(
-                                'LINESTRING(' || 
-                                string_agg(latitude || ' ' || longitude, ', ' ORDER BY row_number) || 
-                                ')'
-                            )
-                        )::geometry(Polygon, 4326)
-                    FROM temp_$region
-                    GROUP BY name;
-                    """.trimIndent()
-            )
-
-            statement.executeUpdate("DROP TABLE temp_$region;")
-            statement.executeUpdate("ALTER TABLE $region ADD COLUMN geom_etrs GEOMETRY(Polygon, 25832);")
-            statement.executeUpdate("UPDATE $region SET geom_etrs = ST_Transform(Geom, 25832);")
-            println("Processed region data for $region.")
-        } catch (e: Exception) {
-            println("Error processing region data for $region.")
-            e.printStackTrace()
-        }
-    }
 }
 
 fun main() {
     val handler = DFSDataHandler()
-    handler.processFlightData()
-    handler.processLocationsData()
+
 }

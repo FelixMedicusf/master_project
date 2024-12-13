@@ -16,7 +16,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("org.postgresql:postgresql:42.6.0")
+    implementation("org.mongodb:mongodb-driver-sync:4.11.0")
+
     implementation ("com.opencsv:opencsv:5.5.2")
     implementation("org.slf4j:slf4j-simple:2.0.10")
     implementation ("org.locationtech.proj4j:proj4j:1.1.0")

@@ -177,5 +177,5 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv"
 
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
 
