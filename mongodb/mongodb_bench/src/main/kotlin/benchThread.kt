@@ -1,8 +1,12 @@
+import com.mongodb.MongoClientSettings
+import com.mongodb.MongoCredential
+import com.mongodb.ReadPreference
+import com.mongodb.ServerAddress
+import com.mongodb.client.MongoClients
+import com.mongodb.client.MongoDatabase
+import com.mongodb.connection.ClusterSettings
 import java.io.File
-import java.sql.Connection
-import java.sql.DriverManager.getConnection
 import java.sql.ResultSet
-import java.sql.Statement
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -13,16 +17,18 @@ import kotlin.random.Random
 
 class BenchThread(
     private val threadName: String,
-    private val mobilityDBIp: String,
+    private val mongodbIps: List<String>,
     private val databaseName: String,
     private val user: String,
     private val password: String,
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
-    private val startLatch: CountDownLatch
+    private val startLatch: CountDownLatch,
+    private val seed: Long
 ) : Thread(threadName) {
 
-    private val seed = 12345L
+    private var database: MongoDatabase
+
     private val random = Random(seed)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     private val municipalitiesPath = "../../data/nrwData/output/municipalities.csv"
@@ -45,56 +51,82 @@ class BenchThread(
             println("Error in thread ${thread.name}: ${exception.message}")
             exception.printStackTrace()
         }
+
+        val user = "felix"
+        val password = "master"
+        val mongodbClientPort = 27017
+
+        var mongodbHosts = ArrayList<ServerAddress>();
+
+        mongodbIps.forEach{ipAddress -> mongodbHosts.add(ServerAddress(ipAddress, mongodbClientPort))}
+
+        val conn = MongoClients.create(
+            MongoClientSettings.builder()
+                .applyToClusterSettings { builder: ClusterSettings.Builder ->
+                    builder.hosts(
+                        mongodbHosts
+                    )
+                }
+                .readPreference(ReadPreference.nearest())
+                .credential(
+                    MongoCredential.createCredential(
+                        user,
+                        "admin",
+                        password.toCharArray()
+                    )
+                )
+                .build())
+
+        database = conn.getDatabase(databaseName)
     }
 
     override fun run() {
-        var connection: Connection? = null
-        var statement: Statement? = null
-        try {
 
-            connection = getConnection(
-                "jdbc:postgresql://$mobilityDBIp/$databaseName", user, password
-            )
-
-            statement = connection.createStatement()
-
-
+            val flightPointsCollection = database.getCollection("flightpoints")
+            val flightTripCollection = database.getCollection("flighttrips")
             // Ensure all threads start at the same time
             startLatch.await()
 
             println("$threadName started executing at ${Instant.now()}.")
             println()
-
+        try{
             while (true) {
                 val task = queryQueue.poll() ?: break
 
-                val sqlQuery = if (task.params != null) {
-                    this.formatSQLStatement(task.sql, task.params)
+                val parsedMongoQuery = if (task.params != null) {
+                    parseMongodbQuery(task.mongoQuery, task.params)
                 } else {
-                    task.sql
+                    Pair(null, task.mongoQuery)
                 }
 
 
                 val startTime = Instant.now().toEpochMilli()
 
-                val response = statement.executeQuery(sqlQuery)
+                val response = flightPointsCollection
+
                 val endTime = Instant.now().toEpochMilli()
 
-                println(sqlQuery)
-                printSQLResponse(response)
+                println(parsedMongoQuery.second)
+                //printMongoResponse(response)
+
+                val params = task.params?.joinToString(";") ?: ""
+                val paramValues = parsedMongoQuery.first ?: ""
 
                 synchronized(log) {
                     log.add(
-                        QueryExecutionLog(
-                            threadName = threadName,
-                            queryName = task.queryName,
-                            queryType = task.type,
-                            round = 0,
-                            executionIndex = 0,
-                            startTime = startTime,
-                            endTime = endTime,
-                            latency = (endTime - startTime)/1000
-                        )
+                            QueryExecutionLog(
+                                threadName = threadName,
+                                queryName = task.queryName,
+                                queryType = task.type,
+                                params =  params,
+                                paramValues = paramValues,
+                                round = 0,
+                                executionIndex = 0,
+                                startTime = startTime,
+                                endTime = endTime,
+                                latency = (endTime - startTime)/1000
+                            )
+
                     )
                 }
 
@@ -106,25 +138,12 @@ class BenchThread(
             e.printStackTrace()
         } finally {
 
-            try {
-                statement?.close()
-            } catch (e: Exception) {
-                println("Failed to close statement: ${e.message}")
-            }
-
-            try {
-                connection?.close()
-            } catch (e: Exception) {
-                println("Failed to close connection: ${e.message}")
-            }
         }
-
     }
 
-
-    private fun formatSQLStatement(sql: String, params: List<String>): String {
-        var parsedSql = sql
-
+    private fun parseMongodbQuery(query: String, params: List<String>): Pair<String, String> {
+        var parsedMongoQuery = query
+        var values = ArrayList<String>()
         for (param in params){
             val replacement = when (param) {
                 "period_short" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=1)
@@ -144,14 +163,16 @@ class BenchThread(
                 else -> ""
 
             }
-
-            if (replacement != null)parsedSql = parsedSql.replace(":$param", replacement)
+            if (replacement != null) {
+                values.add(replacement)
+            }
+            if (replacement != null)parsedMongoQuery = parsedMongoQuery.replace(":$param", replacement)
 
         }
-        return parsedSql
+        return Pair(values.joinToString(";"), parsedMongoQuery)
     }
 
-    private fun printSQLResponse(resultSet: ResultSet) {
+    private fun printMongoResponse(resultSet: ResultSet) {
         try {
 
             val metaData = resultSet.metaData
@@ -255,7 +276,7 @@ class BenchThread(
         val lines = File(filePath).readLines()
 
         if (lines.isNotEmpty()) {
-            val header = lines.first().split(",") // Get column headers
+            val header = lines.first().split(",")
 
             val indicesToKeep = header.withIndex()
                 .filter { it.value in requiredColumns }
@@ -265,11 +286,11 @@ class BenchThread(
                 lines.drop(1).map { line ->
                     val values = line.split(",")
                     indicesToKeep.associate { header[it] to values[it] }
-                }.distinct() // Ensure distinct values during map creation
+                }.distinct()
             )
         }
 
-        return rows.toList() // Convert back to a List to match return type
+        return rows.toList()
     }
 
     private fun getRandomPlace(

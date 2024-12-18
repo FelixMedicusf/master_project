@@ -11,18 +11,20 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
 import kotlin.random.Random
+
+const val USER = "felix"
+const val PASSWORD = "master"
+const val DATABASE = "aviation_data"
 
 fun main() {
 
-    val user = "felix"
-    val password = "master"
-    val database = "aviation_data"
+
 
     val path = Paths.get("benchConf.yaml")
 
-    val seed = 123L
-    val random = Random(seed)
 
     val benchmarkLogsPath = "src/main/resources/benchmark_execution_logs.txt"
 
@@ -43,15 +45,22 @@ fun main() {
     }
 
 
-    // read and parse the yaml file and deserialize it into the data classes
-    val config: BenchmarkConfiguration = Files.newBufferedReader(path).use { bufferedReader ->
-        mapper.readValue(bufferedReader, BenchmarkConfiguration::class.java)
+    val config: BenchmarkConfiguration = try {
+        Files.newBufferedReader(path).use { bufferedReader ->
+            mapper.readValue(bufferedReader, BenchmarkConfiguration::class.java)
+        }
+    } catch (e: Exception) {
+        println("Error reading or parsing configuration file: ${e.message}")
+        return
     }
 
     val threadCount: Int = config.benchmarkSettings.threads
     val sut: String = config.benchmarkSettings.sut
     val nodes: List<String> = config.benchmarkSettings.nodes
 
+    val mainSeed = config.benchmarkSettings.randomSeed ?: 123L
+    println("Using random seed: $mainSeed")
+    val random = Random(mainSeed)
     val allQueries: MutableList<QueryTask> = mutableListOf()
 
 
@@ -71,27 +80,18 @@ fun main() {
 
     allQueries.shuffle(random)
 
+    val threadSeeds = ArrayList<Long>()
+
     val startLatch = CountDownLatch(1)
     val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
     val benchThreads = Executors.newFixedThreadPool(threadCount)
 
-    /*
-    val threadsQueryList: MutableList<MutableList<QueryTask>> =
-        MutableList(threadCount) { mutableListOf() }
-
-    distributeQueryTasks(allQueries, threadsQueryList)
-
-    for ((threadNumber, queries) in threadsQueryList.withIndex()){
-        benchThreads.submit(BenchThread("thread-$threadNumber", nodes[0], database, user,
-            password, queries, executionLogs, startLatch))
-    }
-
-     */
-
     val queryQueue = ConcurrentLinkedQueue(allQueries)
 
     for (i in 1..threadCount){
-        benchThreads.submit(BenchThread("thread-$i", nodes[0], database, user, password, queryQueue, executionLogs, startLatch))
+        val threadSeed = generateRandomSeed(mainSeed)
+        threadSeeds.add(threadSeed)
+        benchThreads.submit(BenchThread("thread-$i", nodes[0], DATABASE, USER, PASSWORD, queryQueue, executionLogs, startLatch, threadSeed))
     }
 
     // Signal all threads to start
@@ -102,13 +102,19 @@ fun main() {
     benchThreads.shutdown()
     benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
 
-    File(benchmarkLogsPath).writeText(executionLogs.joinToString(separator = "\n"))
+    File(benchmarkLogsPath).writeText(threadSeeds.joinToString(separator = ";") + "\n")
+    File(benchmarkLogsPath).appendText(executionLogs.joinToString(separator = "\n"))
 
     println("Execution logs have been written to $benchmarkLogsPath")
 
-
 }
 
+fun generateRandomSeed(existingSeed: Long): Long {
+    val random = Random(existingSeed) // Initialize Random with the existing seed
+    return random.nextLong()          // Generate a random Long
+}
+
+/*
 fun distributeQueryTasks(sourceList: MutableList<QueryTask>, targetList: MutableList<MutableList<QueryTask>>) {
     for ((index, element) in sourceList.withIndex()) {
         val targetIndex = index % targetList.size
@@ -116,13 +122,6 @@ fun distributeQueryTasks(sourceList: MutableList<QueryTask>, targetList: Mutable
     }
 }
 
-fun castToNaturalType(input: String): Any {
-    return when {
-        input.equals("true", ignoreCase = true) -> true // Check for boolean true
-        input.equals("false", ignoreCase = true) -> false // Check for boolean false
-        input.toIntOrNull() != null -> input.toInt() // Check if it's an integer
-        input.toDoubleOrNull() != null -> input.toDouble() // Check if it's a floating-point number
-        else -> input // Default to the original string
-    }
-}
+ */
+
 

@@ -5,6 +5,7 @@ benchmark:
     - "34.140.75.134"
     - "34.77.111.93"
   threads: 10
+  random_seed: 123
 
 queryConfigs:
 

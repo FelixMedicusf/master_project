@@ -132,11 +132,11 @@ class DFSDataHandler {
                     airplaneType,
                     origin, 
                     destination,
-                    ttextSeq(array_agg(ttext(track, timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL)),
+                    track,
                     tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL), 'step'),
                     tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
                 FROM flightPoints 
-                GROUP BY flightId, airplaneType, origin, destination;
+                GROUP BY flightId, track, airplaneType, origin, destination;
                 """.trimIndent()
             )
             println("Created flights table with trajectories.")

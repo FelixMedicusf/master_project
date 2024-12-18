@@ -19,10 +19,11 @@ class BenchThread(
     private val password: String,
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
-    private val startLatch: CountDownLatch
+    private val startLatch: CountDownLatch,
+    private val seed: Long
 ) : Thread(threadName) {
 
-    private val seed = 12345L
+
     private val random = Random(seed)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
     private val municipalitiesPath = "../../data/nrwData/output/municipalities.csv"
@@ -57,7 +58,6 @@ class BenchThread(
             )
 
             statement = connection.createStatement()
-
 
             // Ensure all threads start at the same time
             startLatch.await()

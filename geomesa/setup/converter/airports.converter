@@ -1,20 +1,4531 @@
-geomesa: {
-  converters: {
-  "airports-data" = {
-      type   = "delimited-text",
-      format = "CSV",
-      options = {
-        skip-lines = 1
-        delimiter  = ";"
+[
+  {
+    "_id": {"$oid": "6761931a37ffa8540593ff49"},
+    "airplaneType": "E170",
+    "destinationAirport": "EDDV",
+    "flightId": 69511354,
+    "originAirport": "LFPG",
+    "points": [
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9517437, 51.5027995]
+        },
+        "altitude": 6620.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.95245195, 51.50447]
+        },
+        "altitude": 6607.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9531602, 51.5061405]
+        },
+        "altitude": 6594.85
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.95386845, 51.507811000000004]
+        },
+        "altitude": 6582.175
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9545767, 51.5094815]
+        },
+        "altitude": 6569.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9552823, 51.51114365]
+        },
+        "altitude": 6556.025
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9559879, 51.512805799999995]
+        },
+        "altitude": 6542.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9566935, 51.51446795]
+        },
+        "altitude": 6529.075000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9573991, 51.5161301]
+        },
+        "altitude": 6515.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.958101325, 51.517783025]
+        },
+        "altitude": 6501.525000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.958803549999999, 51.51943595]
+        },
+        "altitude": 6487.450000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.959505775, 51.521088875]
+        },
+        "altitude": 6473.375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.960208, 51.5227418]
+        },
+        "altitude": 6459.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.960907525, 51.524385275]
+        },
+        "altitude": 6444.775
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.96160705, 51.526028749999995]
+        },
+        "altitude": 6430.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.962306575, 51.527672224999996]
+        },
+        "altitude": 6415.725
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9630061, 51.5293157]
+        },
+        "altitude": 6401.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9637026, 51.530948575]
+        },
+        "altitude": 6386.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9643991, 51.532581449999995]
+        },
+        "altitude": 6371.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9650956, 51.534214325]
+        },
+        "altitude": 6356.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9657921, 51.5358472]
+        },
+        "altitude": 6342.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.966485925, 51.537468575]
+        },
+        "altitude": 6327.375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.96717975, 51.539089950000005]
+        },
+        "altitude": 6312.549999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.967873574999999, 51.540711325000004]
+        },
+        "altitude": 6297.724999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9685674, 51.5423327]
+        },
+        "altitude": 6282.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.969257825, 51.543942625]
+        },
+        "altitude": 6268.174999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.96994825, 51.54555255]
+        },
+        "altitude": 6253.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.970638675, 51.547162475]
+        },
+        "altitude": 6238.725
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9713291, 51.5487724]
+        },
+        "altitude": 6224
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.972016475, 51.550369249999996]
+        },
+        "altitude": 6209.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.97270385, 51.5519661]
+        },
+        "altitude": 6195.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.973391225, 51.55356295]
+        },
+        "altitude": 6180.799999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9740786, 51.5551598]
+        },
+        "altitude": 6166.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.97476295, 51.556744025]
+        },
+        "altitude": 6152.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.975447299999999, 51.55832825]
+        },
+        "altitude": 6138.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.97613165, 51.559912475]
+        },
+        "altitude": 6124.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.976816, 51.5614967]
+        },
+        "altitude": 6110.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.977497275, 51.563070374999995]
+        },
+        "altitude": 6096.724999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.978178549999999, 51.56464405]
+        },
+        "altitude": 6083.049999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.978859825, 51.566217725]
+        },
+        "altitude": 6069.375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9795411, 51.5677914]
+        },
+        "altitude": 6055.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98022005, 51.569356725]
+        },
+        "altitude": 6042.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.980899, 51.57092205]
+        },
+        "altitude": 6028.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98157795, 51.572487375]
+        },
+        "altitude": 6015.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9822569, 51.5740527]
+        },
+        "altitude": 6001.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.982933525, 51.575612375000006]
+        },
+        "altitude": 5988.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98361015, 51.57717205]
+        },
+        "altitude": 5974.799999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:27:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.984286775, 51.578731725]
+        },
+        "altitude": 5961.349999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9849634, 51.5802914]
+        },
+        "altitude": 5947.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98563765, 51.5818477]
+        },
+        "altitude": 5934.325
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9863119, 51.583404]
+        },
+        "altitude": 5920.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98698615, 51.584960300000006]
+        },
+        "altitude": 5907.175
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9876604, 51.5865166]
+        },
+        "altitude": 5893.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.988333425, 51.588072225000005]
+        },
+        "altitude": 5879.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.98900645, 51.58962785]
+        },
+        "altitude": 5866
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.989679474999999, 51.591183475]
+        },
+        "altitude": 5852.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9903525, 51.5927391]
+        },
+        "altitude": 5838.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9910239, 51.594296475]
+        },
+        "altitude": 5824.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9916953, 51.59585385]
+        },
+        "altitude": 5810.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9923667, 51.597411225]
+        },
+        "altitude": 5795.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9930381, 51.5989686]
+        },
+        "altitude": 5781.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.993707775, 51.600531475]
+        },
+        "altitude": 5766.9375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.99437745, 51.60209435]
+        },
+        "altitude": 5752.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.995047125, 51.603657225]
+        },
+        "altitude": 5737.2125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9957168, 51.6052201]
+        },
+        "altitude": 5722.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.996386475000001, 51.606782975]
+        },
+        "altitude": 5707.4875
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.99705615, 51.60834585]
+        },
+        "altitude": 5692.625
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.997725825, 51.609908725000004]
+        },
+        "altitude": 5677.7625
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9983955, 51.6114716]
+        },
+        "altitude": 5662.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.999064925, 51.613038825000004]
+        },
+        "altitude": 5647.575
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.99973435, 51.61460605]
+        },
+        "altitude": 5632.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.000403775, 51.616173274999994]
+        },
+        "altitude": 5616.925
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0010732, 51.6177405]
+        },
+        "altitude": 5601.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0017417, 51.619308624999995]
+        },
+        "altitude": 5586.125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0024102, 51.620876749999994]
+        },
+        "altitude": 5570.65
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0030787, 51.622444875]
+        },
+        "altitude": 5555.175
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0037472, 51.624013]
+        },
+        "altitude": 5539.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.004416625, 51.62558085]
+        },
+        "altitude": 5524.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.00508605, 51.6271487]
+        },
+        "altitude": 5508.799999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.005755475, 51.62871655]
+        },
+        "altitude": 5493.349999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0064249, 51.6302844]
+        },
+        "altitude": 5477.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.007094875, 51.631851375]
+        },
+        "altitude": 5462.575
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.007764850000001, 51.63341835]
+        },
+        "altitude": 5447.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.008434825, 51.634985325]
+        },
+        "altitude": 5431.925
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0091048, 51.6365523]
+        },
+        "altitude": 5416.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.00977605, 51.638116749999995]
+        },
+        "altitude": 5401.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0104473, 51.6396812]
+        },
+        "altitude": 5386.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.01111855, 51.64124565]
+        },
+        "altitude": 5371.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0117898, 51.6428101]
+        },
+        "altitude": 5356.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.012462300000001, 51.644370949999995]
+        },
+        "altitude": 5341.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0131348, 51.6459318]
+        },
+        "altitude": 5327.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0138073, 51.647492650000004]
+        },
+        "altitude": 5312.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0144798, 51.6490535]
+        },
+        "altitude": 5297.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.015153925, 51.650610975]
+        },
+        "altitude": 5283.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.01582805, 51.652168450000005]
+        },
+        "altitude": 5269.200000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.016502175, 51.653725925]
+        },
+        "altitude": 5254.900000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0171763, 51.6552834]
+        },
+        "altitude": 5240.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.017850975, 51.656838125]
+        },
+        "altitude": 5226.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.01852565, 51.65839285]
+        },
+        "altitude": 5212.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.019200325, 51.659947575000004]
+        },
+        "altitude": 5198.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.019875, 51.6615023]
+        },
+        "altitude": 5184.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.020549875, 51.663054575000004]
+        },
+        "altitude": 5170.424999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.02122475, 51.66460685]
+        },
+        "altitude": 5156.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.021899625, 51.666159125]
+        },
+        "altitude": 5142.475
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0225745, 51.6677114]
+        },
+        "altitude": 5128.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0232499, 51.669262725]
+        },
+        "altitude": 5114.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.023925299999998, 51.670814050000004]
+        },
+        "altitude": 5100.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.024600699999999, 51.672365375]
+        },
+        "altitude": 5086.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0252761, 51.6739167]
+        },
+        "altitude": 5072.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0259517, 51.675467575]
+        },
+        "altitude": 5058.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0266273, 51.67701845]
+        },
+        "altitude": 5043.85
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.027302899999999, 51.678569325]
+        },
+        "altitude": 5029.625
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0279785, 51.6801202]
+        },
+        "altitude": 5015.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0286532, 51.68167105]
+        },
+        "altitude": 5000.825
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0293279, 51.6832219]
+        },
+        "altitude": 4986.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0300026, 51.68477275]
+        },
+        "altitude": 4971.675
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0306773, 51.6863236]
+        },
+        "altitude": 4957.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.03135145, 51.68787535]
+        },
+        "altitude": 4942.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0320256, 51.6894271]
+        },
+        "altitude": 4927
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.03269975, 51.69097885]
+        },
+        "altitude": 4911.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0333739, 51.6925306]
+        },
+        "altitude": 4896.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0340468, 51.694083675]
+        },
+        "altitude": 4881.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0347197, 51.69563675]
+        },
+        "altitude": 4865.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0353926, 51.697189824999995]
+        },
+        "altitude": 4850.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0360655, 51.6987429]
+        },
+        "altitude": 4834.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.036737474999999, 51.7002964]
+        },
+        "altitude": 4819.099999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.037409449999998, 51.7018499]
+        },
+        "altitude": 4803.299999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.038081425, 51.7034034]
+        },
+        "altitude": 4787.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0387534, 51.7049569]
+        },
+        "altitude": 4771.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.039424499999999, 51.70651105]
+        },
+        "altitude": 4755.825
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0400956, 51.7080652]
+        },
+        "altitude": 4739.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0407667, 51.70961935]
+        },
+        "altitude": 4724.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0414378, 51.7111735]
+        },
+        "altitude": 4708.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.042107275000001, 51.7127272]
+        },
+        "altitude": 4692.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.042776750000002, 51.714280900000006]
+        },
+        "altitude": 4676.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.043446225, 51.7158346]
+        },
+        "altitude": 4660.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0441157, 51.7173883]
+        },
+        "altitude": 4645
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.9957186, 51.6052134]
+        },
+        "altitude": 5723.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.996390572368421, 51.606771134210526]
+        },
+        "altitude": 5708.196052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.997062544736842, 51.60832886842105]
+        },
+        "altitude": 5693.192105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.997734517105263, 51.609886602631576]
+        },
+        "altitude": 5678.188157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.998406489473684, 51.611444336842105]
+        },
+        "altitude": 5663.184210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.999078461842105, 51.61300207105263]
+        },
+        "altitude": 5648.180263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [8.999750434210526, 51.614559805263156]
+        },
+        "altitude": 5633.176315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.000422406578947, 51.616117539473684]
+        },
+        "altitude": 5618.172368421053
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.001094378947368, 51.617675273684206]
+        },
+        "altitude": 5603.168421052631
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.001766351315789, 51.619233007894735]
+        },
+        "altitude": 5588.16447368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.00243832368421, 51.62079074210526]
+        },
+        "altitude": 5573.160526315789
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.00311029605263, 51.622348476315786]
+        },
+        "altitude": 5558.156578947368
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.003782268421052, 51.623906210526314]
+        },
+        "altitude": 5543.152631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.004454240789475, 51.625463944736836]
+        },
+        "altitude": 5528.148684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.005126213157896, 51.627021678947365]
+        },
+        "altitude": 5513.144736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.005798185526317, 51.628579413157894]
+        },
+        "altitude": 5498.140789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.006470157894737, 51.630137147368416]
+        },
+        "altitude": 5483.136842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.007142130263158, 51.631694881578944]
+        },
+        "altitude": 5468.132894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.00781410263158, 51.63325261578947]
+        },
+        "altitude": 5453.128947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.008486075, 51.634810349999995]
+        },
+        "altitude": 5438.125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.009158047368421, 51.636368084210524]
+        },
+        "altitude": 5423.121052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.009830019736842, 51.63792581842105]
+        },
+        "altitude": 5408.117105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.010501992105263, 51.639483552631575]
+        },
+        "altitude": 5393.113157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.011173964473684, 51.6410412868421]
+        },
+        "altitude": 5378.109210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.011845936842105, 51.642599021052625]
+        },
+        "altitude": 5363.105263157894
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.012517909210526, 51.644156755263154]
+        },
+        "altitude": 5348.101315789473
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.013189881578947, 51.64571448947368]
+        },
+        "altitude": 5333.097368421052
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.013861853947368, 51.647272223684205]
+        },
+        "altitude": 5318.093421052631
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.01453382631579, 51.64882995789473]
+        },
+        "altitude": 5303.08947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.01520579868421, 51.65038769210526]
+        },
+        "altitude": 5288.085526315789
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.015877771052631, 51.651945426315784]
+        },
+        "altitude": 5273.081578947368
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.016549743421052, 51.65350316052631]
+        },
+        "altitude": 5258.077631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.017221715789473, 51.65506089473684]
+        },
+        "altitude": 5243.073684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.017893688157894, 51.65661862894736]
+        },
+        "altitude": 5228.069736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.018565660526315, 51.65817636315789]
+        },
+        "altitude": 5213.065789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.019237632894736, 51.65973409736842]
+        },
+        "altitude": 5198.061842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.019909605263157, 51.66129183157894]
+        },
+        "altitude": 5183.057894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.020581577631578, 51.66284956578947]
+        },
+        "altitude": 5168.053947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.02125355, 51.66440729999999]
+        },
+        "altitude": 5153.049999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.021925522368422, 51.66596503421052]
+        },
+        "altitude": 5138.046052631578
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.022597494736843, 51.66752276842105]
+        },
+        "altitude": 5123.042105263157
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.023269467105264, 51.66908050263157]
+        },
+        "altitude": 5108.038157894736
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.023941439473685, 51.6706382368421]
+        },
+        "altitude": 5093.034210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:28:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.024613411842106, 51.67219597105263]
+        },
+        "altitude": 5078.030263157894
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.025285384210527, 51.67375370526315]
+        },
+        "altitude": 5063.026315789473
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.025957356578948, 51.67531143947368]
+        },
+        "altitude": 5048.022368421052
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.026629328947369, 51.67686917368421]
+        },
+        "altitude": 5033.018421052631
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.02730130131579, 51.67842690789473]
+        },
+        "altitude": 5018.01447368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.02797327368421, 51.67998464210526]
+        },
+        "altitude": 5003.010526315789
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.028645246052632, 51.68154237631579]
+        },
+        "altitude": 4988.006578947368
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.029317218421053, 51.68310011052631]
+        },
+        "altitude": 4973.002631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.029989190789474, 51.68465784473684]
+        },
+        "altitude": 4957.998684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.030661163157895, 51.68621557894737]
+        },
+        "altitude": 4942.994736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.031333135526316, 51.68777331315789]
+        },
+        "altitude": 4927.990789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.032005107894737, 51.68933104736842]
+        },
+        "altitude": 4912.986842105262
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.032677080263158, 51.69088878157894]
+        },
+        "altitude": 4897.982894736841
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.033349052631579, 51.69244651578947]
+        },
+        "altitude": 4882.97894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.034021025, 51.69400425]
+        },
+        "altitude": 4867.974999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.03469299736842, 51.69556198421052]
+        },
+        "altitude": 4852.9710526315785
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.035364969736841, 51.69711971842105]
+        },
+        "altitude": 4837.9671052631575
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.036036942105262, 51.69867745263158]
+        },
+        "altitude": 4822.9631578947365
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.036708914473683, 51.7002351868421]
+        },
+        "altitude": 4807.9592105263155
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.037380886842104, 51.70179292105263]
+        },
+        "altitude": 4792.9552631578945
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.038052859210525, 51.70335065526316]
+        },
+        "altitude": 4777.9513157894735
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.038724831578948, 51.70490838947368]
+        },
+        "altitude": 4762.9473684210525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.039396803947369, 51.70646612368421]
+        },
+        "altitude": 4747.9434210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.04006877631579, 51.70802385789474]
+        },
+        "altitude": 4732.9394736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.040740748684211, 51.70958159210526]
+        },
+        "altitude": 4717.9355263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.041412721052632, 51.71113932631579]
+        },
+        "altitude": 4702.9315789473685
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.042084693421053, 51.71269706052631]
+        },
+        "altitude": 4687.927631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.042756665789474, 51.71425479473684]
+        },
+        "altitude": 4672.923684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.043428638157895, 51.71581252894737]
+        },
+        "altitude": 4657.919736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.044100610526316, 51.71737026315789]
+        },
+        "altitude": 4642.915789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.044772582894737, 51.71892799736842]
+        },
+        "altitude": 4627.911842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.045444555263158, 51.72048573157895]
+        },
+        "altitude": 4612.907894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.046116527631579, 51.72204346578947]
+        },
+        "altitude": 4597.903947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0467885, 51.7236012]
+        },
+        "altitude": 4582.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0474558, 51.725153524999996]
+        },
+        "altitude": 4567.849999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0481231, 51.72670585]
+        },
+        "altitude": 4552.799999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0487904, 51.728258175]
+        },
+        "altitude": 4537.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0494577, 51.7298105]
+        },
+        "altitude": 4522.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.050123724999999, 51.731361225]
+        },
+        "altitude": 4508.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.05078975, 51.73291195]
+        },
+        "altitude": 4493.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.051455775, 51.734462674999996]
+        },
+        "altitude": 4479.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0521218, 51.7360134]
+        },
+        "altitude": 4465.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0527855625, 51.7375614]
+        },
+        "altitude": 4451.762500000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.053449324999999, 51.7391094]
+        },
+        "altitude": 4438.425
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0541130875, 51.740657399999996]
+        },
+        "altitude": 4425.0875
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.05477685, 51.7422054]
+        },
+        "altitude": 4411.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0554406125, 51.7437534]
+        },
+        "altitude": 4398.4125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.056104375, 51.7453014]
+        },
+        "altitude": 4385.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.056768137499999, 51.7468494]
+        },
+        "altitude": 4371.737499999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0574319, 51.7483974]
+        },
+        "altitude": 4358.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.05809485, 51.74994245]
+        },
+        "altitude": 4345.924999999999
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.058757799999999, 51.751487499999996]
+        },
+        "altitude": 4333.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.05942075, 51.75303255]
+        },
+        "altitude": 4320.975
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0600837, 51.7545776]
+        },
+        "altitude": 4308.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.060745749999999, 51.756119725]
+        },
+        "altitude": 4296.45
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0614078, 51.75766185]
+        },
+        "altitude": 4284.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06206985, 51.759203975]
+        },
+        "altitude": 4272.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0627319, 51.7607461]
+        },
+        "altitude": 4260.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06339375, 51.76228595]
+        },
+        "altitude": 4248.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0640556, 51.7638258]
+        },
+        "altitude": 4236.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06471745, 51.76536565]
+        },
+        "altitude": 4225.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0653793, 51.7669055]
+        },
+        "altitude": 4213.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0660417, 51.76844285]
+        },
+        "altitude": 4201.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.066704099999999, 51.7699802]
+        },
+        "altitude": 4190.200000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0673665, 51.77151755]
+        },
+        "altitude": 4178.650000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0680289, 51.7730549]
+        },
+        "altitude": 4167.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.068691099999999, 51.774589325]
+        },
+        "altitude": 4155.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0693533, 51.77612375]
+        },
+        "altitude": 4144.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0700155, 51.777658175]
+        },
+        "altitude": 4132.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0706777, 51.7791926]
+        },
+        "altitude": 4121.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.071341174999999, 51.7807241]
+        },
+        "altitude": 4109.575000000001
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.07200465, 51.7822556]
+        },
+        "altitude": 4098.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.072668125, 51.7837871]
+        },
+        "altitude": 4086.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0733316, 51.7853186]
+        },
+        "altitude": 4075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0739956, 51.786845799999995]
+        },
+        "altitude": 4063.475
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0746596, 51.788373]
+        },
+        "altitude": 4051.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.075323599999999, 51.789900200000005]
+        },
+        "altitude": 4040.425
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0759876, 51.7914274]
+        },
+        "altitude": 4028.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.076653949999999, 51.7929503]
+        },
+        "altitude": 4017.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0773203, 51.7944732]
+        },
+        "altitude": 4005.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.07798665, 51.7959961]
+        },
+        "altitude": 3994.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.078653, 51.797519]
+        },
+        "altitude": 3982.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0793217, 51.799036725]
+        },
+        "altitude": 3971.1499999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0799904, 51.80055445]
+        },
+        "altitude": 3959.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0806591, 51.802072175]
+        },
+        "altitude": 3948.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0813278, 51.8035899]
+        },
+        "altitude": 3936.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.081999575000001, 51.80510175]
+        },
+        "altitude": 3924.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.08267135, 51.8066136]
+        },
+        "altitude": 3913.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.083343124999999, 51.80812545]
+        },
+        "altitude": 3901.8500000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0840149, 51.8096373]
+        },
+        "altitude": 3890.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.08469045, 51.811142849999996]
+        },
+        "altitude": 3878.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.085366, 51.8126484]
+        },
+        "altitude": 3867.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.08604155, 51.814153950000005]
+        },
+        "altitude": 3855.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0867171, 51.8156595]
+        },
+        "altitude": 3844.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0873972, 51.8171576]
+        },
+        "altitude": 3832.8500000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0880773, 51.8186557]
+        },
+        "altitude": 3821.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0887574, 51.8201538]
+        },
+        "altitude": 3809.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0894375, 51.8216519]
+        },
+        "altitude": 3798.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0901221, 51.82314235]
+        },
+        "altitude": 3787.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.090806700000002, 51.8246328]
+        },
+        "altitude": 3775.65
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.091491300000001, 51.82612325]
+        },
+        "altitude": 3764.2250000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0921759, 51.8276137]
+        },
+        "altitude": 3752.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.092864650000001, 51.829096475]
+        },
+        "altitude": 3741.425
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.093553400000001, 51.83057925]
+        },
+        "altitude": 3730.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09424215, 51.832062025]
+        },
+        "altitude": 3718.675
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0949309, 51.8335448]
+        },
+        "altitude": 3707.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09562345, 51.835020825]
+        },
+        "altitude": 3695.9500000000003
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.096316, 51.83649685]
+        },
+        "altitude": 3684.6000000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09700855, 51.837972875]
+        },
+        "altitude": 3673.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0977011, 51.8394489]
+        },
+        "altitude": 3661.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.098396725, 51.8409186]
+        },
+        "altitude": 3650.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09909235, 51.842388299999996]
+        },
+        "altitude": 3639.15
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.099787975, 51.843858]
+        },
+        "altitude": 3627.775
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1004836, 51.8453277]
+        },
+        "altitude": 3616.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.101181200000001, 51.846792199999996]
+        },
+        "altitude": 3605.025
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.101878800000001, 51.8482567]
+        },
+        "altitude": 3593.65
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1025764, 51.849721200000005]
+        },
+        "altitude": 3582.275
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.103274, 51.8511857]
+        },
+        "altitude": 3570.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0547794, 51.742209]
+        },
+        "altitude": 4410.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.055454268421052, 51.74371971052632]
+        },
+        "altitude": 4398.751315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.056129136842104, 51.74523042105263]
+        },
+        "altitude": 4387.102631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.056804005263157, 51.74674113157895]
+        },
+        "altitude": 4375.453947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.05747887368421, 51.74825184210527]
+        },
+        "altitude": 4363.805263157894
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.058153742105263, 51.74976255263158]
+        },
+        "altitude": 4352.156578947368
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.058828610526316, 51.7512732631579]
+        },
+        "altitude": 4340.507894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.059503478947368, 51.75278397368421]
+        },
+        "altitude": 4328.859210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06017834736842, 51.75429468421053]
+        },
+        "altitude": 4317.210526315789
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.060853215789473, 51.755805394736846]
+        },
+        "altitude": 4305.561842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.061528084210526, 51.75731610526316]
+        },
+        "altitude": 4293.913157894736
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.062202952631578, 51.758826815789476]
+        },
+        "altitude": 4282.26447368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06287782105263, 51.760337526315794]
+        },
+        "altitude": 4270.615789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.063552689473683, 51.761848236842106]
+        },
+        "altitude": 4258.9671052631575
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.064227557894736, 51.763358947368424]
+        },
+        "altitude": 4247.3184210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:29:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.06490242631579, 51.764869657894735]
+        },
+        "altitude": 4235.669736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.065577294736842, 51.76638036842105]
+        },
+        "altitude": 4224.021052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.066252163157895, 51.76789107894737]
+        },
+        "altitude": 4212.372368421053
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.066927031578947, 51.76940178947368]
+        },
+        "altitude": 4200.723684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0676019, 51.7709125]
+        },
+        "altitude": 4189.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.068276768421052, 51.77242321052632]
+        },
+        "altitude": 4177.426315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.068951636842105, 51.77393392105263]
+        },
+        "altitude": 4165.777631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.069626505263157, 51.77544463157895]
+        },
+        "altitude": 4154.128947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.07030137368421, 51.77695534210527]
+        },
+        "altitude": 4142.480263157894
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.070976242105264, 51.77846605263158]
+        },
+        "altitude": 4130.831578947368
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.071651110526316, 51.7799767631579]
+        },
+        "altitude": 4119.182894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.072325978947369, 51.78148747368421]
+        },
+        "altitude": 4107.534210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.073000847368421, 51.78299818421053]
+        },
+        "altitude": 4095.8855263157893
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.073675715789474, 51.784508894736845]
+        },
+        "altitude": 4084.236842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.074350584210526, 51.78601960526316]
+        },
+        "altitude": 4072.5881578947365
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.075025452631579, 51.787530315789475]
+        },
+        "altitude": 4060.9394736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.075700321052631, 51.78904102631579]
+        },
+        "altitude": 4049.290789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.076375189473683, 51.790551736842104]
+        },
+        "altitude": 4037.6421052631576
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.077050057894736, 51.79206244736842]
+        },
+        "altitude": 4025.993421052631
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.07772492631579, 51.793573157894734]
+        },
+        "altitude": 4014.344736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.078399794736843, 51.79508386842105]
+        },
+        "altitude": 4002.696052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.079074663157895, 51.79659457894737]
+        },
+        "altitude": 3991.0473684210524
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.079749531578948, 51.79810528947368]
+        },
+        "altitude": 3979.398684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0804244, 51.799616]
+        },
+        "altitude": 3967.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.081099268421053, 51.80112671052632]
+        },
+        "altitude": 3956.1013157894736
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.081774136842105, 51.80263742105263]
+        },
+        "altitude": 3944.452631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.082449005263157, 51.80414813157895]
+        },
+        "altitude": 3932.8039473684207
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.08312387368421, 51.80565884210527]
+        },
+        "altitude": 3921.1552631578943
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.083798742105264, 51.80716955263158]
+        },
+        "altitude": 3909.5065789473683
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.084473610526317, 51.808680263157896]
+        },
+        "altitude": 3897.857894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.085148478947369, 51.81019097368421]
+        },
+        "altitude": 3886.2092105263155
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.085823347368422, 51.811701684210526]
+        },
+        "altitude": 3874.5605263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.086498215789474, 51.813212394736844]
+        },
+        "altitude": 3862.911842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.087173084210526, 51.814723105263155]
+        },
+        "altitude": 3851.2631578947367
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.087847952631579, 51.816233815789474]
+        },
+        "altitude": 3839.61447368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.088522821052631, 51.81774452631579]
+        },
+        "altitude": 3827.965789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.089197689473684, 51.8192552368421]
+        },
+        "altitude": 3816.317105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.089872557894736, 51.82076594736842]
+        },
+        "altitude": 3804.6684210526314
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09054742631579, 51.82227665789473]
+        },
+        "altitude": 3793.019736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.091222294736843, 51.82378736842105]
+        },
+        "altitude": 3781.371052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.091897163157896, 51.82529807894737]
+        },
+        "altitude": 3769.7223684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.092572031578948, 51.82680878947368]
+        },
+        "altitude": 3758.073684210526
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.0932469, 51.8283195]
+        },
+        "altitude": 3746.4249999999997
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.093921768421053, 51.82983021052632]
+        },
+        "altitude": 3734.7763157894733
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.094596636842105, 51.83134092105263]
+        },
+        "altitude": 3723.1276315789473
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.095271505263158, 51.83285163157895]
+        },
+        "altitude": 3711.478947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09594637368421, 51.834362342105265]
+        },
+        "altitude": 3699.8302631578945
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.096621242105265, 51.83587305263158]
+        },
+        "altitude": 3688.1815789473685
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.097296110526317, 51.837383763157895]
+        },
+        "altitude": 3676.532894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.09797097894737, 51.838894473684206]
+        },
+        "altitude": 3664.8842105263157
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.098645847368422, 51.840405184210525]
+        },
+        "altitude": 3653.2355263157892
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.099320715789474, 51.84191589473684]
+        },
+        "altitude": 3641.586842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.099995584210527, 51.843426605263154]
+        },
+        "altitude": 3629.938157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.10067045263158, 51.84493731578947]
+        },
+        "altitude": 3618.2894736842104
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.101345321052632, 51.84644802631579]
+        },
+        "altitude": 3606.640789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.102020189473684, 51.8479587368421]
+        },
+        "altitude": 3594.992105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.102695057894737, 51.84946944736842]
+        },
+        "altitude": 3583.3434210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.103369926315791, 51.85098015789473]
+        },
+        "altitude": 3571.694736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.104044794736843, 51.85249086842105]
+        },
+        "altitude": 3560.0460526315787
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.104719663157896, 51.85400157894737]
+        },
+        "altitude": 3548.3973684210523
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:30:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.105394531578948, 51.85551228947368]
+        },
+        "altitude": 3536.7486842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1060694, 51.857023]
+        },
+        "altitude": 3525.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.106769175, 51.858478475]
+        },
+        "altitude": 3513.575
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.107468950000001, 51.85993395]
+        },
+        "altitude": 3502.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.108168725, 51.861389425]
+        },
+        "altitude": 3490.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1088685, 51.8628449]
+        },
+        "altitude": 3479
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.109568075, 51.86429655]
+        },
+        "altitude": 3467.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.11026765, 51.8657482]
+        },
+        "altitude": 3455.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.110967225, 51.86719985]
+        },
+        "altitude": 3444.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1116668, 51.8686515]
+        },
+        "altitude": 3432.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1123640875, 51.8700996375]
+        },
+        "altitude": 3420.8624999999997
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.113061375000001, 51.871547774999996]
+        },
+        "altitude": 3409.125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1137586625, 51.8729959125]
+        },
+        "altitude": 3397.3875
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.11445595, 51.87444405]
+        },
+        "altitude": 3385.6499999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1151532375, 51.8758921875]
+        },
+        "altitude": 3373.9125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.115850524999999, 51.877340325000006]
+        },
+        "altitude": 3362.1749999999997
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1165478125, 51.878788462500005]
+        },
+        "altitude": 3350.4375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1172451, 51.8802366]
+        },
+        "altitude": 3338.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1179383, 51.881682350000005]
+        },
+        "altitude": 3326.8999999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1186315, 51.8831281]
+        },
+        "altitude": 3315.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1193247, 51.884573849999995]
+        },
+        "altitude": 3303.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1200179, 51.8860196]
+        },
+        "altitude": 3291.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.120707625000001, 51.88746555]
+        },
+        "altitude": 3279.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12139735, 51.8889115]
+        },
+        "altitude": 3267.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.122087075, 51.890357449999996]
+        },
+        "altitude": 3256.1000000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1227768, 51.8918034]
+        },
+        "altitude": 3244.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.123461275, 51.8932498]
+        },
+        "altitude": 3232.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12414575, 51.8946962]
+        },
+        "altitude": 3220.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.124830225, 51.896142600000005]
+        },
+        "altitude": 3208.975
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1255147, 51.897589]
+        },
+        "altitude": 3197.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.126193525, 51.899036975]
+        },
+        "altitude": 3185.475
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12687235, 51.900484950000006]
+        },
+        "altitude": 3173.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.127551175, 51.901932925000004]
+        },
+        "altitude": 3162.025
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12823, 51.9033809]
+        },
+        "altitude": 3150.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12890175, 51.904831325]
+        },
+        "altitude": 3138.65
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1295735, 51.906281750000005]
+        },
+        "altitude": 3127
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13024525, 51.907732175]
+        },
+        "altitude": 3115.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.130917, 51.9091826]
+        },
+        "altitude": 3103.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1315813, 51.91063345]
+        },
+        "altitude": 3092.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.132245600000001, 51.912084300000004]
+        },
+        "altitude": 3080.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1329099, 51.91353515]
+        },
+        "altitude": 3069.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1335742, 51.914986]
+        },
+        "altitude": 3057.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.134231375, 51.91643395]
+        },
+        "altitude": 3046.5249999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13488855, 51.9178819]
+        },
+        "altitude": 3035.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.135545725, 51.919329850000004]
+        },
+        "altitude": 3024.175
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1362029, 51.9207778]
+        },
+        "altitude": 3013
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.136852225, 51.922218075]
+        },
+        "altitude": 3002.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13750155, 51.92365835]
+        },
+        "altitude": 2991.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.138150875000001, 51.925098625]
+        },
+        "altitude": 2981.05
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1388002, 51.9265389]
+        },
+        "altitude": 2970.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.139442025000001, 51.927967275]
+        },
+        "altitude": 2960.375
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14008385, 51.929395650000004]
+        },
+        "altitude": 2950.3500000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.140725674999999, 51.930824025]
+        },
+        "altitude": 2940.3250000000003
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1413675, 51.9322524]
+        },
+        "altitude": 2930.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.142001449999999, 51.933664575]
+        },
+        "altitude": 2921.125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1426354, 51.93507675]
+        },
+        "altitude": 2911.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14326935, 51.936488925]
+        },
+        "altitude": 2902.775
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1439033, 51.9379011]
+        },
+        "altitude": 2893.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.144529325, 51.9392926]
+        },
+        "altitude": 2885.4
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14515535, 51.9406841]
+        },
+        "altitude": 2877.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.145781374999999, 51.942075599999995]
+        },
+        "altitude": 2869
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1464074, 51.9434671]
+        },
+        "altitude": 2860.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.147025124999999, 51.94483385]
+        },
+        "altitude": 2853.775
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14764285, 51.9462006]
+        },
+        "altitude": 2846.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.148260575, 51.94756735]
+        },
+        "altitude": 2839.725
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1488783, 51.9489341]
+        },
+        "altitude": 2832.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.149488824999999, 51.9502721]
+        },
+        "altitude": 2826.975
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15009935, 51.951610099999996]
+        },
+        "altitude": 2821.25
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.150709875, 51.9529481]
+        },
+        "altitude": 2815.525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1513204, 51.9542861]
+        },
+        "altitude": 2809.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1519222, 51.955594624999996]
+        },
+        "altitude": 2805.275
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.152524, 51.95690315]
+        },
+        "altitude": 2800.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1531258, 51.958211675]
+        },
+        "altitude": 2796.225
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1537276, 51.9595202]
+        },
+        "altitude": 2791.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.154322950000001, 51.9608038]
+        },
+        "altitude": 2788.0249999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1549183, 51.9620874]
+        },
+        "altitude": 2784.35
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15551365, 51.963371]
+        },
+        "altitude": 2780.675
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.156109, 51.9646546]
+        },
+        "altitude": 2777
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.156698200000001, 51.96591705]
+        },
+        "altitude": 2773.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.157287400000001, 51.9671795]
+        },
+        "altitude": 2770.6
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1578766, 51.96844195]
+        },
+        "altitude": 2767.3999999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1584658, 51.9697044]
+        },
+        "altitude": 2764.2
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15904925, 51.9709502]
+        },
+        "altitude": 2761.075
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1596327, 51.972196]
+        },
+        "altitude": 2757.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.16021615, 51.9734418]
+        },
+        "altitude": 2754.825
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1607996, 51.9746876]
+        },
+        "altitude": 2751.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1144599, 51.8744472]
+        },
+        "altitude": 3385.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.115100134210527, 51.87583107105263]
+        },
+        "altitude": 3377.2763157894738
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.115740368421053, 51.87721494210526]
+        },
+        "altitude": 3368.7526315789473
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.11638060263158, 51.87859881315789]
+        },
+        "altitude": 3360.2289473684214
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.117020836842105, 51.879982684210525]
+        },
+        "altitude": 3351.705263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.117661071052632, 51.881366555263156]
+        },
+        "altitude": 3343.1815789473685
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.118301305263158, 51.88275042631579]
+        },
+        "altitude": 3334.657894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.118941539473685, 51.88413429736842]
+        },
+        "altitude": 3326.134210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.11958177368421, 51.88551816842105]
+        },
+        "altitude": 3317.6105263157897
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.120222007894737, 51.88690203947368]
+        },
+        "altitude": 3309.0868421052633
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.120862242105263, 51.888285910526314]
+        },
+        "altitude": 3300.563157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12150247631579, 51.889669781578945]
+        },
+        "altitude": 3292.039473684211
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.122142710526315, 51.89105365263158]
+        },
+        "altitude": 3283.5157894736844
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.122782944736842, 51.89243752368421]
+        },
+        "altitude": 3274.992105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.123423178947368, 51.89382139473684]
+        },
+        "altitude": 3266.4684210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.124063413157895, 51.89520526578947]
+        },
+        "altitude": 3257.9447368421056
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12470364736842, 51.8965891368421]
+        },
+        "altitude": 3249.421052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.125343881578948, 51.897973007894734]
+        },
+        "altitude": 3240.8973684210528
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.125984115789473, 51.899356878947366]
+        },
+        "altitude": 3232.3736842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12662435, 51.90074075]
+        },
+        "altitude": 3223.8500000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.127264584210527, 51.90212462105263]
+        },
+        "altitude": 3215.326315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.127904818421053, 51.90350849210526]
+        },
+        "altitude": 3206.8026315789475
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.12854505263158, 51.90489236315789]
+        },
+        "altitude": 3198.278947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.129185286842105, 51.90627623421052]
+        },
+        "altitude": 3189.7552631578947
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.129825521052632, 51.907660105263155]
+        },
+        "altitude": 3181.2315789473687
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.130465755263158, 51.909043976315786]
+        },
+        "altitude": 3172.7078947368423
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.131105989473685, 51.91042784736842]
+        },
+        "altitude": 3164.184210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13174622368421, 51.91181171842105]
+        },
+        "altitude": 3155.6605263157894
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.132386457894738, 51.91319558947368]
+        },
+        "altitude": 3147.1368421052634
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.133026692105263, 51.91457946052631]
+        },
+        "altitude": 3138.613157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13366692631579, 51.91596333157894]
+        },
+        "altitude": 3130.0894736842106
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.134307160526316, 51.917347202631575]
+        },
+        "altitude": 3121.565789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.134947394736843, 51.91873107368421]
+        },
+        "altitude": 3113.042105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.135587628947368, 51.92011494473684]
+        },
+        "altitude": 3104.5184210526318
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.136227863157895, 51.92149881578947]
+        },
+        "altitude": 3095.9947368421053
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.13686809736842, 51.9228826868421]
+        },
+        "altitude": 3087.471052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.137508331578948, 51.92426655789473]
+        },
+        "altitude": 3078.9473684210525
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.138148565789473, 51.925650428947364]
+        },
+        "altitude": 3070.4236842105265
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1387888, 51.9270343]
+        },
+        "altitude": 3061.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.139429034210528, 51.928418171052634]
+        },
+        "altitude": 3053.3763157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.140069268421053, 51.929802042105266]
+        },
+        "altitude": 3044.8526315789477
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14070950263158, 51.9311859131579]
+        },
+        "altitude": 3036.3289473684213
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.141349736842106, 51.93256978421053]
+        },
+        "altitude": 3027.805263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.141989971052633, 51.93395365526316]
+        },
+        "altitude": 3019.2815789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.142630205263158, 51.93533752631579]
+        },
+        "altitude": 3010.757894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:57.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.143270439473685, 51.93672139736842]
+        },
+        "altitude": 3002.234210526316
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:58.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14391067368421, 51.938105268421054]
+        },
+        "altitude": 2993.7105263157896
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:31:59.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.144550907894738, 51.939489139473686]
+        },
+        "altitude": 2985.186842105263
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:00.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.145191142105263, 51.94087301052632]
+        },
+        "altitude": 2976.6631578947367
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:01.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14583137631579, 51.94225688157895]
+        },
+        "altitude": 2968.1394736842108
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:02.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.146471610526316, 51.94364075263158]
+        },
+        "altitude": 2959.6157894736843
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:03.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.147111844736843, 51.94502462368421]
+        },
+        "altitude": 2951.092105263158
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:04.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.147752078947368, 51.94640849473684]
+        },
+        "altitude": 2942.5684210526315
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:05.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.148392313157895, 51.947792365789475]
+        },
+        "altitude": 2934.0447368421055
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:06.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.14903254736842, 51.949176236842106]
+        },
+        "altitude": 2925.521052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:07.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.149672781578948, 51.95056010789474]
+        },
+        "altitude": 2916.9973684210527
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:08.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.150313015789473, 51.95194397894737]
+        },
+        "altitude": 2908.4736842105262
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:09.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15095325, 51.95332785]
+        },
+        "altitude": 2899.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:10.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.151593484210528, 51.95471172105263]
+        },
+        "altitude": 2891.426315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:11.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.152233718421053, 51.956095592105264]
+        },
+        "altitude": 2882.9026315789474
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:12.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15287395263158, 51.957479463157895]
+        },
+        "altitude": 2874.378947368421
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:13.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.153514186842106, 51.95886333421053]
+        },
+        "altitude": 2865.855263157895
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:14.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.154154421052633, 51.96024720526316]
+        },
+        "altitude": 2857.3315789473686
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:15.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.154794655263158, 51.96163107631579]
+        },
+        "altitude": 2848.807894736842
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:16.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.155434889473685, 51.96301494736842]
+        },
+        "altitude": 2840.2842105263157
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:17.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15607512368421, 51.96439881842105]
+        },
+        "altitude": 2831.7605263157893
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:18.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.156715357894738, 51.965782689473684]
+        },
+        "altitude": 2823.2368421052633
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:19.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.157355592105263, 51.967166560526316]
+        },
+        "altitude": 2814.713157894737
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:20.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.15799582631579, 51.96855043157895]
+        },
+        "altitude": 2806.1894736842105
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:21.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.158636060526316, 51.96993430263158]
+        },
+        "altitude": 2797.665789473684
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:22.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.159276294736843, 51.97131817368421]
+        },
+        "altitude": 2789.1421052631576
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:23.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.159916528947369, 51.97270204473684]
+        },
+        "altitude": 2780.6184210526317
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:24.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.160556763157896, 51.97408591578947]
+        },
+        "altitude": 2772.0947368421052
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:25.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.161196997368421, 51.975469786842105]
+        },
+        "altitude": 2763.571052631579
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:26.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.161837231578948, 51.976853657894736]
+        },
+        "altitude": 2755.047368421053
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:27.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.162477465789474, 51.97823752894737]
+        },
+        "altitude": 2746.5236842105264
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:28.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1631177, 51.9796214]
+        },
+        "altitude": 2738
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:29.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.163692975, 51.98084675]
+        },
+        "altitude": 2733.875
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:30.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.16426825, 51.982072099999996]
+        },
+        "altitude": 2729.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:31.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.164843525, 51.98329745]
+        },
+        "altitude": 2725.625
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:32.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1654188, 51.9845228]
+        },
+        "altitude": 2721.5
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:33.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.16599125, 51.985744075]
+        },
+        "altitude": 2716.3
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:34.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1665637, 51.986965350000006]
+        },
+        "altitude": 2711.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:35.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.16713615, 51.988186625000004]
+        },
+        "altitude": 2705.8999999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:36.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1677086, 51.9894079]
+        },
+        "altitude": 2700.7
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:37.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.168277974999999, 51.990629525]
+        },
+        "altitude": 2693.4624999999996
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:38.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.16884735, 51.99185115]
+        },
+        "altitude": 2686.225
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:39.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.169416725, 51.993072775]
+        },
+        "altitude": 2678.9875
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1699861, 51.9942944]
+        },
+        "altitude": 2671.75
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:41.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.170555475, 51.995516025]
+        },
+        "altitude": 2664.5125
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:42.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.17112485, 51.99673765]
+        },
+        "altitude": 2657.275
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:43.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.171694225000001, 51.997959275]
+        },
+        "altitude": 2650.0375000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:44.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1722636, 51.9991809]
+        },
+        "altitude": 2642.8
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:45.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.172830600000001, 52.000403275]
+        },
+        "altitude": 2633.8500000000004
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:46.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.173397600000001, 52.00162565]
+        },
+        "altitude": 2624.9
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:47.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1739646, 52.002848025000006]
+        },
+        "altitude": 2615.95
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:48.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1745316, 52.0040704]
+        },
+        "altitude": 2607
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:49.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.175097300000001, 52.005293675000004]
+        },
+        "altitude": 2597.275
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:50.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.175663, 52.006516950000005]
+        },
+        "altitude": 2587.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:51.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1762287, 52.007740225]
+        },
+        "altitude": 2577.825
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:52.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1767944, 52.0089635]
+        },
+        "altitude": 2568.1
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:53.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.17735875, 52.010187224999996]
+        },
+        "altitude": 2557.825
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:54.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.177923100000001, 52.01141095]
+        },
+        "altitude": 2547.55
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:55.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.17848745, 52.012634675]
+        },
+        "altitude": 2537.275
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:56.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1790518, 52.0138584]
+        },
+        "altitude": 2527
+      },
+      {
+        "timestamp": {"$date": "2023-01-24T20:32:40.000Z"},
+        "location": {
+          "type": "Point",
+          "coordinates": [9.1699902, 51.9942931]
+        },
+        "altitude": 2674.3
       }
-      id-field = "uuid()",  
-      fields = [
-        { name = "iata",  transform = "emptyToNull($1)"  }
-        { name = "icao",  transform = "emptyToNull($2)"  } 
-        { name = "name",  transform = "emptyToNull($3)"  }
-        { name = "country",  transform = "emptyToNull($4)"  }  
-        { name = "city",  transform = "emptyToNull($5)"  }  
-      ]
-      }
+    ]
   }
-}
+]

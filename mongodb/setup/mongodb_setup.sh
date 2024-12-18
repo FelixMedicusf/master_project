@@ -46,9 +46,15 @@ ipAdresses[i]=$nodeInternalIp
 echo "Provisioning $currentInstanceName"
 gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt-get install gnupg curl && curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor"
 gcloud compute ssh $currentInstanceName --zone $zone -- "echo \"deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/8.0 multiverse\" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list && sudo apt-get update"
-gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt-get install -y mongodb-org"
+gcloud compute ssh $currentInstanceName --zone $zone -- "sudo apt-get install -y mongodb-org && sudo chmod 777 $config_file && echo -e \"\nsecurity:\n  authorization: enabled\" >> /etc/mongod.conf"
 
-gcloud compute ssh $currentInstanceName --zone $zone -- "sudo chmod 777 $log_dir && sudo chmod 777 $data_dir && sudo chmod 777 $config_file && sudo mongod --configsvr --replSet $repl_set_name --dbpath /var/lib/mongodb --bind_ip 0.0.0.0 --fork --logpath /var/log/mongodb/mongod.log"
+# gcloud compute ssh $currentInstanceName --zone $zone -- "sudo bash -c \"openssl rand -base64 756 > /etc/mongodb-keyfile\" && sudo chmod 600 /etc/mongodb-keyfile && sudo chown mongodb:mongodb /etc/mongodb-keyfile"
+# gcloud compute ssh $currentInstanceName --zone $zone -- "sudo scp /etc/mongodb-keyfile felix@:${ipAdresses[2]}/etc/mongodb-keyfile && sudo scp /etc/mongodb-keyfile felix@:${ipAdresses[3]}/etc/mongodb-keyfile"
+
+gcloud compute scp ~/Documents/mongodb-keyfile "$currentInstanceName":~/mongodb-keyfile "--zone=$zone"
+gcloud compute ssh $currentInstanceName --zone $zone -- "sudo mv ~/mongodb-keyfile /etc/mongodb-keyfile && sudo chmod 600 /etc/mongodb-keyfile"
+
+gcloud compute ssh $currentInstanceName --zone $zone -- "sudo chmod 777 $log_dir && sudo chmod 777 $data_dir && sudo mongod --configsvr --replSet $repl_set_name --dbpath /var/lib/mongodb --bind_ip 0.0.0.0 --auth --keyFile /etc/mongodb-keyfile --fork --logpath /var/log/mongodb/mongod.log"
 
 done
 
@@ -84,8 +90,14 @@ ipAdresses[i]=$nodeInternalIp
 
 echo "Provisioning $currentInstanceName"
 
-gcloud compute ssh "$currentInstanceName" --zone "$zone" -- "sudo mongos --configdb $repl_set_name/${ipAdresses[1]}:27019,${ipAdresses[2]}:27019,${ipAdresses[3]}:27019 --bind_ip 0.0.0.0 --fork --logpath /var/log/mongodb/mongos.log"
-gcloud compute ssh "$currentInstanceName" --zone "$zone" -- "echo \"$config_change\" | mongosh --host localhost --port 27017 --eval"
+gcloud compute ssh "$currentInstanceName" --zone "$zone" -- "sudo mongos --configdb $repl_set_name/${ipAdresses[1]}:27019,${ipAdresses[2]}:27019,${ipAdresses[3]}:27019 --bind_ip 0.0.0.0 --keyFile /etc/mongodb-keyfile --fork --logpath /var/log/mongodb/mongos.log"
+
+if [ "$i" -eq 1 ]; then
+gcloud compute ssh "$currentInstanceName" --zone "$zone" -- \
+"mongosh --eval 'db.getSiblingDB(\"admin\").createUser({ user: \"$user\", pwd: \"$user_password\", roles: [ { role: \"root\", db: \"admin\" } ] });'"
+fi
+
+gcloud compute ssh "$currentInstanceName" --zone "$zone" -- "echo \"$config_change\" | mongosh --host localhost --port 27017 -u $user -p $user_password --eval"
 
 done
 
@@ -93,10 +105,16 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y 
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPoints.csv"
 
-
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=aviation_data --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPoints.csv --batchSize=5000 --numInsertionWorkers=2"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"flightpoints\")'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'sh.enableSharding(\"$database\")'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.flightpoints.createIndex({ flightId: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.flightpoints\", { flightId: \"hashed\" });'"
+
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPoints.csv --batchSize=5000 --numInsertionWorkers=2 --username $user --password $user_password --authenticationDatabase admin"
+
+
+
 
 #for (( i=1; i <= nodeNumber; ++i ))
 #do 
