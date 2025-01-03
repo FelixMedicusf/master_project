@@ -1,12 +1,16 @@
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
-import com.mongodb.ReadPreference
 import com.mongodb.ServerAddress
 import com.mongodb.client.MongoClients
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
+import com.mongodb.client.model.*
 import com.mongodb.connection.ClusterSettings
+import org.bson.Document
 import java.io.File
-import java.sql.ResultSet
+import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -14,20 +18,19 @@ import java.time.format.DateTimeFormatter
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.CountDownLatch
 import kotlin.random.Random
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.declaredFunctions
 
 class BenchThread(
     private val threadName: String,
     private val mongodbIps: List<String>,
-    private val databaseName: String,
-    private val user: String,
-    private val password: String,
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch,
     private val seed: Long
 ) : Thread(threadName) {
 
-    private var database: MongoDatabase
+    private var mongoDatabase: MongoDatabase
 
     private val random = Random(seed)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -67,7 +70,6 @@ class BenchThread(
                         mongodbHosts
                     )
                 }
-                .readPreference(ReadPreference.nearest())
                 .credential(
                     MongoCredential.createCredential(
                         user,
@@ -77,13 +79,13 @@ class BenchThread(
                 )
                 .build())
 
-        database = conn.getDatabase(databaseName)
+        mongoDatabase = conn.getDatabase(DATABASE)
     }
 
     override fun run() {
 
-            val flightPointsCollection = database.getCollection("flightpoints")
-            val flightTripCollection = database.getCollection("flighttrips")
+            val flightPointsCollection = mongoDatabase.getCollection("flightpoints")
+            val flightTripCollection = mongoDatabase.getCollection("flighttrips")
             // Ensure all threads start at the same time
             startLatch.await()
 
@@ -93,24 +95,25 @@ class BenchThread(
             while (true) {
                 val task = queryQueue.poll() ?: break
 
-                val parsedMongoQuery = if (task.params != null) {
-                    parseMongodbQuery(task.mongoQuery, task.params)
+                val mongoParameterValues = if (task.params != null) {
+                    returnParamValues(task.params)
                 } else {
-                    Pair(null, task.mongoQuery)
+                    null
                 }
 
+                val currentFunction = invokeFunctionByName(task.queryName)
 
                 val startTime = Instant.now().toEpochMilli()
 
-                val response = flightPointsCollection
+                val response = mongoParameterValues?.let { currentFunction?.call(*it.toTypedArray()) }
 
                 val endTime = Instant.now().toEpochMilli()
 
-                println(parsedMongoQuery.second)
-                //printMongoResponse(response)
+                printMongoResponse(response)
+
 
                 val params = task.params?.joinToString(";") ?: ""
-                val paramValues = parsedMongoQuery.first ?: ""
+                val parameterValues = mongoParameterValues?.joinToString(";") ?: ""
 
                 synchronized(log) {
                     log.add(
@@ -119,11 +122,13 @@ class BenchThread(
                                 queryName = task.queryName,
                                 queryType = task.type,
                                 params =  params,
-                                paramValues = paramValues,
+                                paramValues = parameterValues,
                                 round = 0,
                                 executionIndex = 0,
                                 startTime = startTime,
                                 endTime = endTime,
+                                startTimeSecond = 0L,
+                                endTimeSecond = 0L,
                                 latency = (endTime - startTime)/1000
                             )
 
@@ -141,8 +146,7 @@ class BenchThread(
         }
     }
 
-    private fun parseMongodbQuery(query: String, params: List<String>): Pair<String, String> {
-        var parsedMongoQuery = query
+    private fun returnParamValues(params: List<String>): List<String> {
         var values = ArrayList<String>()
         for (param in params){
             val replacement = when (param) {
@@ -163,40 +167,27 @@ class BenchThread(
                 else -> ""
 
             }
-            if (replacement != null) {
-                values.add(replacement)
+            if (replacement != null && !param.contains("period") ) {
+                values.add(replacement.toString())
             }
-            if (replacement != null)parsedMongoQuery = parsedMongoQuery.replace(":$param", replacement)
-
         }
-        return Pair(values.joinToString(";"), parsedMongoQuery)
+        return values
     }
 
-    private fun printMongoResponse(resultSet: ResultSet) {
-        try {
+    private fun printMongoResponse(response: Any?) {
+        // Configure Jackson ObjectMapper for pretty JSON formatting
+        val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
 
-            val metaData = resultSet.metaData
-            val columnCount = metaData.columnCount
-
-            // Print column names
-            for (i in 1..columnCount) {
-                print("${metaData.getColumnName(i)}\t")
+        var castedResponse  = response as List<Document>
+        println("MongoDB Response:")
+        castedResponse.forEach { document ->
+            try {
+                // Convert the Document to a JSON string and print it
+                val jsonString = mapper.writeValueAsString(document.toMap())
+                println(jsonString)
+            } catch (e: Exception) {
+                println("Error formatting document: ${document.toJson()}")
             }
-            println()
-
-
-            while (resultSet.next()) {
-                for (i in 1..columnCount) {
-                    print("${resultSet.getString(i)}\t")
-                }
-                println()
-            }
-
-            println()
-
-        } catch (e: Exception) {
-            println("Error while processing ResultSet: ${e.message}")
-            e.printStackTrace()
         }
     }
 
@@ -215,7 +206,7 @@ class BenchThread(
     }
 
     // Function to generate a random time span (period) within 2023
-    private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter, year: Int, mode: Int = 0): String {
+    private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter, year: Int, mode: Int = 0): Pair<SimpleDateFormat, SimpleDateFormat> {
 
         // Generate pseudo random timestamps based on the mode
         // 1: for short time range (0-2 days), 2: for medium time range (2 days - 1 month), 3: for long time range (1 - 12 Month)
@@ -267,7 +258,7 @@ class BenchThread(
             endDate to timestamp1
         }
 
-        return "tstzspan'[${start.format(formatter)}, ${end.format(formatter)}]'"
+        return Pair(SimpleDateFormat(start.format(formatter)), SimpleDateFormat(end.format(formatter)))
     }
 
 
@@ -315,8 +306,22 @@ class BenchThread(
 
         val randomDay = startDate.plusDays(random.nextLong(0, daysInYear))
 
-        return "'${randomDay}'"
+        return "$randomDay"
     }
+
+    private fun invokeFunctionByName(functionName: String): KFunction<*>? {
+        val benchThreadClass = this::class
+
+        val function = benchThreadClass.declaredFunctions.find { it.name == functionName }
+
+        if (function != null) {
+            return function
+        } else {
+            println("Function '$functionName' not found.")
+            return benchThreadClass.declaredFunctions.find { it.name == "queryFlightsByPeriod" }
+        }
+    }
+
 
 }
 

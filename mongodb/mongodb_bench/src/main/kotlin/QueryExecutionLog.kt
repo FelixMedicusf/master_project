@@ -8,6 +8,8 @@ data class QueryExecutionLog(
     val executionIndex: Int,
     val startTime: Long,
     val endTime: Long,
+    val startTimeSecond: Long?,
+    val endTimeSecond: Long?,
     val latency: Long
 ) {
 
@@ -25,6 +27,8 @@ data class QueryExecutionLog(
             executionIndex,
             startTime,
             endTime,
+            startTimeSecond,
+            endTimeSecond,
             latency
         ).joinToString(",")
     }

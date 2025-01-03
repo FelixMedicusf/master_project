@@ -14,9 +14,6 @@ import kotlin.random.Random
 class BenchThread(
     private val threadName: String,
     private val mobilityDBIp: String,
-    private val databaseName: String,
-    private val user: String,
-    private val password: String,
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch,
@@ -54,7 +51,7 @@ class BenchThread(
         try {
 
             connection = getConnection(
-                "jdbc:postgresql://$mobilityDBIp/$databaseName", user, password
+                "jdbc:postgresql://$mobilityDBIp/$DATABASE", USER, PASSWORD
             )
 
             statement = connection.createStatement()

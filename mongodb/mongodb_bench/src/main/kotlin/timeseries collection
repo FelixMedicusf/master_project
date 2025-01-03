@@ -1,0 +1,31 @@
+db.createCollection("flightpoints", {
+  timeseries: {
+    timeField: "timestamp",
+    metaField: "flightId",
+    granularity: "seconds"
+  }
+});
+
+// Source collection
+const flightTripsCollection = db.flighttrips;
+
+// Destination time-series collection
+const flightLogsCollection = db.flightpoints;
+
+// Iterate over each document in flighttrips
+flightTripsCollection.find().forEach(doc => {
+    const flightId = doc.flightId; // Metadata for time-series
+    const points = doc.points; // Time-series data
+
+    // Insert each point as a separate document into flightLogs
+    points.forEach(point => {
+        flightLogsCollection.insertOne({
+            flightId: flightId, // MetaField
+            timestamp: point.timestamp, // TimeField
+            location: point.location, // Additional fields
+            altitude: point.altitude // Additional fields
+        });
+    });
+});
+
+print("Time-series data migrated successfully!");

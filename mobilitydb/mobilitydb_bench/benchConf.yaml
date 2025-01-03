@@ -1,9 +1,9 @@
 benchmark:
   sut: "MobilityDB"
   nodes:
-    - "34.79.9.127"
-    - "34.140.75.134"
-    - "34.77.111.93"
+    - "34.140.119.43"
+    - "34.38.2.68"
+    - "34.79.131.15"
   threads: 10
   random_seed: 123
 
@@ -14,7 +14,7 @@ queryConfigs:
     use: True
     type: temporal query - instant temporal aggregate query
     sql: >
-      SELECT COUNT(*), :period, TCOUNT(attime(f.trip, :period))
+      SELECT COUNT(*), :period
       FROM flights f
       WHERE f.trip && :period
       GROUP BY :period
@@ -23,7 +23,7 @@ queryConfigs:
     parameters:
       - period
 
-  - name: LocationOfAirplaneTypeAtInstant
+  - name: LocationOfAirplaneAtInstant
     use: True
     type: temporal no aggregate query
     sql: >
@@ -45,7 +45,7 @@ queryConfigs:
     parameters:
       - instant
 
-  - name: FightTimeLowAltitude
+  - name: FlightTimeLowAltitude
     use: True
     type: temporal aggregation query
     sql: >
@@ -137,11 +137,11 @@ queryConfigs:
       - period
 
   # Spatial queries
-  - name: FlightsInCityRadius
+  - name: FlightsInCityRadius (need to change according to MongoDB)
     use: True
     type: spatial range-query
     sql: >
-      SELECT f.flightId, f.airplanetype, nearestapproachdistance(f.trip, c.geom) As min_distance, c.name
+      SELECT c.name, f.flightId, f.airplanetype, nearestapproachdistance(f.trip, c.geom) As min_distance
       FROM flights as f, cities as c
       WHERE nearestapproachdistance(f.trip, c.geom) < :radius AND c.name = :city
       GROUP BY  f.flightId, c.name, f.airplanetype, f.trip, c.geom;
@@ -150,11 +150,11 @@ queryConfigs:
       - city
       - radius
 
-  - name: FlightsIntersectingmunicipalities
+  - name: FlightsIntersectingMunicipalities
     use: True
     type: spatial range-query
     sql: >
-      SELECT g.name, f.flightId, f.airplanetype
+      SELECT g.name, f.flightId, f.airplanetype, f.originAiport, f.destinationAirport
       FROM flights f, municipalities g
       WHERE eintersects(f.trip, g.geom_etrs) AND g.name = :municipality
       ORDER BY f.flightId, g.name;
@@ -162,7 +162,7 @@ queryConfigs:
     parameters:
       - municipality
 
-  - name: CountFlightsIncounties
+  - name: CountFlightsInCounties
     use: True
     type: spatial aggregation query
     sql: >
@@ -174,7 +174,7 @@ queryConfigs:
     parameters:
       - county
 
-  - name: FlightsCloseToMainCitiesLowAltitude
+  - name: FlightsCloseToMainCitiesLowAltitude (need to change according to MongoDB)
     use: True
     type: spatial range query
     sql: >
@@ -186,7 +186,7 @@ queryConfigs:
       - low_altitude
       - radius
 
-  - name: FlightsOnlyInOnedistrict
+  - name: FlightsOnlyInOneDistrict
     use: True
     type: spatial range query
     sql: >
@@ -196,6 +196,13 @@ queryConfigs:
     repetition: 1000
     parameters:
       - district
+
+  - name: countiesLandingsDepartures
+    use: True
+    type: spatial aggregation query
+    sql: >
+
+    repetition: 1000
 
   - name: districtWithMostLandingsDepartures
     use: True
@@ -225,7 +232,7 @@ queryConfigs:
       ORDER BY overall_traffic DESC;
     repetition: 1000
 
-  - name: FlightDistanceIncounties
+  - name: FlightDistanceInCounties (no distance)
     use: True
     type: spatial range query
     sql: >
@@ -237,8 +244,18 @@ queryConfigs:
       - county
       - type
 
+  - name: distanceToLocation
+    use: True
+    type: unknown
+    sql: >
+
+    repetition: 1000
+    parameters:
+      - lat
+      - lon
+
   # spatiotemporal queries
-  - name: FlightsIncountyDuringPeriod
+  - name: FlightsInCountyDuringPeriod
     use: True
     type: spatiotemporal range-query
     sql: >
@@ -268,7 +285,7 @@ queryConfigs:
       - instant
       - municipality
 
-  - name: CountFlightsDuringPeriodFordistricts
+  - name: CountFlightsDuringPeriodDistricts
     use: False
     type: spatio-temporal aggregate query
     sql: >
