@@ -1,210 +1,194 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "34.78.177.160"
-    - "35.233.108.112"
-    - "34.79.65.249"
-  threads: 10
+    - "35.187.114.235"
+    - "35.241.234.119"
+    - "34.140.67.109"
+  threads: 2
   random_seed: 123
 
 queryConfigs:
 
-  # Temporal queries
-  - name: CountAllActiveFlightsDuringPeriod
-    use: True
+  # Temporal queries (6 functioning queries)
+  - name: countActiveFlightsInPeriod
+    use: False
     type: temporal query - instant temporal aggregate query
-    mongodbQuery: >
-
-    repetition: 1000
+    mongodbQuery: abc
+    repetition: 50
     parameters:
       - period
 
-  - name: LocationOfAirplaneTypeAtInstant
-    use: True
+  - name: locationOfAirplaneAtInstant
+    use: False
     type: temporal no aggregate query
-    mongodbQuery: >
-
-    repetition: 1000
+    mongodbQuery: abc
+    repetition: 50
     parameters:
       - instant
 
-  - name: LocationOfLowFlyingAirplanesTypeAtInstant
-    use: True
-    type: temporal no aggregate query
-    mongodbQuery: >
-
-    repetition: 1000
-    parameters:
-      - instant
-
-  - name: FightTimeLowAltitude
+  - name: flightTimeLowAltitude
     use: True
     type: temporal aggregation query
-    mongodbQuery: >
-
-    repetition: 1000
+    mongodbQuery: abc
+    repetition: 50
     parameters:
-      - period
+      - period_short
 
-  - name: AverageHourlyFlightsDuringDay
-    use: True
+  - name: averageHourlyFlightsDuringDay
+    use: False
     type: temporal aggregation query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - day
 
-  - name: FlightsWithLocalOriginDestinationDuringPeriod
-    use: True
+  - name: flightsWithLocalOriginDestinationInPeriod
+    use: False
     type: temporal no aggregate query
-    mongodbQuery: >
+    mongodbQuery: abc
 
     repetition: 1000
     parameters:
       - period
 
-  - name: AirportUtilizationDuringPeriod
-    use: True
+  - name: airportUtilizationInPeriod
+    use: False
     type: temporal aggregation query
-    mongodbQuery: >
+    mongodbQuery: abc
 
     repetition: 1000
     parameters:
-      - period
+      - period_medium
 
-  # Spatial queries
-  - name: FlightsInCityRadius
-    use: True
+  # Spatial queries (7 functioning queries)
+  - name: flightsInCityRadius
+    use: False
     type: spatial range-query
-    mongodbQuery: >
+    mongodbQuery: abc
 
     repetition: 1000
     parameters:
       - city
       - radius
 
-  - name: FlightsIntersectingmunicipalities
-    use: True
+  - name: flightsIntersectingMunicipalities
+    use: False
     type: spatial range-query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - municipality
 
-  - name: CountFlightsIncounties
-    use: True
+  - name: countFlightsInCounties
+    use: False
     type: spatial aggregation query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - county
 
-  - name: FlightsCloseToMainCitiesLowAltitude
-    use: True
+  - name: flightsCloseToMainCitiesLowAltitude
+    use: False
     type: spatial range query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - low_altitude
       - radius
 
-  - name: FlightsOnlyInOnedistrict
-    use: True
+  - name: flightsOnlyInOneDistrict
+    use: False
     type: spatial range query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - district
 
-  - name: districtWithMostLandingsDepartures
-    use: True
+  - name: countiesLandingsDepartures
+    use: False
     type: spatial aggregation query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
+    parameters:
+      - county
 
-  - name: FlightDistanceIncounties
-    use: True
+  - name: flightClosestToPoint
+    use: False
+    type: spatial aggregation query
+    mongodbQuery: abc
+    repetition: 1000
+    parameters:
+      - coordinates
+      - distance
+
+  - name: FlightDistanceInCounties
+    use: False
     type: spatial range query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - county
       - type
 
-  # spatiotemporal queries
-  - name: FlightsIncountyDuringPeriod
-    use: True
+  # spatiotemporal queries (6 functioning queries)
+  - name: flightsInCountyInPeriod
+    use: False
     type: spatiotemporal range-query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
-      - county
       - period
+      - county
 
-  - name: PairOfFlightsInmunicipalityDuringPeriod
+  - name: pairOfFlightsInMunicipalityInPeriod
     use: False
     type: spatiotemporal range join-query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - instant
       - municipality
 
-  - name: CountFlightsDuringPeriodFordistricts
+  - name: countFlightsAtInstantInDistricts
     use: False
     type: spatio-temporal aggregate query
-    mongodbQuery: >
+    mongodbQuery: abc
+    repetition: 1000
+    parameters:
+      - instant
 
+  - name: inCityRadiusInPeriod
+    use: False
+    type: spatio-temporal aggregate query
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - period
-      - district
+      - city
+      - radius
 
-  - name: ClosePairOfPlanes
-    use: True
+  - name: closePairOfPlanes
+    use: False
     type: spatiotemporal distance query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - county
 
-  - name: ClosestToCityDuringTime
-    use: True
-    type: spatial range-query
-    mongodbQuery: >
-
-    repetition: 1000
-    parameters:
-      - city
-      - radius
-      - period
-
-  - name: FlightDurationInMunicipalityLowAltitude
-    use: True
+  - name: flightDurationInMunicipalityLowAltitudeInPeriod
+    use: False
     type: spatial aggregation query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
-      - low_altitude
       - period
       - municipality
+      - low_altitude
 
-  - name: AverageHourlyFlightsDuringDayInMunicipality
-    use: True
+  - name: averageHourlyFlightsDuringDayInCounty
+    use: False
     type: spatiotemporal aggregation query
-    mongodbQuery: >
-
+    mongodbQuery: abc
     repetition: 1000
     parameters:
       - day

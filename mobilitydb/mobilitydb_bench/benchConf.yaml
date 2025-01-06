@@ -254,6 +254,16 @@ queryConfigs:
       - lat
       - lon
 
+  - name: flightDistancesToPoint (implementieren wie bei mongo)
+    use: True
+    type: unknown
+    sql: >
+
+    repetition: 1000
+    parameters:
+      - lat
+      - lon
+
   # spatiotemporal queries
   - name: FlightsInCountyDuringPeriod
     use: True
@@ -269,20 +279,20 @@ queryConfigs:
       - county
       - period
 
-  - name: PairOfFlightsInmunicipalityDuringPeriod
+  - name: PairOfFlightsInMunicipalityDuringPeriod
     use: False
     type: spatiotemporal range join-query
     sql: >
-      SELECT DISTINCT f1.flightId AS f1_flightid, f2.flightid AS f2_flightid, :instant, g.name, getValues(attime(f1.altitude, :instant)) as f1_altitude, getValue(attime(f2.altitude, :instant)) AS f2_altitude
-      FROM flights f1, flights f2, municipalitym g
-      WHERE f1.flightid < f2.flightid AND g.name = :municipality AND f1.trip && stbox(g.geom_etrs, :instant) AND
-      f2.Trip && stbox(g.geom_etrs, :instant) AND
-      eintersects(attime(f1.trip, :instant), g.geom_etrs) AND
-      eintersects(attime(f2.trip, :instant), g.geom_etrs)
+      SELECT DISTINCT f1.flightId AS f1_flightid, f2.flightid AS f2_flightid, :instant, g.name
+      FROM flights f1, flights f2, municipality g
+      WHERE f1.flightid < f2.flightid AND g.name = :municipality AND f1.trip && stbox(g.geom_etrs, :period) AND
+      f2.Trip && stbox(g.geom_etrs, :period) AND
+      eintersects(attime(f1.trip, :period), g.geom_etrs) AND
+      eintersects(attime(f2.trip, :period), g.geom_etrs)
       ORDER BY f1.flightid, f2.flightid, g.name, :instant;
     repetition: 1000
     parameters:
-      - instant
+      - :period
       - municipality
 
   - name: CountFlightsDuringPeriodDistricts
@@ -298,19 +308,19 @@ queryConfigs:
       - period
       - district
 
-  - name: ClosePairOfPlanes
+  - name: ClosePairOfPlanes (change to flightpoints table) (takes very long to execute on mongodb)
     use: True
-    type: spatiotemporal distance query
+    type: spatiotemporal distance query (add constraint that f1.trip needs to be within period and inside a circle)
     sql: >
       SELECT f1.flightid, f2.flightid, f1.trip |=| f2.trip As MinDistance, f1.airplanetype, f2.airplanetype
       FROM flights f1, flights f2, counties k
-      WHERE f1.trip |=| f2.trip < 10000 AND f1.flightid < f2.flightid AND k.name = :county
+      WHERE f1.trip |=| f2.trip < 10000 AND f1.flightid < f2.flightid AND
       ORDER BY MinDistance ASC;
     repetition: 1000
     parameters:
-      - county
+      - period
 
-  - name: ClosestToCityDuringTime
+  - name: ClosestToCityDuringTime (nur MobilityDB)
     use: True
     type: spatial range-query
     sql: >
@@ -325,7 +335,21 @@ queryConfigs:
       - radius
       - period
 
-  - name: FlightDurationInMunicipalityLowAltitude
+  - name: inCityRadiusDuringTime (implementieren wie bei Mongo)
+    use: True
+    type: spatial range-query
+    sql: >
+      SELECT f.flightId, f.airplanetype, f.airplaneType, f.originAirport, f.destinationAirport, c.name
+      FROM flights as f, cities as c
+      WHERE nearestapproachdistance(f.trip, c.geom) < :radius AND nearestapproachinstant(f.trip, c.geom) <@ :period AND c.name = :city
+      GROUP BY  f.flightId, c.name, f.airplanetype, f.trip, c.geom;
+    repetition: 1000
+    parameters:
+      - city
+      - radius
+      - period
+
+  - name: FlightDurationInMunicipalityLowAltitudeInPeriod
     use: True
     type: spatial aggregation query
     sql: >
@@ -339,7 +363,7 @@ queryConfigs:
       - period
       - municipality
 
-  - name: AverageHourlyFlightsDuringDayInMunicipality
+  - name: AverageHourlyFlightsDuringDayInCounty
     use: True
     type: spatiotemporal aggregation query
     sql: >

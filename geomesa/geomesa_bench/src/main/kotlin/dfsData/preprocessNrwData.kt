@@ -33,7 +33,6 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
 
 
     try {
-        // Remove entries where no longitude or latitude is given or entries for the same plane with the same timestamp
         var record: Array<String>? = reader.readNext()
 
 
@@ -52,16 +51,17 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
         while (record != null) {
 
                 if(record.size > 3){
-                    region = record[4].replace("ö", "oe").replace("ß", "ss").replace("ä", "ae").replace("ü", "ue")
-                    firstEntry = true
-                    counter = 0
+
                     if (!beginning) {
                         var outputLine = "$region;$polygon))"
                         writer.writeNext(outputLine.split(";").toTypedArray())
                     }
+                    region = record[4].replace("ö", "oe").replace("ß", "ss").replace("ä", "ae").replace("ü", "ue")
+                    firstEntry = true
+                    counter = 0
                     beginning=false
-
                     ignoreEntries=false
+
                 } else {
                     if (firstEntry){
                         val sourceCoordinates = ProjCoordinate(record[1].toDouble(), record[2].toDouble())
@@ -71,11 +71,12 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
                         polygon = "POLYGON((${transformedCoordinates.x} ${transformedCoordinates.y}"
                         firstEntry=false
                     }
+
                     if (record[1]+record[2] == firstLocation)counter++
 
 
 
-                    if(!ignoreEntries) {
+                    if(!ignoreEntries && !firstEntry) {
 
                         val sourceCoordinates = ProjCoordinate(record[1].toDouble(), record[2].toDouble())
                         val targetCoordinates = ProjCoordinate()
@@ -90,6 +91,11 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
                 record = reader.readNext()
 
         }
+        if (polygon.isNotEmpty()) {
+            val outputLine = "$region;$polygon))"
+            writer.writeNext(outputLine.split(";").toTypedArray())
+        }
+
 
     }catch (e: Exception){
         e.printStackTrace()
@@ -102,8 +108,8 @@ fun preprocessRegionalData(inputFile: String, outputFile: String){
 }
 
 fun main(){
-    preprocessRegionalData("dvg1bld_nw.txt", "geomesa-state.csv")
-    preprocessRegionalData("dvg1gem_nw.txt", "geomesa-municipalities.csv")
-    preprocessRegionalData("dvg1krs_nw.txt", "geomesa-counties.csv")
-    preprocessRegionalData("dvg1rbz_nw.txt", "geomesa-districts.csv")
+    preprocessRegionalData("dvg1bld_nw.txt", "state-wkt.csv")
+    preprocessRegionalData("dvg1gem_nw.txt", "municipalities-wkt.csv")
+    preprocessRegionalData("dvg1krs_nw.txt", "counties-wkt.csv")
+    preprocessRegionalData("dvg1rbz_nw.txt", "districts-wkt.csv")
 }
