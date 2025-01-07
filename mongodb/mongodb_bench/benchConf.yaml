@@ -11,191 +11,213 @@ queryConfigs:
 
   # Temporal queries (6 functioning queries)
   - name: countActiveFlightsInPeriod
-    use: False
-    type: temporal query - instant temporal aggregate query
+    use: True
+    type: temporal
     mongodbQuery: abc
-    repetition: 50
+    repetition: 2
     parameters:
       - period
 
   - name: locationOfAirplaneAtInstant
-    use: False
-    type: temporal no aggregate query
+    use: True
+    type: temporal
     mongodbQuery: abc
-    repetition: 50
+    repetition: 2
     parameters:
       - instant
 
   - name: flightTimeLowAltitude
     use: True
-    type: temporal aggregation query
+    type: temporal
     mongodbQuery: abc
-    repetition: 50
+    repetition: 2
     parameters:
       - period_short
 
   - name: averageHourlyFlightsDuringDay
-    use: False
-    type: temporal aggregation query
+    use: True
+    type: temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - day
 
   - name: flightsWithLocalOriginDestinationInPeriod
-    use: False
-    type: temporal no aggregate query
+    use: True
+    type: temporal
     mongodbQuery: abc
-
-    repetition: 1000
+    repetition: 2
     parameters:
-      - period
+      - period_short
 
   - name: airportUtilizationInPeriod
-    use: False
-    type: temporal aggregation query
+    use: True
+    type: temporal
     mongodbQuery: abc
-
-    repetition: 1000
+    repetition: 2
     parameters:
       - period_medium
 
   # Spatial queries (7 functioning queries)
   - name: flightsInCityRadius
-    use: False
-    type: spatial range-query
+    use: True
+    type: spatial
     mongodbQuery: abc
-
-    repetition: 1000
+    repetition: 2
     parameters:
       - city
       - radius
 
   - name: flightsIntersectingMunicipalities
-    use: False
-    type: spatial range-query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - municipality
 
   - name: countFlightsInCounties
-    use: False
-    type: spatial aggregation query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - county
 
   - name: flightsCloseToMainCitiesLowAltitude
-    use: False
-    type: spatial range query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - low_altitude
       - radius
 
   - name: flightsOnlyInOneDistrict
-    use: False
-    type: spatial range query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - district
 
   - name: countiesLandingsDepartures
-    use: False
-    type: spatial aggregation query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - county
 
   - name: flightClosestToPoint
-    use: False
-    type: spatial aggregation query
+    use: True
+    type: spatial
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
-      - coordinates
+      - point
       - distance
 
-  - name: FlightDistanceInCounties
-    use: False
-    type: spatial range query
-    mongodbQuery: abc
-    repetition: 1000
-    parameters:
-      - county
-      - type
-
-  # spatiotemporal queries (6 functioning queries)
+  # spatiotemporal queries (7 functioning queries)
   - name: flightsInCountyInPeriod
-    use: False
-    type: spatiotemporal range-query
+    use: True
+    type: spatiotemporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
-      - period
+      - period_long
       - county
 
   - name: pairOfFlightsInMunicipalityInPeriod
-    use: False
-    type: spatiotemporal range join-query
+    use: True
+    type: spatio-temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
-      - instant
+      - period
       - municipality
 
   - name: countFlightsAtInstantInDistricts
-    use: False
-    type: spatio-temporal aggregate query
+    use: True
+    type: spatio-temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - instant
 
   - name: inCityRadiusInPeriod
-    use: False
-    type: spatio-temporal aggregate query
+    use: True
+    type: spatio-temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - period
       - city
       - radius
 
-  - name: closePairOfPlanes
-    use: False
-    type: spatiotemporal distance query
-    mongodbQuery: abc
-    repetition: 1000
-    parameters:
-      - county
-
   - name: flightDurationInMunicipalityLowAltitudeInPeriod
-    use: False
-    type: spatial aggregation query
+    use: True
+    type: spatial-temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - period
       - municipality
       - low_altitude
 
   - name: averageHourlyFlightsDuringDayInCounty
-    use: False
-    type: spatiotemporal aggregation query
+    use: True
+    type: spatio-temporal
     mongodbQuery: abc
-    repetition: 1000
+    repetition: 2
     parameters:
       - day
       - county
 
+  - name: flightsWithLocalOriginDestinationInPeriodInCounty
+    use: True
+    type: spatio-temporal
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - period
+      - county
 
 
+
+
+
+
+
+  # bisher noch nicht implementiert (auch nicht in MobiltiyDB)
+  - name: FlightDistanceInCounties
+    use: False
+    type: spatial
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - county
+      - type
+
+
+
+# takes too long to execute (complex implementation)
+  - name: crossedCountiesInPeriodWithDestination
+    use: False
+    type: spatiotemporal
+    mongodbQuery: abc
+    repetition: 10
+    parameters:
+      - period_short
+
+  # takes very long to execute as filtering based on time or space is not possible before calculating distances of each pair of flightpoints
+  - name: closePairOfPlanes
+    use: False
+    type: spatiotemporal
+    mongodbQuery: abc
+    repetition: 1000
+    parameters:
+      - county
 
 
 

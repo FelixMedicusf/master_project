@@ -133,13 +133,13 @@ class DataHandler(databaseName: String) {
 
         val flightPointsCollection = database.getCollection("flightpoints")
         val flightTripsCollection = database.getCollection("flighttrips")
-        //createTimeIndexes(flightPointsCollection, flightTripsCollection)
+        createTimeIndexes(flightPointsCollection, flightTripsCollection)
 
         val flightPointsTsCollection = database.getCollection("flightpoints_ts")
 
-        //createSpatialIndexes(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
+        createSpatialIndexes(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
 
-        createCompoundIndex(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
+        //createCompoundIndex(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
 
     }
 
@@ -2059,11 +2059,11 @@ class DataHandler(databaseName: String) {
 
 fun main() {
     val handler = DataHandler("aviation_data")
-//    handler.updateDatabaseCollections()
-//    handler.shardCollections()
-//    handler.insertRegionalData()
-//    handler.createFlightTrips()
-//    handler.createTimeSeriesCollection()
+    handler.updateDatabaseCollections()
+    handler.shardCollections()
+    handler.insertRegionalData()
+    handler.createFlightTrips()
+    handler.createTimeSeriesCollection()
     handler.createIndexes()
     //handler.runQueries()
     //handler.invokeFunctionByName("averageHourlyFlightsDuringDayInCounty")

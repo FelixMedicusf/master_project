@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.util.*
 
-val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
 
 // temporal queries
 fun BenchThread.countActiveFlightsInPeriod(
