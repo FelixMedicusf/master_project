@@ -3,20 +3,31 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import io.ktor.http.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
+import io.ktor.server.plugins.*
+import io.ktor.server.plugins.contentnegotiation.*
+
 
 const val DATABASE = "aviation_data"
 const val USER = "felix"
 const val PASSWORD = "master"
+var benchmarkExecutorService: ExecutorService? = null
+
+
 
 class BenchmarkExecutor(
     private val configPath: String,
@@ -116,10 +127,60 @@ class BenchmarkExecutor(
     }
 }
 
+
 fun main() {
-    val executor = BenchmarkExecutor(
-        configPath = "benchConf.yaml",
-        logsPath = "src/main/resources/benchmark_execution_logs.txt",
-    )
-    executor.execute()
+    // Path to the config and logs
+    val configPath = "benchConf.yaml"
+    val logsPath = "src/main/resources/benchmark_execution_logs.txt"
+
+    // Start HTTP server
+    embeddedServer(Netty, port = 8080) {
+        install(ContentNegotiation) {
+            jackson {}
+        }
+        routing {
+            // Start benchmark execution
+            post("/start-benchmark") {
+                if (benchmarkExecutorService != null && !benchmarkExecutorService!!.isShutdown) {
+                    call.respond(HttpStatusCode.BadRequest, "Benchmark execution is already running.")
+                    return@post
+                }
+
+                benchmarkExecutorService = Executors.newSingleThreadExecutor()
+                benchmarkExecutorService!!.submit {
+                    val executor = BenchmarkExecutor(configPath, logsPath)
+                    executor.execute()
+                }
+                call.respond(HttpStatusCode.OK, "Benchmark execution started.")
+            }
+
+            // Stop benchmark execution
+            post("/stop-benchmark") {
+                if (benchmarkExecutorService == null || benchmarkExecutorService!!.isShutdown) {
+                    call.respond(HttpStatusCode.BadRequest, "No benchmark execution is running.")
+                    return@post
+                }
+
+                benchmarkExecutorService!!.shutdownNow()
+                call.respond(HttpStatusCode.OK, "Benchmark execution stopped.")
+            }
+
+            // Upload YAML configuration file
+            post("/upload-config") {
+                val configFileBytes = call.receive<ByteArray>()
+                File(configPath).writeBytes(configFileBytes)
+                call.respond(HttpStatusCode.OK, "Configuration file uploaded.")
+            }
+
+            // Retrieve benchmark logs
+            get("/retrieve-logs") {
+                val logFile = File(logsPath)
+                if (logFile.exists()) {
+                    call.respondFile(logFile)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "Log file not found.")
+                }
+            }
+        }
+    }.start(wait = true)
 }

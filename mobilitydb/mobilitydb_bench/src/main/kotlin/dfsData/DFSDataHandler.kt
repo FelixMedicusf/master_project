@@ -1,7 +1,6 @@
 package dfsData
 
 import BenchmarkConfiguration
-import BenchmarkSettings
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
@@ -11,6 +10,7 @@ import java.nio.file.Paths
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.Statement
+
 
 class DFSDataHandler {
 
@@ -78,9 +78,9 @@ class DFSDataHandler {
         if (conf.benchmarkSettings.nodes.size != 1) {
             try {
                 statement.executeQuery(
-                    "SELECT create_distributed_table('flightpoints', 'flightid');"
+                    "SELECT create_distributed_table('flightpoints', 'timestamp');"
                 )
-                println("Distributed Table flightPoints with flightId as sharding key.")
+                println("Distributed Table flightPoints with timestamp as sharding key.")
             } catch (e: Exception) {
                 println("Could not distribute table flightPoints.")
                 e.printStackTrace()
@@ -123,20 +123,53 @@ class DFSDataHandler {
     }
 
     private fun createTrajectories() {
+
+        statement.executeUpdate(
+            """
+            CREATE TABLE flights (
+                flightId TEXT,
+                airplaneType TEXT,
+                origin TEXT,
+                destination TEXT,
+                track TEXT,
+                altitude tfloatSeq,
+                trip tgeogpointSeq
+            );
+            """.trimIndent()
+        )
+
+        if (conf.benchmarkSettings.nodes.size != 1) {
+            try {
+                statement.executeQuery(
+                    "SELECT create_distributed_table('flights', 'trip');"
+                )
+                println("Distributed Table flightPoints with timestamp as sharding key.")
+            } catch (e: Exception) {
+                println("Could not distribute table flightPoints.")
+                e.printStackTrace()
+            }
+        }
+
         try {
             statement.executeUpdate(
                 """
-                CREATE TABLE flights(flightId, airplaneType, origin, destination, track, altitude, trip) AS
-                SELECT 
-                    flightId,
-                    airplaneType,
-                    origin, 
-                    destination,
-                    track,
-                    tfloatSeq(array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) FILTER (WHERE altitude IS NOT NULL), 'step'),
-                    tgeompointSeq(array_agg(tgeompoint(ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) FILTER (WHERE track IS NOT NULL), 'step')
-                FROM flightPoints 
-                GROUP BY flightId, track, airplaneType, origin, destination;
+                    INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip)
+                    SELECT 
+                        flightId,
+                        airplaneType,
+                        origin,
+                        destination,
+                        track,
+                        tfloatSeq(
+                            array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) 
+                            FILTER (WHERE altitude IS NOT NULL), 'step'
+                        ),
+                        tgeogpointSeq(
+                            array_agg(tgeogpoint(ST_Transform(Geom, 4326), timestamp) ORDER BY timestamp) 
+                            FILTER (WHERE track IS NOT NULL), 'step'
+                        )
+                    FROM flightPoints
+                    GROUP BY flightId, track, airplaneType, origin, destination;
                 """.trimIndent()
             )
             println("Created flights table with trajectories.")
@@ -144,6 +177,7 @@ class DFSDataHandler {
             println("Could not create flights table.")
             e.printStackTrace()
         }
+
 
         try {
             statement.executeUpdate("ALTER TABLE flights ADD COLUMN traj GEOMETRY;")
@@ -163,9 +197,12 @@ class DFSDataHandler {
             println("Could not count flight trajectories.")
             e.printStackTrace()
         }
+
+        // TODO: how should I shard here?? If possible based on trip column
+
     }
 
-    fun processLocationsData() {
+    fun processStaticData() {
         insertStateData()
         insertAirportData()
 
@@ -182,9 +219,12 @@ class DFSDataHandler {
                     district VARCHAR(50),
                     name VARCHAR(50),
                     population INTEGER,
-                    Geom GEOMETRY(Point, 25832)
+                    Geom GEOMETRY(Point, 4326)
                 )
                 """.trimIndent()
+            )
+            statement.executeQuery(
+                "SELECT create_distributed_table('cities', 'name');"
             )
             statement.executeUpdate(
                 """
@@ -195,10 +235,16 @@ class DFSDataHandler {
             statement.executeUpdate(
                 """
                 UPDATE cities 
-                SET Geom = ST_Transform(ST_SetSRID(ST_MakePoint(lon, lat), 4326), 25832);
+                SET Geom = ST_SetSRID(ST_MakePoint(lon, lat), 4326);
                 """.trimIndent()
             )
             println("Inserted city data.")
+
+            val createIndexQuery = "CREATE INDEX idx_cities_name_hash ON cities (md5(name));"
+            statement.executeUpdate(createIndexQuery)
+
+
+
         } catch (e: Exception) {
             println("Could not create or populate cities table.")
             e.printStackTrace()
@@ -225,8 +271,6 @@ class DFSDataHandler {
                 """.trimIndent()
             )
 
-
-
             statement.executeUpdate("""
                 COPY airports (IATA, ICAO, AirportName, Country, City)
                 FROM '/tmp/regData/airports.csv' 
@@ -235,6 +279,15 @@ class DFSDataHandler {
                 ENCODING 'WIN1252';
                 """.trimIndent()
             )
+
+            val createIndexQuery = "CREATE INDEX idx_airports_name_hash ON airports (md5(icao));"
+            statement.executeUpdate(createIndexQuery)
+
+            statement.executeQuery(
+                "SELECT create_distributed_table('airports', 'icao');"
+            )
+
+
 
         }catch (e: Exception){
             e.printStackTrace()
@@ -284,19 +337,62 @@ class DFSDataHandler {
                     """.trimIndent()
             )
 
+
             statement.executeUpdate("DROP TABLE temp_$region;")
-            statement.executeUpdate("ALTER TABLE $region ADD COLUMN geom_etrs GEOMETRY(Polygon, 25832);")
-            statement.executeUpdate("UPDATE $region SET geom_etrs = ST_Transform(Geom, 25832);")
+
+            //TODO: Shard regional tables (cities, airports, districts, counties, municipalities) same as in MongoDB (right now based on hashed name)
+            // keep CRS 4326
+            val createIndexQuery = "CREATE INDEX idx_${region}_name_hash ON $region (md5(name));"
+            statement.executeUpdate(createIndexQuery)
+
+            statement.executeQuery(
+                "SELECT create_distributed_table('${region}', 'name');"
+            )
+
+
+
+            //statement.executeUpdate("ALTER TABLE $region ADD COLUMN geom_etrs GEOMETRY(Polygon, 25832);")
+            //statement.executeUpdate("UPDATE $region SET geom_etrs = ST_Transform(Geom, 25832);")
             println("Processed region data for $region.")
         } catch (e: Exception) {
             println("Error processing region data for $region.")
             e.printStackTrace()
         }
     }
+
+    fun createIndexes(){
+        createFlightPointsIndex()
+        createFlightTripsIndex()
+        createStaticTablesIndexes()
+
+    }
+
+    private fun createFlightPointsIndex(){
+        // TODO: Implement
+        //GiST and SP-GiST
+        //CREATE INDEX flights_trip_Gist_Idx ON flights USING Gist(trip);
+        //CREATE INDEX flights_trip_SPGist_Idx ON flights USING SPGist(trip);
+
+//        In GiST partitioning, we use the cluster operation
+//        of PostgreSQL to redistribute the data of the table using the GiST
+//                index. This operation exploits the index to store the trips that are
+//        close to each other together in the same table
+
+    }
+
+    private fun createFlightTripsIndex(){
+        // TODO: Implement
+    }
+
+    private fun createStaticTablesIndexes(){
+        // TODO: Implement
+    }
+
 }
 
 fun main() {
     val handler = DFSDataHandler()
     handler.processFlightData()
-    handler.processLocationsData()
+    handler.processStaticData()
+    handler.createIndexes()
 }

@@ -1,5 +1,4 @@
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -11,6 +10,8 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.*
 import com.mongodb.connection.ClusterSettings
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.bson.Document
 import org.bson.conversions.Bson
 import org.locationtech.jts.geom.Coordinate
@@ -20,17 +21,10 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneOffset
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.reflect.KFunction
-import kotlin.reflect.full.declaredFunctions
-
 
 // This class is used to prepare the MongoDB for the benchmark.
-// Updating collections, inserting data about regions, creating the collection and inserting data for flightTrips
+// Updating collections, inserting data about regions, creating the collection and inserting data for flightTrips, creating indexes on and sharding collections
 class DataHandler(databaseName: String) {
 
     private val conf: BenchmarkConfiguration
@@ -94,6 +88,23 @@ class DataHandler(databaseName: String) {
 
         println("Updating flightpoints collection ... ")
         updateCollection(flightPointsCollection, arrayOf("timestamp", "coordinates"))
+
+        flightPointsCollection.createIndex(
+            Indexes.compoundIndex(
+                Indexes.ascending("timestamp"),
+                Indexes.ascending("flightId")
+            ),
+            IndexOptions().unique(false) // Shard keys typically are not unique
+        )
+
+        println("Compound index on 'timestamp' and 'flightId' created for collection flightpoints.")
+
+        // Step 3: Shard the collection using the compound key
+        adminDatabase.runCommand(
+            Document("shardCollection", "${database.name}.flightpoints")
+                .append("key", Document("timestamp", 1).append("flightId", 1))
+        )
+
         println("Updating cities collection ... ")
         updateCollection(citiesCollection, arrayOf("coordinates"))
     }
@@ -108,24 +119,26 @@ class DataHandler(databaseName: String) {
     }
 
     fun createFlightTrips(){
-        val flightTripsCollection = database.getCollection("flighttrips")
         val flightPointsCollection = database.getCollection("flightpoints")
+        val flightTripsCollection = database.getCollection("flighttrips")
         println("Creating flighttrips ...")
         createTripsCollection(flightPointsCollection, flightTripsCollection)
-        println("Interpolating flighttrips ...")
-        interpolateFlightPoints(flightTripsCollection)
         println("Creating trajectories for flighttrips ...")
         createFlightTrajectories(flightTripsCollection)
+        //println("Interpolating flighttrips ...")
+        //interpolateFlightPoints(flightTripsCollection)
     }
 
     fun shardCollections(){
 
-        val flightTrips = database.getCollection("flighttrips")
-        createHashedIndexAndShard(flightTrips, "flightId")
+        val flightTripsCollection = database.getCollection("flighttrips")
+        // create index on flightId and shard by it for collection flighttrips
+        createIndexAndShard(flightTripsCollection, "flightId")
 
+        // create index on hashed name and shard by it for municipalities, counties, and districts
         for (region in regions){
             val collection = database.getCollection(region)
-            createHashedIndexAndShard(collection, "name")
+            createIndexAndShard(collection, "name")
         }
     }
 
@@ -133,27 +146,28 @@ class DataHandler(databaseName: String) {
 
         val flightPointsCollection = database.getCollection("flightpoints")
         val flightTripsCollection = database.getCollection("flighttrips")
-        createTimeIndexes(flightPointsCollection, flightTripsCollection)
-
         val flightPointsTsCollection = database.getCollection("flightpoints_ts")
 
+        createTimeIndexes(flightPointsCollection) //Index on timestamp of flightpoints collection
         createSpatialIndexes(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
+        createCompoundIndex(flightPointsCollection, flightPointsTsCollection)
 
-        //createCompoundIndex(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
-
+//
+//        flightTripsCollection.updateMany(
+//            Document(),
+//            Document("\$unset", Document("points", ""))
+//        )
     }
 
-    private fun createTimeIndexes(flightPointsCollection: MongoCollection<Document>, flightTripsCollection: MongoCollection<Document>){
+    private fun createTimeIndexes(flightPointsCollection: MongoCollection<Document>){
         flightPointsCollection.createIndex(Document("timestamp",1))
-        flightTripsCollection.createIndex(Document("points.timestamp", 1))
 
-        println("Created index on timestamp in ${flightPointsCollection.namespace.collectionName} and ${flightTripsCollection.namespace.collectionName}.")
+        println("Created index on timestamp in ${flightPointsCollection.namespace.collectionName}.")
     }
 
     private fun createSpatialIndexes(flightPointsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>, flightTripsCollection: MongoCollection<Document>){
         flightPointsCollection.createIndex(Document("location","2dsphere"))
         flightPointsTsCollection.createIndex(Document("location","2dsphere"))
-        flightTripsCollection.createIndex(Document("points.location", "2dsphere"))
         flightTripsCollection.createIndex(Document("trajectory", "2dsphere"))
 
         println("Created index on spatial fields in ${flightPointsCollection.namespace.collectionName}, ${flightPointsTsCollection.namespace.collectionName} and ${flightTripsCollection.namespace.collectionName}.")
@@ -161,10 +175,10 @@ class DataHandler(databaseName: String) {
 
     }
 
-    private fun createCompoundIndex(flightPointsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>, flightTripsCollection: MongoCollection<Document>) {
+    private fun createCompoundIndex(flightPointsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>) {
         var compoundIndex = Indexes.compoundIndex(
+            Indexes.ascending("timestamp"), // Ascending index on timestamp
             Indexes.geo2dsphere("location"), // Geospatial index
-            Indexes.ascending("timestamp")  // Ascending index
         )
 
         var indexOptions = IndexOptions()
@@ -172,13 +186,15 @@ class DataHandler(databaseName: String) {
         flightPointsCollection.createIndex(compoundIndex, indexOptions)
         flightPointsTsCollection.createIndex(compoundIndex, indexOptions)
 
-        compoundIndex = Indexes.compoundIndex(
-            Indexes.geo2dsphere("points.location"),
-            Indexes.ascending("points.timestamp")
-        )
-        indexOptions = IndexOptions()
-
-        flightTripsCollection.createIndex(compoundIndex, indexOptions)
+//        compoundIndex = Indexes.compoundIndex(
+//            Indexes.geo2dsphere("points.location"),
+//            Indexes.ascending("points.timestamp")
+//        )
+//        indexOptions = IndexOptions()
+//
+//        flightTripsCollection.createIndex(compoundIndex, indexOptions)
+//
+        println("Created compound index on timestamp and geom field in ${flightPointsCollection.namespace.collectionName} and ${flightPointsTsCollection.namespace.collectionName}.")
     }
 
     private fun updateCollection(collection: MongoCollection<Document>, fields: Array<String>) {
@@ -270,7 +286,7 @@ class DataHandler(databaseName: String) {
     private fun createTripsCollection(flightPoints: MongoCollection<Document>, flightTrips: MongoCollection<Document>) {
 
         val pipeline = listOf(
-            Document("\$sort", Document("timestamp", 1)), // Ensure points are sorted by timestamp
+            Document("\$sort", Document("timestamp", 1)),
             Document("\$group", Document().apply {
                 append("_id", Document().apply {
                     append("flightId", "\$flightId")
@@ -285,7 +301,9 @@ class DataHandler(databaseName: String) {
                         append("type", "Point")
                         append("coordinates", listOf("\$longitude", "\$latitude"))
                     })
-                    append("altitude", "\$altitude") // Include altitude
+                    append("altitude", "\$altitude")
+                    append("lon", "\$longitude")
+                    append("lat", "\$latitude")
                 }))
             }),
             Document("\$addFields", Document().apply {
@@ -294,10 +312,6 @@ class DataHandler(databaseName: String) {
                 append("destinationAirport", "\$_id.destinationAirport")
                 append("airplaneType", "\$_id.airplaneType")
                 append("track", "\$_id.track")
-                append("timeRange", Document().apply {
-                    append("start", Document("\$arrayElemAt", listOf("\$points.timestamp", 0))) // First timestamp
-                    append("end", Document("\$arrayElemAt", listOf("\$points.timestamp", -1))) // Last timestamp
-                })
             }),
             Document("\$project", Document().apply {
                 append("_id", 0)
@@ -307,7 +321,6 @@ class DataHandler(databaseName: String) {
                 append("airplaneType", 1)
                 append("track", 1)
                 append("points", 1)
-                append("timeRange", 1)
             }),
             Document("\$merge", Document().apply {
                 append("into", flightTrips.namespace.collectionName)
@@ -322,45 +335,46 @@ class DataHandler(databaseName: String) {
     }
 
 
-    private fun interpolateFlightPoints(collection: MongoCollection<Document>, batchSize: Int = 7500) {
-        var skip = 0
+    private fun interpolateFlightPoints(collection: MongoCollection<Document>, batchSize: Int = 10000) {
+        // Use a cursor-based approach with batchSize
+        val cursor = collection.find().batchSize(batchSize)
 
-        while (true) {
+        val bulkOperations = mutableListOf<WriteModel<Document>>()
+        var processedCount = 0
 
-            val flights = collection.find()
-                .skip(skip)
-                .limit(batchSize)
-                .toList()
+        cursor.forEach { flight ->
+            val points = flight.getList("points", Document::class.java)
+            val interpolatedPoints = mutableListOf<Document>()
 
-            if (flights.isEmpty()){
-                break
+            // Interpolate points within each flight
+            for (i in 0 until points.size - 1) {
+                val currentPoint = points[i]
+                val nextPoint = points[i + 1]
+                interpolatePointsBetween(currentPoint, nextPoint, interpolatedPoints)
             }
+            interpolatedPoints.add(points.last())
 
-            val bulkOperations = mutableListOf<WriteModel<Document>>()
+            // Prepare the update operation for the interpolated points
+            val update = Document("\$set", Document("points", interpolatedPoints))
+            bulkOperations.add(UpdateOneModel(Document("_id", flight["_id"]), update))
 
-            for (flight in flights) {
-                val points = flight.getList("points", Document::class.java)
-                val interpolatedPoints = mutableListOf<Document>()
-
-                for (i in 0..<points.size - 1) {
-                    val currentPoint = points[i]
-                    val nextPoint = points[i + 1]
-                    interpolatePointsBetween(currentPoint, nextPoint, interpolatedPoints)
-                }
-                interpolatedPoints.add(points.last())
-                val update = Document("\$set", Document("points", interpolatedPoints))
-                bulkOperations.add(UpdateOneModel(Document("_id", flight["_id"]), update))
-
-            }
-
-            if (bulkOperations.isNotEmpty()) {
+            // Execute bulk write when batch size is reached
+            if (bulkOperations.size >= batchSize) {
                 collection.bulkWrite(bulkOperations)
-                //println("Executed bulk update for $batchSize documents.")
+                bulkOperations.clear()
+                println("Executed bulk update for $batchSize documents.")
             }
 
-            skip += batchSize
-            println("Processed $batchSize documents, skipping $skip next.")
+            processedCount++
         }
+
+        // Execute any remaining bulk operations
+        if (bulkOperations.isNotEmpty()) {
+            collection.bulkWrite(bulkOperations)
+            println("Executed bulk update for remaining ${bulkOperations.size} documents.")
+        }
+
+        println("Processed $processedCount documents in total.")
     }
     private fun interpolatePointsBetween(currentPoint: Document, nextPoint: Document, result: MutableList<Document>) {
         val currentTimestamp = currentPoint.getDate("timestamp").toInstant()
@@ -404,71 +418,87 @@ class DataHandler(databaseName: String) {
 
     private fun createFlightTrajectories(collection: MongoCollection<Document>, batchSize: Int = 7500) {
         val geometryFactory = GeometryFactory()
-        var skip = 0
 
         println("Starting Trajectory creation for all flights in the ${collection.namespace.collectionName} collection.")
 
-        while (true) {
-            // Fetch a batch of documents
-            val flights = collection.find()
-                .skip(skip)
-                .limit(batchSize)
-                .toList()
+        // Use a cursor-based approach with batchSize
+        val cursor = collection.find().batchSize(batchSize)
 
-            if (flights.isEmpty()){
-                break
-            }
-            val bulkOperations = mutableListOf<WriteModel<Document>>()
+        val bulkOperations = mutableListOf<WriteModel<Document>>()
+        var processedCount = 0
 
-            for (flight in flights) {
+        cursor.forEach { flight ->
+            val points = flight.getList("points", Document::class.java)
 
-                val points = flight.getList("points", Document::class.java)
+            // Extract coordinates from the points
+            val coordinates = points.mapNotNull { point ->
+                //val location = point.get("location", Document::class.java)
+                //val coords = location["coordinates"] as? List<*>
+                val lon = point.getDouble("lon")
+                val lat = point.getDouble("lat")
+                Coordinate((lon).toDouble(), (lat).toDouble())
+            }.toTypedArray()
 
-                val coordinates = points.mapNotNull { point ->
-                    val location = point.get("location", Document::class.java)
-                    val coords = location["coordinates"] as? List<*>
-                    coords?.let { Coordinate((it[0] as Number).toDouble(), (it[1] as Number).toDouble()) }
-                }.toTypedArray()
+            // Create a LineString if there are enough coordinates
+            if (coordinates.size >= 2) {
+                val lineString = geometryFactory.createLineString(CoordinateArraySequence(coordinates))
 
-                if (coordinates.size >= 2) {
-                    val lineString = geometryFactory.createLineString(CoordinateArraySequence(coordinates))
+                // Convert LineString to GeoJSON format
+                val geoJsonLineString = Document("type", "LineString")
+                    .append("coordinates", lineString.coordinates.map { listOf(it.x, it.y) })
 
-                    val geoJsonLineString = Document("type", "LineString")
-                        .append("coordinates", lineString.coordinates.map { listOf(it.x, it.y) })
-
-                    val update = Updates.set("trajectory", geoJsonLineString)
-                    bulkOperations.add(UpdateOneModel(Document("_id", flight["_id"]), update))
-                }
+                // Prepare the update operation for the trajectory field
+                val update = Updates.set("trajectory", geoJsonLineString)
+                bulkOperations.add(UpdateOneModel(Document("_id", flight["_id"]), update))
             }
 
-            if (bulkOperations.isNotEmpty()) {
+            // Execute bulk write when batch size is reached
+            if (bulkOperations.size >= batchSize) {
                 collection.bulkWrite(bulkOperations)
+                bulkOperations.clear()
                 println("Executed bulk update for $batchSize documents.")
             }
 
-            skip += batchSize
-            println("Processed $batchSize documents, skipping $skip next.")
+            processedCount++
         }
 
-        println("Trajectory creation completed for all flights of ${collection.namespace.collectionName}.")
+        // Execute any remaining operations
+        if (bulkOperations.isNotEmpty()) {
+            collection.bulkWrite(bulkOperations)
+            println("Executed bulk update for remaining ${bulkOperations.size} documents.")
+        }
+
+        println("Trajectory creation completed for all flights of ${collection.namespace.collectionName}. Processed $processedCount documents.")
     }
 
-    private fun createHashedIndexAndShard(collection: MongoCollection<Document>, columnName: String) {
+    private fun createIndexAndShard(collection: MongoCollection<Document>, columnName: String) {
         val collectionName = collection.namespace.collectionName
         val databaseName = collection.namespace.databaseName
 
-        // Step 1: Create a hashed index on the specified column
-        println("Creating hashed index on column '$columnName' in collection '$collectionName'...")
-        collection.createIndex(Document(columnName, "hashed"))
-        println("Hashed index created on column '$columnName'.")
+        if (collectionName == "flighttrips"){
+            collection.createIndex(Document(columnName, 1))
+            println("Index created on column '$columnName'.")
+            adminDatabase.runCommand(
+                Document("shardCollection", "$databaseName.$collectionName")
+                    .append("key", Document(columnName, 1))
+            )
+            println("Collection '$collectionName' sharded on column '$columnName'.")
 
-        // Step 2: Shard the collection on the specified column
-        println("Sharding collection '$collectionName' on column '$columnName' with hashed key...")
-        adminDatabase.runCommand(
-            Document("shardCollection", "$databaseName.$collectionName")
-                .append("key", Document(columnName, "hashed"))
-        )
-        println("Collection '$collectionName' sharded on column '$columnName'.")
+
+        }
+        else {
+            collection.createIndex(Document(columnName, "hashed"))
+            println("Hashed index created on column '$columnName'.")
+            adminDatabase.runCommand(
+                Document("shardCollection", "$databaseName.$collectionName")
+                    .append("key", Document(columnName, "hashed"))
+            )
+            println("Collection '$collectionName' sharded on hashed column '$columnName'.")
+        }
+
+
+
+
     }
 
     private fun listCollections(database: MongoDatabase) {
@@ -485,1571 +515,279 @@ class DataHandler(databaseName: String) {
     }
 
     private fun migrateFlightPoints(flightTripsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>, database: MongoDatabase) {
-        val flightPointsCollectionName = "flightpoints"
 
         try {
-//            database.getCollection(flightPointsCollectionName).drop()
-//            println("Collection '$flightPointsCollectionName' deleted.")
 
-            val timeSeriesOptions = TimeSeriesOptions("timestamp").metaField("flightId").granularity(TimeSeriesGranularity.SECONDS)
+            val timeSeriesOptions = TimeSeriesOptions("timestamp").metaField("metadata").granularity(TimeSeriesGranularity.SECONDS)
             val createOptions = CreateCollectionOptions()
                 .timeSeriesOptions(timeSeriesOptions)
             database.createCollection(flightPointsTsCollection.namespace.collectionName, createOptions)
 
-            flightPointsTsCollection.createIndex(Document("flightId", "hashed"))
 
-            adminDatabase.runCommand(
-                Document("shardCollection", "aviation_data.flightpoints_ts") // Namespace
-                    .append("key", Document("flightId", "hashed")) // Correctly formatted key as a Document
-            )
+            var indexOptions = IndexOptions()
+            //val timestampIndex = Document("timestamp", 1)
+//            flightPointsTsCollection.createIndex(
+//                Document("metadata.flightId", 1).append("timestamp", 1),
+//                indexOptions
+//            )
+//            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+//                .append("key", Document("metadata.flightId", 1).append("timestamp", 1))
+
+            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+                .append("key", Document("timestamp", 1))
+
+
+//            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+//                .append("key", Document("timestamp", 1))
+
+            adminDatabase.runCommand(shardingCommand)
 
             println("Collection '${flightPointsTsCollection.namespace.collectionName}' created with time-series settings.")
+
         } catch (e: Exception) {
             println("Error while resetting the collection: ${e.message}")
             return
         }
 
         val bulkOps = mutableListOf<WriteModel<Document>>()
-        val batchSize = 500000 // Adjust based on memory and dataset size
+        val batchSize = 200000
+        val fetchBatchSize = 7500
+        val projection = Projections.fields(
+            Projections.include("flightId", "airplaneType", "destinationAirport", "originAirport", "track", "points")
+        )
+
 
         try {
-            flightTripsCollection.find().forEach { doc ->
-                val flightId = doc.getInteger("flightId") // Metadata
-                val points = doc.getList("points", Document::class.java) // Time-series data
 
-                points.forEach { point ->
-                    val bulkOp = InsertOneModel(
-                        Document(mapOf(
-                            "flightId" to flightId, // MetaField
-                            "timestamp" to point["timestamp"], // TimeField
-                            "location" to point["location"], // Additional fields
-                            "altitude" to point["altitude"] // Additional fields
-                        ))
+            flightTripsCollection.find().projection(projection).batchSize(fetchBatchSize).forEach { doc ->
+                val flightId = doc.getInteger("flightId")
+                val airplaneType = doc.getString("airplaneType")
+                val destinationAirport = doc.getString("destinationAirport")
+                val originAirport = doc.getString("originAirport")
+                val track = doc.getInteger("track")
+                val points = doc.getList("points", Document::class.java)
+
+                // Preprocess all points at once
+                val metadata = Document(
+                    mapOf(
+                        "flightId" to flightId,
+                        "track" to track,
+                        "originAirport" to originAirport,
+                        "destinationAirport" to destinationAirport,
+                        "airplaneType" to airplaneType,
                     )
-                    bulkOps.add(bulkOp)
+                )
 
-                    // Execute bulk write when batch size is reached
-                    if (bulkOps.size >= batchSize) {
-                        flightPointsTsCollection.bulkWrite(bulkOps)
-                        bulkOps.clear() // Clear the bulkOps list
-                    }
+                val currentBatch = points.map { point ->
+                    InsertOneModel(
+                        Document(
+                            mapOf(
+                                "metadata" to metadata,
+                                "timestamp" to point["timestamp"],
+                                "lon" to point["lon"],
+                                "lat" to point["lat"],
+                                "altitude" to point["altitude"],
+                            )
+                        )
+                    )
+                }
+
+                // Add preprocessed operations to the bulkOps
+                bulkOps.addAll(currentBatch)
+
+                // Execute bulk write when batch size is reached
+                if (bulkOps.size >= batchSize) {
+                    flightPointsTsCollection.bulkWrite(bulkOps)
+                    bulkOps.clear() // Clear the bulkOps list
                 }
             }
 
-            // Execute any remaining operations
+// Final batch write for remaining operations
             if (bulkOps.isNotEmpty()) {
                 flightPointsTsCollection.bulkWrite(bulkOps)
             }
 
-            println("Time-series data migrated successfully!")
+//            flightTripsCollection.find().projection(projection).batchSize(fetchBatchSize).forEach { doc ->
+//                val flightId = doc.getInteger("flightId")
+//                val airplaneType = doc.getString("airplaneType")
+//                val destinationAirport = doc.getString("destinationAirport")
+//                val originAirport = doc.getString("originAirport")
+//                val track = doc.getInteger("track")
+//                val points = doc.getList("points", Document::class.java)
+//
+//                points.forEach { point ->
+//                    val bulkOp = InsertOneModel(
+//                        Document(mapOf(
+//                            // metadata entries
+//                            "metadata" to Document(
+//                                mapOf(
+//                                    "flightId" to flightId,
+//                                    "track" to track,
+//                                    "originAirport" to originAirport,
+//                                    "destinationAirport" to destinationAirport,
+//                                    "airplaneType" to airplaneType,
+//                                )
+//                            ),
+//                            "timestamp" to point["timestamp"],
+//                            "lon" to point["lon"],
+//                            "lat" to point["lat"],
+//                            "altitude" to point["altitude"],
+//                        ))
+//                    )
+//                    bulkOps.add(bulkOp)
+//
+//                    // Execute bulk write when batch size is reached
+//                    if (bulkOps.size >= batchSize) {
+//                        flightPointsTsCollection.bulkWrite(bulkOps)
+//                        bulkOps.clear() // Clear the bulkOps list
+//                    }
+//                }
+//            }
+//            println("Time-series data migrated successfully!")
+//
+//            // Execute any remaining operations
+//            if (bulkOps.isNotEmpty()) {
+//                flightPointsTsCollection.bulkWrite(bulkOps)
+//            }
+
+            val densifyStage = Document(
+                "\$densify", Document()
+                    .append("field", "timestamp")
+                    .append("partitionByFields", listOf("metadata.flightId", "metadata.track"))
+                    .append(
+                        "range", Document()
+                            .append("step", 1)
+                            .append("unit", "second")
+                            .append("bounds", "partition")
+                    )
+            )
+
+            // Step 2: $fill stage
+            val fillStage = Document(
+                "\$fill", Document()
+                    .append("partitionByFields", listOf("metadata.flightId", "metadata.track"))
+                    .append(
+                        "sortBy", Document("timestamp", 1)
+                    )
+                    .append(
+                        "output", Document()
+                            .append("altitude", Document("method", "linear"))
+                            .append("lon", Document("method", "linear"))
+                            .append("lat", Document("method", "linear"))
+                    )
+            )
+
+
+            // Execute the pipeline
+            val pipeline = listOf(densifyStage, fillStage)
+            val result = flightPointsTsCollection.aggregate(pipeline).toList()
+
+            // TODO: transform coordinates to GeoJSON
+            val updateCoordinates = Document("\$set", mapOf(
+                "location" to Document(
+                    "type", "Point"
+                ).append(
+                    "coordinates", listOf("\$lon", "\$lat")
+                )
+            ))
+
+            val updateLocationsPipeline = mutableListOf<Bson>()
+
+            updateLocationsPipeline.add(updateCoordinates)
+
+            println("Creating GeoJSON fields for ${flightPointsTsCollection.namespace.collectionName}.")
+            flightPointsTsCollection.updateMany(Document(), pipeline)
+
         } catch (e: Exception) {
             println("Error during migration: ${e.message}")
         }
     }
 
 
-    fun invokeFunctionByName(functionName: String): KFunction<*>? {
-        val benchThreadClass = this::class
+    fun processFlightTripsByRange(
+        flightTripsCollection: MongoCollection<Document>,
+        flightPointsTsCollection: MongoCollection<Document>,
+        batchSize: Int,
+        flightIdThreshold: Int
+    ) {
+        runBlocking {
+            // Launch two coroutines for parallel processing
+            val largerFlightIdsJob = launch {
+                processFlightTrips(flightTripsCollection, flightPointsTsCollection, batchSize, flightIdThreshold, true)
+            }
 
-        val function = benchThreadClass.declaredFunctions.find { it.name == functionName }
+            val smallerFlightIdsJob = launch {
+                processFlightTrips(flightTripsCollection, flightPointsTsCollection, batchSize, flightIdThreshold, false)
+            }
 
-        if (function != null) {
-            return function
-        } else {
-            println("Function '$functionName' not found.")
-            return benchThreadClass.declaredFunctions.find { it.name == "queryFlightsByPeriod" }
+            // Wait for both coroutines to finish
+            largerFlightIdsJob.join()
+            smallerFlightIdsJob.join()
         }
     }
 
-    private fun printMongoResponse(response: Any?) {
-        // Configure Jackson ObjectMapper for pretty JSON formatting
-        val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
+    suspend fun processFlightTrips(
+        flightTripsCollection: MongoCollection<Document>,
+        flightPointsTsCollection: MongoCollection<Document>,
+        batchSize: Int,
+        flightIdThreshold: Int,
+        isLarger: Boolean
+    ) {
+        val filter = if (isLarger) {
+            Document("flightId", Document("\$gt", flightIdThreshold))
+        } else {
+            Document("flightId", Document("\$lte", flightIdThreshold))
+        }
 
-        var castedResponse  = response as List<Document>
-        println("MongoDB Response:")
-        castedResponse.forEach { document ->
-            try {
-                // Convert the Document to a JSON string and print it
-                val jsonString = mapper.writeValueAsString(document.toMap())
-                println(jsonString)
-            } catch (e: Exception) {
-                println("Error formatting document: ${document.toJson()}")
+        val bulkOps = mutableListOf<InsertOneModel<Document>>()
+
+        flightTripsCollection.find(filter).batchSize(batchSize).forEach { doc ->
+            val flightId = doc.getInteger("flightId")
+            val airplaneType = doc.getString("airplaneType")
+            val destinationAirport = doc.getString("destinationAirport")
+            val originAirport = doc.getString("originAirport")
+            val track = doc.getInteger("track")
+            val points = doc.getList("points", Document::class.java)
+
+            val metadata = Document(
+                mapOf(
+                    "flightId" to flightId,
+                    "track" to track,
+                    "originAirport" to originAirport,
+                    "destinationAirport" to destinationAirport,
+                    "airplaneType" to airplaneType,
+                )
+            )
+
+            val currentBatch = points.map { point ->
+                InsertOneModel(
+                    Document(
+                        mapOf(
+                            "metadata" to metadata,
+                            "timestamp" to point["timestamp"],
+                            "lon" to point["lon"],
+                            "lat" to point["lat"],
+                            "altitude" to point["altitude"],
+                        )
+                    )
+                )
+            }
+
+            bulkOps.addAll(currentBatch)
+
+            if (bulkOps.size >= batchSize) {
+                flightPointsTsCollection.bulkWrite(bulkOps)
+                bulkOps.clear()
             }
         }
-    }
 
-    fun runQueries() {
-        val flightTripsCollection = database.getCollection("flighttrips")
-        val flightPointsCollection = database.getCollection("flightpoints")
-        val flightPointsTsCollection = database.getCollection("flightpoints_ts")
-        val airportsCollection = database.getCollection("airports")
-        val citiesCollection = database.getCollection("cities")
-        val municipalitiesCollection = database.getCollection("municipalities")
-        val countiesCollection = database.getCollection("counties")
-        val districtsCollection = database.getCollection("districts")
-
-
-
-        //val response3 = flightClosestToPoint(flightTripsCollection, 1000, listOf(7.716796, 51.467697))
-        //val response3 = inCityRadiusDuringTime(citiesCollection, flightTripsCollection, "2023-01-01 10:00:00", "2023-01-03 12:00:00", 50, "Aachen")
-        val response3 = averageHourlyFlightsDuringDayInCounty(countiesCollection, flightTripsCollection, "2023-01-02",  "Krs Koeln")
-        //println(response3.fourth)
-        printMongoResponse(response3.fourth)
-
-    }
-
-    fun queryFlightsByPeriod(
-        flightTripsCollection: MongoCollection<Document>, vararg period: String
-    ): Pair<Long, List<Document>> {
-
-        val startDate: Date = dateFormat.parse(period[0])
-        val endDate: Date = dateFormat.parse(period[1])
-
-        // MongoDB aggregation pipeline
-        val pipeline = listOf(
-            Document("\$match", Document("points.timestamp", Document("\$gte", startDate).append("\$lte", endDate))),
-            Document(
-                "\$project", Document("period", Document("\$concat", listOf(period[0], " - ", period[1])))
-            ),
-            Document(
-                "\$group", Document("_id", "\$period").append("count", Document("\$sum", 1))
-            ),
-            Document("\$sort", Document("_id", 1)) // Sort by period
-        )
-
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-        // Execute the aggregation
-        val results = flightTripsCollection.aggregate(pipeline)
-
-        // Convert results to a list of Documents
-        return Pair(queryTimeStart, results.into(mutableListOf()))
-
-    }
-
-    fun locationOfAirplaneTypeAtInstant(
-        flightTripsCollection: MongoCollection<Document>,
-        instant: String
-    ): Pair<Long, List<Document>> {
-
-        val timestamp: Date = dateFormat.parse(instant)
-        val pipeline = listOf(
-            Document(
-                "\$match", Document("points.timestamp", timestamp) // Filter documents with exact timestamp
-            ),
-            Document(
-                "\$project", Document(
-                    "flightid", 1) // Include flight ID
-                    .append("time", instant) // Add the provided instant as a field
-                    .append(
-                        "altitudeAtTime", Document(
-                            "\$arrayElemAt", listOf(
-                                "\$points.altitude",
-                                Document("\$indexOfArray", listOf("\$points.timestamp", timestamp))
-                            )
-                        )
-                    )
-                    .append(
-                        "longitudeAtTime", Document(
-                            "\$arrayElemAt", listOf(
-                                Document("\$arrayElemAt", listOf("\$points.location.coordinates",
-                                    Document("\$indexOfArray", listOf("\$points.timestamp", timestamp))
-                                )), 0
-                            )
-                        )
-                    )
-                    .append(
-                        "latitudeAtTime", Document(
-                            "\$arrayElemAt", listOf(
-                                Document("\$arrayElemAt", listOf("\$points.location.coordinates",
-                                    Document("\$indexOfArray", listOf("\$points.timestamp", timestamp))
-                                )), 1
-                            )
-                        )
-                    )
-            ),
-            Document(
-                "\$match", Document("longitudeAtTime", Document("\$ne", null)) // Ensure longitude is not null
-            ),
-            Document(
-                "\$project", Document(
-                    "flightid", 1
-                ).append("time", 1)
-                    .append("altitude", "\$altitudeAtTime")
-                    .append("location", Document("\$concat", listOf(
-                        "POINT(",
-                        Document("\$toString", "\$longitudeAtTime"), " ",
-                        Document("\$toString", "\$latitudeAtTime"), ")"
-                    ))) // Convert coordinates to WKT POINT format
-            )
-        )
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-        // Execute the aggregation
-        val results = flightTripsCollection.aggregate(pipeline)
-
-        // Convert results to a list of Documents
-        return Pair(queryTimeStart, results.into(mutableListOf()))
-    }
-
-    fun locationOfLowFlyingAirplanesTypeAtInstant(
-        flightpointsCollectionTs: MongoCollection<Document>,
-        instant: String
-    ): Pair<Long, List<Document>> {
-
-        val timestamp: Date = dateFormat.parse(instant)
-
-        val pipeline = listOf(
-
-            Document("\$match", Document().apply {
-                append("timestamp", timestamp)
-                append("altitude", Document("\$lt", 5000))
-            }),
-
-            Document("\$project", Document().apply {
-                append("flightId", 1)
-                append("location", 1)
-                append("_id", 0)
-            })
-        )
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-        // Execute the aggregation
-        return Pair(queryTimeStart, flightpointsCollectionTs.aggregate(pipeline).into(mutableListOf()))
-    }
-
-    fun flightTimeLowAltitude(
-        flightTripsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String
-    ): Pair<Long, List<Document>> {
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-
-        val pipeline = listOf(
-
-            Document(
-                "\$match", Document(
-                    "points", Document(
-                        "\$elemMatch", Document(
-                            "timestamp", Document("\$gte", startDate).append("\$lte", endDate)
-                        )
-                    )
-                )
-            ),
-
-            Document(
-                "\$match", Document(
-                    "points", Document(
-                        "\$elemMatch", Document(
-                            "altitude", Document("\$lt", 4000)
-                        )
-                    )
-                )
-            ),
-
-            Document(
-                "\$project", Document(
-                    "flightId", 1
-                ).append(
-                    "durations", Document(
-                        "\$map", Document(
-                            "input", Document(
-                                "\$range", listOf(0, Document("\$subtract", listOf(Document("\$size", "\$points"), 1)))
-                            )
-                        ).append(
-                            "as", "index"
-                        ).append(
-                            "in", Document(
-                                "altitude", Document("\$arrayElemAt", listOf("\$points.altitude", "\$\$index"))
-                            ).append(
-                                "startTime", Document("\$arrayElemAt", listOf("\$points.timestamp", "\$\$index"))
-                            ).append(
-                                "endTime", Document("\$arrayElemAt", listOf("\$points.timestamp", Document("\$add", listOf("\$\$index", 1))))
-                            )
-                        )
-                    )
-                )
-            ),
-
-            Document(
-                "\$project", Document(
-                    "flightId", 1
-                ).append(
-                    "totalTime", Document(
-                        "\$sum", Document(
-                            "\$map", Document(
-                                "input", "\$durations"
-                            ).append(
-                                "as", "duration"
-                            ).append(
-                                "in", Document(
-                                    "\$divide", listOf(
-                                        Document("\$subtract", listOf("\$\$duration.endTime", "\$\$duration.startTime")),
-                                        1000
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ).append(
-                    "timeBelow4000", Document(
-                        "\$sum", Document(
-                            "\$map", Document(
-                                "input", "\$durations"
-                            ).append(
-                                "as", "duration"
-                            ).append(
-                                "in", Document(
-                                    "\$cond", listOf(
-                                        Document("\$lt", listOf("\$\$duration.altitude", 4000)),
-                                        Document(
-                                            "\$divide", listOf(
-                                                Document("\$subtract", listOf("\$\$duration.endTime", "\$\$duration.startTime")),
-                                                1000
-                                            )
-                                        ),
-                                        0
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            ),
-
-            Document(
-                "\$addFields", Document(
-                    "ratio", Document(
-                        "\$cond", listOf(
-                            Document("\$gt", listOf("\$totalTime", 0)),
-                            Document("\$divide", listOf("\$timeBelow4000", "\$totalTime")),
-                            0
-                        )
-                    )
-                )
-            ),
-
-            Document(
-                "\$project", Document(
-                    "_id", 0
-                ).append(
-                    "flightId", 1
-                ).append(
-                    "timeBelow4000", 1
-                ).append(
-                    "totalTime", 1
-                ).append(
-                    "ratio", 1
-                )
-            )
-        )
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-
-        return Pair(queryTimeStart, flightTripsCollection.aggregate(pipeline).allowDiskUse(true).toList())
-    }
-
-    fun averageHourlyFlightsDuringDay(
-        flightPointsTsCollection: MongoCollection<Document>,
-        dateString: String
-    ): Pair<Long, List<Document>> {
-        val date = LocalDate.parse(dateString.trim('\'')) // Trim single quotes and parse
-
-        val startOfDay = Date.from(date.atStartOfDay().toInstant(ZoneOffset.UTC))
-        val endOfDay = Date.from(date.plusDays(1).atStartOfDay().toInstant(ZoneOffset.UTC))
-
-        // List of all hours (0-23)
-        val hours = (0..23).toList()
-
-        val pipeline = listOf(
-            // Step 1: Filter documents for the specified day
-            Document("\$match", Document("timestamp", Document("\$gte", startOfDay).append("\$lt", endOfDay))),
-
-            // Step 2: Add a field for the hour of the timestamp
-            Document("\$addFields", Document("hour", Document("\$hour", "\$timestamp"))),
-
-            // Step 3: Group by hour and collect distinct flightIds
-            Document("\$group", Document().apply {
-                append("_id", "\$hour") // Group by hour
-                append("distinctFlights", Document("\$addToSet", "\$flightId")) // Collect distinct flightIds
-            }),
-
-            // Step 4: Calculate the number of flights per hour
-            Document("\$project", Document().apply {
-                append("_id", 0) // Exclude MongoDB's default _id field
-                append("hour", "\$_id") // Rename the _id field to hour
-                append("flightCount", Document("\$size", "\$distinctFlights")) // Count the distinct flights
-            }),
-
-            // Step 5: Sort by hour
-            Document("\$sort", Document("hour", 1))
-        )
-
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-
-        return Pair(queryTimeStart, flightPointsTsCollection.aggregate(pipeline).toList())
-    }
-
-
-    fun flightsWithLocalOriginDestinationDuringPeriod(
-        airportsCollection: MongoCollection<Document>,
-        periodStart: String,
-        periodEnd: String
-    ): Pair<Long, List<Document>>{
-
-        val startDate: Date = dateFormat.parse(periodStart)
-        val endDate: Date = dateFormat.parse(periodEnd)
-
-        val pipeline = listOf(
-            // Stage 1: Lookup cities for airports
-            Document(
-                "\$lookup", Document("from", "cities")
-                    .append("localField", "City")
-                    .append("foreignField", "name")
-                    .append("as", "cityDetails")
-            ),
-            Document("\$match", Document("cityDetails", Document("\$ne", emptyList<Any>()))),
-            Document("\$project", Document("ICAO", 1)
-                .append("cityName", Document("\$arrayElemAt", listOf("\$cityDetails.name", 0)))
-                .append("_id", 0)),
-
-            // Stage 2: Group local airports into a list
-            Document("\$group", Document("_id", null)
-                .append("localAirports", Document("\$addToSet", "\$ICAO"))),
-
-            // Stage 3: Pass localAirports list to the lookup
-            Document("\$lookup", Document("from", "flighttrips")
-                .append("let", Document("localAirports", "\$localAirports"))
-                .append("pipeline", listOf(
-                    // Match flighttrips with overlapping timeRange
-                    Document(
-                        "\$match", Document("\$expr", Document("\$or", listOf(
-                            Document("\$and", listOf(
-                                Document("\$lte", listOf("\$timeRange.start", endDate)),
-                                Document("\$gte", listOf("\$timeRange.end", startDate))
-                            )),
-                            Document("\$and", listOf(
-                                Document("\$lte", listOf("\$timeRange.start", startDate)),
-                                Document("\$gte", listOf("\$timeRange.end", endDate))
-                            ))
-                        )))
-                    ),
-                    // Match flighttrips where origin or destination matches local airports
-                    Document(
-                        "\$match", Document("\$expr", Document("\$or", listOf(
-                            Document("\$in", listOf("\$originAirport", "\$\$localAirports")),
-                            Document("\$in", listOf("\$destinationAirport", "\$\$localAirports"))
-                        )))
-                    )
-                ))
-                .append("as", "filteredFlightTrips")
-            ),
-            Document("\$project", Document("filteredFlightTrips.points", 0).append("filteredFlightTrips.trajectory", 0).append("filteredFlightTrips.timeRange", 0).append("filteredFlightTrips.track", 0)),
-            Document("\$unwind", "\$filteredFlightTrips"),
-            Document(
-                "\$lookup", Document("from", "airports")
-                    .append("localField", "filteredFlightTrips.originAirport")
-                    .append("foreignField", "ICAO")
-                    .append("as", "cityNameOrigin")
-            ),
-            Document(
-                "\$lookup", Document("from", "airports")
-                    .append("localField", "filteredFlightTrips.destinationAirport")
-                    .append("foreignField", "ICAO")
-                    .append("as", "cityNameDestination")
-            ),
-            // Stage 4: Project final fields
-            Document("\$project", Document()
-                .append("_id", 0)
-                .append("flightId", "\$filteredFlightTrips.flightId")
-                .append("originAirport", "\$filteredFlightTrips.originAirport")
-                .append("destinationAirport", "\$filteredFlightTrips.destinationAirport")
-                .append("originCity", "\$cityNameOrigin.City")
-                .append("destinationCity", "\$cityNameDestination.City")
-                .append("airplaneType", "\$filteredFlightTrips.airplaneType")
-       )
-        )
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-
-        return Pair(queryTimeStart, airportsCollection.aggregate(pipeline).toList())
-    }
-
-    fun airportUtilizationDuringPeriod(
-        flightTripsCollection: MongoCollection<Document>,
-        periodStart: String,
-        periodEnd: String
-    ): Pair<Long, List<Document>> {
-        val startDate: Date = dateFormat.parse(periodStart)
-        val endDate: Date = dateFormat.parse(periodEnd)
-
-        val pipeline = listOf(
-            // Stage 1: Filter flights based on timeRange overlap with the period
-            Document(
-                "\$match", Document("\$expr", Document("\$or", listOf(
-                    Document("\$and", listOf(
-                        Document("\$lte", listOf("\$timeRange.start", endDate)),
-                        Document("\$gte", listOf("\$timeRange.end", startDate))
-                    )),
-                    Document("\$and", listOf(
-                        Document("\$lte", listOf("\$timeRange.start", startDate)),
-                        Document("\$gte", listOf("\$timeRange.end", endDate))
-                    ))
-                )))
-            ),
-            Document(
-                "\$facet", Document("departures", listOf(
-                    Document(
-                        "\$group", Document("_id", "\$originAirport")
-                            .append("departure_count", Document("\$sum", 1))
-                    )
-                ))
-                    .append("arrivals", listOf(
-                        Document(
-                            "\$group", Document("_id", "\$destinationAirport")
-                                .append("arrival_count", Document("\$sum", 1))
-                        )
-                    ))
-            ),
-
-            // Combine results
-            Document(
-                "\$project", Document("combined", Document("\$concatArrays", listOf("\$departures", "\$arrivals")))
-            ),
-            Document(
-                "\$unwind", "\$combined"
-            ),
-            Document(
-                "\$replaceRoot", Document("newRoot", "\$combined")
-            ),
-            Document(
-                "\$group", Document("_id", "\$_id")
-                    .append("departure_count", Document("\$sum", Document("\$ifNull", listOf("\$departure_count", 0))))
-                    .append("arrival_count", Document("\$sum", Document("\$ifNull", listOf("\$arrival_count", 0))))
-            ),
-            // Add traffic_count (sum of arrivals and departures)
-            Document(
-                "\$addFields", Document("traffic_count", Document("\$add", listOf("\$departure_count", "\$arrival_count")))
-            ),
-            // Sort by traffic_count, departure_count, and arrival_count
-            Document(
-                "\$sort", Document("traffic_count", -1)
-                    .append("departure_count", -1)
-                    .append("arrival_count", -1)
-            )
-        )
-
-        val queryTimeStart = Instant.now().toEpochMilli()
-        val result = flightTripsCollection.aggregate(pipeline).toList()
-
-        return Pair(queryTimeStart, result)
-}
-
-    fun flightsInCityRadius(
-        citiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        cityName: String,
-        radius: Int
-    ):Quadrupel<Long, Long, Long, List<Document>> {
-
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", cityName)),
-            Document("\$project", Document("location.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-
-        val firstResponse = citiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val coordinates = firstResponse.flatMap { document ->
-            val location = document.get("location", Document::class.java) // Get 'location' sub-document
-            val coords = location?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-            coords?.map { it as Double } ?: emptyList() // Ensure null-safe mapping
+        if (bulkOps.isNotEmpty()) {
+            flightPointsTsCollection.bulkWrite(bulkOps)
         }
-
-        val secondPipeline = listOf(
-            Document("\$match", Document("points.location",
-                Document("\$geoWithin",
-                    Document("\$centerSphere", listOf(coordinates, radius))
-                )
-            )),
-            Document("\$project", Document("flightId", 1).append("airplaneType", 1).append("_id", 0))
-        )
-
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
-
-    fun flightsIntersectingMunicipalities(
-        municipalitiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        municipalityName: String
-    ):Quadrupel<Long, Long, Long, List<Document>> {
-
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", municipalityName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-
-        val firstResponse = municipalitiesCollection.aggregate(firstPipeline).toList()
-
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-        //println(firstResponse)
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-        }[0]
-
-        val secondPipeline = listOf(
-            Document("\$match", Document("trajectory",
-                Document("\$geoIntersects",
-                    Document("\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates))
-                )
-            )),
-            Document("\$project", Document("flightId", 1).append("airplaneType", 1).append("_id", 0).append("originAirport", 1).append("destinationAirport", 1))
-        )
-
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
-
-    fun flightClosestToPoint(
-        flightTripsCollection: MongoCollection<Document>,
-        maxDistance: Int,
-        coordinates: List<Double>,
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-        val pipeline = listOf(
-            Document("\$geoNear", Document()
-                .append("near", Document("type", "Point").append("coordinates", coordinates))
-                .append("distanceField", "dist.calculated")
-                .append("maxDistance", maxDistance)
-                .append("key", "trajectory")
-                .append("includeLocs", "dist.location")
-                .append("spherical", true)
-                ),
-                Document("\$project", Document()
-                    .append("airplaneType", 1)
-                    .append("originAirport", 1)
-                    .append("calculatedDistance", "\$dist.calculated")
-                    .append("flightId", 1)
-                    .append("_id", 0)
-                )
-        )
-
-        val queryStartTime = Instant.now().toEpochMilli()
-        val response = flightTripsCollection.aggregate(pipeline).toList()
-
-        return Quadrupel(queryStartTime, 0, 0, response)
-    }
-
-    fun countFlightsInCounties(
-        countiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        countyName: String
-        ): Quadrupel<Long, Long, Long, List<Document>> {
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", countyName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-
-        val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
-
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-        //println(firstResponse)
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-        }[0]
-
-        val secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "trajectory",
-                    Document(
-                        "\$geoIntersects",
-                        Document("\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates))
-                    )
-                )
-            ),
-            Document("\$project",
-                Document("flightId", 1).append("airplaneType", 1).append("_id", 0).append("originAirport", 1)
-                    .append("destinationAirport", 1)
-            ),
-            Document("\$count", "flight_count")
-        )
-
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-    }
-
-    fun flightsCloseToMainCitiesLowAltitude(
-        citiesCollection: MongoCollection<Document>,
-        flightPointsCollection: MongoCollection<Document>,
-        lowAltitude: Int,
-        radius: Int,
-        population: Int
-    ): Quadrupel<Long, Long, Long, List<Document>> {
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("population", Document("\$gt", population))),
-            Document("\$project", Document("coordinates", "\$location.coordinates").append("_id", 0).append("name", 1)),
-            Document("\$group", Document("_id", null)
-                .append("coordinatePairs", Document("\$push", "\$coordinates"))
-                .append("names", Document("\$push", "\$name"))
-            )
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-
-        val firstResponse = citiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        if (firstResponse.isEmpty()) {
-            println("No cities found matching the criteria.")
-            return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartFirstQuery, emptyList())
-        }
-
-        val coordinatePairs = firstResponse.firstOrNull()?.get("coordinatePairs", List::class.java)
-        val geoWithinConditions = coordinatePairs?.map { pair ->
-            Document("location", Document("\$geoWithin", Document("\$centerSphere", listOf(pair, radius.toDouble() / 6378.1))))
-        }
-
-        if (geoWithinConditions.isNullOrEmpty()) {
-            println("No coordinate pairs to create geoWithin conditions.")
-            return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartFirstQuery, emptyList())
-        }
-
-        val secondPipeline = listOf(
-            Document("\$match", Document("altitude", Document("\$lt", lowAltitude))),
-            Document("\$match", Document("\$or", geoWithinConditions)), // Use $or for multiple geoWithin conditions
-            Document("\$project", Document("flightId", 1).append("altitude", 1).append("airplaneType", 1).append("_id", 0).append("timestamp", 1)),
-            Document("\$group", Document("_id", Document("flightId", "\$flightId")
-                .append("altitude", "\$altitude")
-                .append("airplaneType", "\$airplaneType")
-                .append("timestamp", "\$timestamp")))
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-    }
-
-    fun flightsOnlyInOneDistrict(
-        districtsCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        districtName: String
-        ):Quadrupel<Long, Long, Long, List<Document>>{
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", districtName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = districtsCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-        }[0]
-
-        val secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "trajectory",
-                    Document(
-                        "\$geoWithin",
-                        Document("\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates))
-                    )
-                )
-            ),
-            Document("\$project",
-                Document("flightId", 1).append("airplaneType", 1).append("_id", 0).append("originAirport", 1)
-                    .append("destinationAirport", 1)
-            )
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
-
-    fun countiesLandingsDepartures(
-        countiesCollection: MongoCollection<Document>,
-        citiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        countyName: String): Quadrupel<Long, Long, Long, List<Document>> {
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", countyName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java)
-            polygon?.get("coordinates", List::class.java)
-        }[0]
-
-        //println(polygonCoordinates)
-
-        val secondPipeline = listOf(
-
-            Document("\$match",
-                Document("location",
-                    Document("\$geoWithin",
-                        Document("\$geometry",
-                            Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                        )
-                    )
-                )
-            ),
-            Document("\$project", Document("name", 1)),
-
-            Document("\$lookup", Document("from", "airports")
-                .append("localField", "name")
-                .append("foreignField", "City")
-                .append("as", "airports_in_county")
-            ),
-
-            Document("\$unwind", "\$airports_in_county"),
-
-            Document("\$group", Document("_id", null)
-                .append("icaoCodes", Document("\$addToSet", "\$airports_in_county.ICAO"))
-            ),
-
-            Document("\$lookup", Document("from", "flighttrips")
-                .append("let", Document("icaoCodes", "\$icaoCodes"))
-                .append("pipeline", listOf(
-                    Document("\$match", Document("\$expr", Document(
-                        "\$or", listOf(
-                            Document("\$in", listOf("\$originAirport", "\$\$icaoCodes")),
-                            Document("\$in", listOf("\$destinationAirport", "\$\$icaoCodes"))
-                        )
-                    ))),
-                    Document("\$project", Document("originAirport", 1).append("destinationAirport", 1))
-                ))
-                .append("as", "related_flights")
-            ),
-
-            // Step 8: Count arrivals and departures
-            Document("\$unwind", "\$related_flights"),
-            Document("\$group", Document("_id", null)
-                .append("arrivals", Document("\$sum", Document("\$cond", listOf(
-                    Document("\$in", listOf("\$related_flights.destinationAirport", "\$icaoCodes")), 1, 0
-                ))))
-                .append("departures", Document("\$sum", Document("\$cond", listOf(
-                    Document("\$in", listOf("\$related_flights.originAirport", "\$icaoCodes")), 1, 0
-                ))))
-            ),
-            // Step 9: Calculate overall traffic
-            Document("\$addFields", Document("overall_traffic", Document("\$add", listOf("\$arrivals", "\$departures")))),
-            Document("\$project", Document("_id", 0))
-        )
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val response = citiesCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, response)
-
-    }
-
-    /*
-    fun flightDistancesInMunicipalities(
-        municipalitiesCollection: MongoCollection<Document>,
-        ): Long {
-
-    }
-
-     */
-
-    fun flightsInCountyDuringPeriod(
-        countiesCollection: MongoCollection<Document>,
-        flightPointsTsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String,
-        countyName: String
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", countyName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java)
-            polygon?.get("coordinates", List::class.java)
-        }[0]
-
-        var secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "points.location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        ),
-                        Document(
-                            "points.timestamp", Document(
-                                "\$gte", startDate // Start of the period
-                            ).append(
-                                "\$lte", endDate // End of the period
-                            )
-                        )
-                    )
-                )
-            ),
-            Document("\$group", Document("_id", "\$flightId"))
-        )
-
-        secondPipeline = listOf(
-            Document(
-                "\$project", Document("trajectory", 0).append("altitude", 0)
-            ),
-            Document("\$unwind", "\$points"),
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "points.location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        ),
-                        Document(
-                            "points.timestamp", Document(
-                                "\$gte", startDate // Start of the period
-                            ).append(
-                                "\$lte", endDate // End of the period
-                            )
-                        )
-                    )
-                )
-            ),
-            Document("\$group", Document("_id", "\$flightId")) // Group by flightId
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val response = flightPointsTsCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, response)
-
-    }
-
-    fun pairOfFlightsInMunicipalityDuringPeriod(
-        municipalitiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String,
-        municipalityName: String
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", municipalityName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = municipalitiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-        //println(firstResponse)
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-        }[0]
-
-        val secondPipeline = listOf(
-            // Step 1: Unwind the points array to access individual timestamps and locations
-            Document("\$unwind", "\$points"),
-            Document(
-                "\$project", Document("trajectory", 0).append("altitude", 0)
-            ),
-
-            // Step 2: Match flights where `points.location` is within the polygon and the `points.timestamp` is within the period
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "points.location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        ),
-                        Document(
-                            "points.timestamp", Document(
-                                "\$gte", startDate // Start of the period
-                            ).append(
-                                "\$lte", endDate // End of the period
-                            )
-                        )
-                    )
-                )
-            ),
-
-            // Step 3: Perform the self-join to find flight pairs
-            Document(
-                "\$lookup", Document()
-                    .append("from", "flighttrips")
-                    .append(
-                        "let", Document()
-                            .append("f1_flightId", "\$flightId")
-                            .append("f1_points", "\$points")
-                    )
-                    .append(
-                        "pipeline", listOf(
-                            Document("\$unwind", "\$points"),
-                            Document(
-                                "\$match", Document(
-                                    "\$and", listOf(
-                                        Document("\$expr", Document("\$lt", listOf("\$flightId", "\$\$f1_flightId"))), // f2.flightId < f1.flightId
-                                        Document(
-                                            "points.location", Document(
-                                                "\$geoWithin", Document(
-                                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                                )
-                                            )
-                                        ),
-                                        Document(
-                                            "\$expr", Document("\$eq", listOf("\$points.timestamp", "\$\$f1_points.timestamp"))
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                    .append("as", "joinedFlights")
-            ),
-
-            // Step 4: Unwind the joined flights
-            Document("\$unwind", "\$joinedFlights"),
-
-            // Step 5: Project the required fields
-            Document(
-                "\$project", Document()
-                    .append("f1_flightId", "\$flightId")
-                    .append("f2_flightId", "\$joinedFlights.flightId")
-                    .append("timestamp", "\$points.timestamp")
-            ),
-
-            // Step 6: Group results to ensure distinct pairs
-            Document(
-                "\$group", Document()
-                    .append("_id", Document()
-                        .append("f1_flightId", "\$f1_flightId")
-                        .append("f2_flightId", "\$f2_flightId")
-                        .append("timestamp", "\$timestamp")
-                    )
-            ),
-
-            // Step 7: Sort the results
-            Document(
-                "\$sort", Document()
-                    .append("f1_flightId", 1)
-                    .append("f2_flightId", 1)
-                    .append("timestamp", 1)
-            )
-        )
-
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-    }
-
-    fun countFlightsDuringPeriodInDistricts(
-        districtsCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        instant: String,
-
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-        // 2023-01-15 18:00:00 --> detmold 4, Koeln 2, Duesseldrof 8
-
-        val timestamp: Date = dateFormat.parse(instant)
-
-        val firstPipeline = listOf(
-            // Step 1: Project only the `name` and `polygon` fields
-            Document(
-                "\$project", Document()
-                    .append("name", 1) // Include the `name` field
-                    .append("polygon.coordinates", 1) // Include the `polygon` field
-                    .append("_id", 0) // Exclude the `_id` field from the output
-            )
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = districtsCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val names = mutableListOf<String>()
-        val polygonCoordinates = mutableListOf<List<Any>>()
-
-        for (result in firstResponse) {
-            val name = result.getString("name")
-            val polygon = result.get("polygon", Document::class.java)
-            val coords = polygon?.get("coordinates")
-
-            if (name != null) names.add(name)
-            if (coords != null) polygonCoordinates.add(coords as List<Any>) // Cast to the expected type
-        }
-
-        val secondPipeline = listOf(
-            // Step 1: Unwind the points array to access individual timestamps and locations
-            Document("\$unwind", "\$points"),
-            Document(
-                "\$project", Document("trajectory", 0).append("altitude", 0)
-            ),
-
-            // Step 2: Match flights with the specific time instant
-            Document(
-                "\$match", Document(
-                    "points.timestamp", timestamp
-                )
-            ),
-
-            // Step 3: Use $facet to count flights for each polygon
-            Document(
-                "\$facet", Document().apply {
-                    names.forEachIndexed { index, name ->
-                        append(name, listOf(
-                            Document(
-                                "\$match", Document(
-                                    "points.location", Document(
-                                        "\$geoWithin", Document(
-                                            "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates[index])
-                                        )
-                                    )
-                                )
-                            ),
-                            Document("\$group", Document("_id", null).append("count", Document("\$sum", 1)))
-                        ))
-                    }
-                }
-            ),
-            Document(
-                "\$project", Document().apply {
-                    names.forEach { name ->
-                        append(name, Document(
-                            "\$ifNull", listOf(
-                                Document("\$arrayElemAt", listOf("\$$name.count", 0)),
-                                0 // Default to 0 if no documents matched
-                            )
-                        ))
-                    }
-                }
-            )
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-
     }
 
 
-    // takes very long to execute as filtering based on time or space is not possible before calculating distances of each pair of flightpoints
-    // only way is to create smaller subset collection of flightpoints (but would also take long as check needs to happen only on docs with same timestamp)
-    fun closePairOfPlanes(
-        flightPointsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String,
-        maxDistance: Int
-    ): Quadrupel<Long, Long, Long, List<Document>> {
 
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-        val pipeline = listOf(
-            // $lookup stage
-            Document(
-                "\$lookup", Document()
-                    .append("from", "flightpoints")
-                    .append("let", Document()
-                        .append("point", "\$location")
-                        .append("timestamp", "\$timestamp")
-                    )
-                    .append("pipeline", listOf(
-                        Document(
-                            "\$geoNear", Document()
-                                .append("near", "\$\$point")
-                                .append("distanceField", "dist.calculated")
-                                .append("maxDistance", maxDistance)
-                                .append("query", Document(
-                                    "\$and", listOf(
-                                        Document("timestamp", "\$\$timestamp"),
-                                    )
-                                ))
-                                .append("key", "location")
-                                .append("spherical", true)
-                        )
-                    ))
-                    .append("as", "joinedField")
-            ),
-            // $match stage
-            Document(
-                "\$match", Document(
-                    "\$expr", Document(
-                        "\$gt", listOf(
-                            Document("\$size", "\$joinedField"),
-                            0
-                        )
-                    )
-                )
-            ),
-            // $project stage
-            Document(
-                "\$project", Document()
-                    .append("timestamp", 1)
-                    .append("flightId", 1)
-                    .append("joinedField", 1)
-            )
-        )
-
-        val queryStartTime = Instant.now().toEpochMilli()
-        val firstResponse = flightPointsCollection.aggregate(pipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-
-        return Quadrupel(queryStartTime, 0, 0, firstResponse)
-
-    }
-
-    fun inCityRadiusDuringTime(
-        citiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String,
-        radius: Int,
-        cityName: String
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", cityName)),
-            Document("\$project", Document("location.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-
-        val firstResponse = citiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val coordinates = firstResponse.flatMap { document ->
-            val location = document.get("location", Document::class.java)
-            val coords = location?.get("coordinates", List::class.java)
-            coords?.map { it as Double } ?: emptyList() // Ensure null-safe mapping
-        }
-
-        val secondPipeline = listOf(
-            Document("\$unwind", "\$points"),
-            Document(
-                "\$project", Document("trajectory", 0).append("altitude", 0)
-            ),
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document("points.location",
-                            Document("\$geoWithin",
-                                Document("\$centerSphere", listOf(coordinates, radius))
-                            )
-                        ),
-                        Document(
-                            "points.timestamp", Document(
-                                "\$gte", startDate // Start of the period
-                            ).append(
-                                "\$lte", endDate // End of the period
-                            )
-                        )
-                    )
-                )
-            ),
-            Document(
-                "\$group", Document(
-                    "_id", Document()
-                        .append("flightId", "\$flightId")
-                        .append("originAirport", "\$originAirport")
-                        .append("destinationAirport", "\$destinationAirport")
-                        .append("airplaneType", "\$airplaneType")
-                )
-            )
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-    }
-
-    fun flightDurationInMunicipalityLowAltitudeInPeriod(
-        municipalitiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        startPeriod: String,
-        endPeriod: String,
-        municipalityName: String,
-        lowAltitude: Int
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-
-
-        val startDate: Date = dateFormat.parse(startPeriod)
-        val endDate: Date = dateFormat.parse(endPeriod)
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", municipalityName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = municipalitiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-        //println(firstResponse)
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
-        }[0]
-
-        //                        Document(
-//                            "points.altitude", Document()
-//                                .append("\$lt", lowAltitude) // Altitude below the given threshold
-//                        )
-
-        val secondPipeline = listOf(
-            Document("\$unwind", "\$points"), // Unwind the points array
-            Document(
-                "\$project", Document()
-                    .append("trajectory", 0) // Exclude unnecessary fields
-            ),
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "points.location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document()
-                                        .append("type", "Polygon")
-                                        .append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        ),
-                        Document(
-                            "points.timestamp", Document()
-                                .append("\$gte", startDate) // Start of the period
-                                .append("\$lte", endDate) // End of the period
-                        )
-                    )
-                )
-            ),
-            Document(
-                "\$group", Document()
-                    .append("_id", Document()
-                        .append("flightId", "\$flightId")
-                        .append("originAirport", "\$originAirport")
-                        .append("destinationAirport", "\$destinationAirport")
-                        .append("airplaneType", "\$airplaneType")
-                    )
-                    .append(
-                        "timestamps", Document(
-                            "\$push", Document()
-                                .append("timestamp", "\$points.timestamp")
-                                .append("altitude", "\$points.altitude")
-                        )
-                    )
-            ),
-            Document(
-            "\$project", Document()
-                .append(
-                    "totalTimeBelowAltitude", Document(
-                        "\$reduce", Document()
-                            .append("input", "\$timestamps")
-                            .append("initialValue", Document().append("total", 0).append("prev_altitude", null).append("prev_timestamp", null))
-                            .append("in", Document().append("\$cond", listOf(
-                                Document("\$and", listOf(
-                                    Document("\$ne", listOf("\$\$value.prev_altitude", 0)), // Previous altitude is not 0
-                                    Document("\$ne", listOf("\$\$value.prev_timestamp", 0)), // Previous time is not 0
-                                    Document("\$ne", listOf("\$\$value.prev_altitude", null)), // Previous time is not 0
-                                    Document("\$ne", listOf("\$\$value.prev_timestamp", null)), // Previous time is not 0
-                                    Document("\$lt", listOf("\$\$this.altitude", lowAltitude)), // Current altitude < lowAltitude
-                                    Document("\$lt", listOf("\$\$value.prev_altitude", lowAltitude)) // Previous altitude < lowAltitude
-                                )),
-                                Document("prev_altitude", "\$\$this.altitude").append("prev_timestamp", "\$\$this.timestamp")
-                                            .append("total", Document("\$add", listOf(
-                                                "\$\$value.total", 1
-//                                                Document(
-//                                                    "\$subtract", listOf(
-//                                                        Document("\$toLong", "\$\$value.prev_timestamp"),
-//                                                        Document("\$toLong", "\$\$this.timestamp"),
-//                                                    )
-//                                                )
-                                            ))),
-                                Document("prev_altitude", "\$\$this.altitude").append("prev_timestamp", "\$\$this.timestamp")
-
-                                )))
-
-                    ))
-                ),
-
-            Document(
-                "\$project", Document()
-                    .append("flightId", "\$_id.flightId")
-                    .append("originAirport", "\$_id.originAirport")
-                    .append("destinationAirport", "\$_id.destinationAirport")
-                    .append("airplaneType", "\$_id.airplaneType")
-                    .append("totalTimeBelowAltitude", "\$totalTimeBelowAltitude") // Extract the total time
-            )
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
-
-    fun averageHourlyFlightsDuringDayInCounty(
-        countiesCollection: MongoCollection<Document>,
-        flightTripsCollection: MongoCollection<Document>,
-        day: String,
-        countyName: String
-    ): Quadrupel<Long, Long, Long, List<Document>>{
-
-
-        val startDate: Date = dateFormat.parse("$day 00:00:00")
-        val endDate: Date = dateFormat.parse("$day 23:59:59")
-
-        val firstPipeline = listOf(
-            Document("\$match", Document("name", countyName)),
-            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-        val name = firstResponse.get(0).getString("name")
-        val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java)
-            polygon?.get("coordinates", List::class.java)
-        }[0]
-
-        val secondPipeline = listOf(
-            Document(
-                "\$project", Document("trajectory", 0).append("altitude", 0) // Exclude unnecessary fields
-            ),
-            Document("\$unwind", "\$points"), // Unwind the points array
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "points.timestamp", Document()
-                                .append("\$gte", startDate) // Start of the period
-                                .append("\$lte", endDate) // End of the period
-                        ),
-                        Document(
-                            "points.location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        )
-                    )
-                )
-            ),
-            Document(
-                "\$project", Document()
-                    .append("hour", Document("\$hour", "\$points.timestamp")) // Extract hour
-                    .append("flightId", 1) // Include flightId
-            ),
-            Document(
-                "\$group", Document()
-                    .append("_id", Document()
-                        .append("hour", "\$hour")
-                        .append("flightId", "\$flightId")
-                    ) // Group by hour and flightId
-                    .append("count", Document("\$sum", 1)) // Count occurrences
-            ),
-            Document(
-                "\$group", Document()
-                    .append("_id", "\$_id.hour") // Group by hour
-                    .append("activeFlights", Document("\$sum", 1)) // Count distinct flightIds
-            ),
-            Document(
-                "\$project", Document()
-                    .append("hour", "\$_id") // Set the hour
-                    .append("activeFlights", 1)
-                    .append("_id", 0)// Include the count of active flights
-            ),
-            Document(
-                "\$sort", Document("hour", 1) // Sort by hour
-            )
-        )
-
-
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
 
 
 }
@@ -2066,5 +804,14 @@ fun main() {
     handler.createTimeSeriesCollection()
     handler.createIndexes()
     //handler.runQueries()
-    //handler.invokeFunctionByName("averageHourlyFlightsDuringDayInCounty")
+
 }
+
+
+
+
+
+
+
+
+

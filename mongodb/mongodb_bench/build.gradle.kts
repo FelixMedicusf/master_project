@@ -4,6 +4,7 @@ plugins {
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
+var ktor_version = "2.3.3"
 
 repositories {
     mavenCentral()
@@ -27,6 +28,14 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
     implementation("org.mongodb:bson:5.2.1")
     implementation("org.mongodb:bson-kotlinx:5.2.1")
+
+
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:1.4.12")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+
 }
 
 tasks.test {

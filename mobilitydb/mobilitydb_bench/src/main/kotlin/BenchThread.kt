@@ -129,15 +129,17 @@ class BenchThread(
                 "period_long" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=3)
                 "period" -> generateRandomTimeSpan(formatter = this.formatter, year=2023, random = this.random)
                 "instant" -> generateRandomTimestamp(formatter = this.formatter, random = this.random)
+                "day" -> getRandomDay(random = this.random, year = 2023)
                 "city" -> getRandomPlace(this.cities, "name", this.random)
+                "airport" -> getRandomPlace(this.airports, "Airport name", this.random)
                 "municipality" -> getRandomPlace(this.municipalities, "name", this.random)
                 "county" -> getRandomPlace(this.counties, "name", this.random)
                 "district" -> getRandomPlace(this.districts, "name", this.random)
-                "airport" -> getRandomPlace(this.airports, "Airport name", this.random)
-                "day" -> getRandomDay(random = this.random, year = 2023)
-                "radius" -> (random.nextInt(100, 200) * 10).toString();
+                "point" -> getRandomPoint(this.random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
+                "radius" -> ((random.nextDouble(0.25, 0.5) * 10)/6378.1).toString();
                 "low_altitude" -> (random.nextInt(300, 600) * 10).toString();
                 "type" -> "'${airplanetypes[random.nextInt(0, airplanetypes.size)]}'"
+                "distance" -> (random.nextInt(10, 100) * 10).toString() // in meter in MongoDB
                 else -> ""
 
             }
@@ -208,29 +210,58 @@ class BenchThread(
         val endDate: LocalDateTime = when (mode) {
             1 -> {
                 // Up to 2 days
-                val daysToAdd = random.nextLong(0, 2 + 1)
-                val tentativeEnd = timestamp1.plusDays(daysToAdd)
-                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                val secondsToShift = random.nextLong(0, 172801)
+                val tentativeEnd = if (random.nextBoolean()) {
+                    timestamp1.plusSeconds(secondsToShift)
+                } else {
+                    timestamp1.minusSeconds(secondsToShift)
+                }
+                if (tentativeEnd.year == year){
+                    tentativeEnd
+                } else if (tentativeEnd.year > year) {
+                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                } else if (tentativeEnd.year < year){
+                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
+                } else timestamp1
             }
             2 -> {
-                // Between 2 days and 1 month
-                val daysToAdd = random.nextLong(2, 30 + 1)
-                val tentativeEnd = timestamp1.plusDays(daysToAdd)
-                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                // Between 2 days and 30 days
+                val secondsToShift = random.nextLong(172800, 2592001)
+                val tentativeEnd = if (random.nextBoolean()) {
+                    timestamp1.plusSeconds(secondsToShift)
+                } else {
+                    timestamp1.minusSeconds(secondsToShift)
+                }
+                if (tentativeEnd.year == year){
+                    tentativeEnd
+                } else if (tentativeEnd.year > year) {
+                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                } else if (tentativeEnd.year < year){
+                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
+                } else timestamp1
             }
             3 -> {
                 // Between 1 and 12 months
-                val monthsToAdd = random.nextLong(1, 12 + 1)
-                val tentativeEnd = timestamp1.plusMonths(monthsToAdd)
-                if (tentativeEnd.year == year) tentativeEnd else timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                val secondsToShift = random.nextLong(259200, 31536001)
+                val tentativeEnd = if (random.nextBoolean()) {
+                    timestamp1.plusSeconds(secondsToShift)
+                } else {
+                    timestamp1.minusSeconds(secondsToShift)
+                }
+                if (tentativeEnd.year == year){
+                    tentativeEnd
+                } else if (tentativeEnd.year > year) {
+                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
+                } else if (tentativeEnd.year < year){
+                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
+                } else timestamp1
             }
             else -> {
-
+                // Full random (0 days to 12 months)
                 val randomDay = random.nextInt(1, 366)
                 val randomHour = random.nextInt(0, 24)
                 val randomMinute = random.nextInt(0, 60)
                 val randomSecond = random.nextInt(0, 60)
-
                 val date2 = LocalDate.ofYearDay(year, randomDay)
                 LocalDateTime.of(date2, java.time.LocalTime.of(randomHour, randomMinute, randomSecond))
             }
@@ -280,6 +311,20 @@ class BenchThread(
         if (columnValues.isEmpty()) return null
 
         return "'${columnValues[random.nextInt(columnValues.size)]}'"
+    }
+
+    private fun getRandomPoint(random: Random, rectangle: List<List<Double>>):String {
+        val upperLeftLon = rectangle[0][0]
+        val upperLeftLat = rectangle[0][1]
+        val bottomRightLon = rectangle[1][0]
+        val bottomRightLat = rectangle[1][1]
+
+        val randomLon = upperLeftLon + random.nextDouble() * (bottomRightLon - upperLeftLon)
+
+        val randomLat = bottomRightLat + random.nextDouble() * (upperLeftLat - bottomRightLat)
+
+        // Return the random point
+        return "$randomLon $randomLat"
     }
 
     private fun getRandomDay(random: Random, year: Int): String {

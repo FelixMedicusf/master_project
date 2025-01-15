@@ -3,20 +3,28 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import io.ktor.http.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.engine.*
+import io.ktor.server.netty.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.time.Instant
 import java.util.*
-import java.util.concurrent.ConcurrentLinkedQueue
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.*
 import kotlin.concurrent.thread
 import kotlin.random.Random
 
 const val USER = "felix"
 const val PASSWORD = "master"
 const val DATABASE = "aviation_data"
+var benchmarkExecutorService: ExecutorService? = null
 
 
 class BenchmarkExecutor(private val configPath: String, private val logsPath: String) {
@@ -68,12 +76,14 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         }
 
         println("Releasing $threadCount threads to start execution.")
+        val benchStart = Instant.now().toEpochMilli()
         startLatch.countDown()
 
         benchThreads.shutdown()
         benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
+        val benchEnd = Instant.now().toEpochMilli()
 
-        saveExecutionLogs(threadSeeds, executionLogs)
+        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd)
     }
 
     private fun loadConfig(): BenchmarkConfiguration? {
@@ -108,18 +118,70 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         return seeds
     }
 
-    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>) {
-        File(logsPath).writeText(threadSeeds.joinToString(separator = ";") + "\n")
+    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long) {
+        File(logsPath).writeText("${(benchEnd - benchStart)/1000}s\n")
+        File(logsPath).appendText(threadSeeds.joinToString(separator = ";") + "\n")
         File(logsPath).appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
 }
 
 
-
 fun main() {
-    val executor = BenchmarkExecutor("benchConf.yaml", "src/main/resources/benchmark_execution_logs.txt")
-    executor.execute()
+    // Path to the config and logs
+    val configPath = "benchConf.yaml"
+    val logsPath = "src/main/resources/benchmark_execution_logs.txt"
+
+    // Start HTTP server
+    embeddedServer(Netty, port = 8080) {
+        install(ContentNegotiation) {
+            jackson {}
+        }
+        routing {
+            // Start benchmark execution
+            post("/start-benchmark") {
+                if (benchmarkExecutorService != null && !benchmarkExecutorService!!.isShutdown) {
+                    call.respond(HttpStatusCode.BadRequest, "Benchmark execution is already running.")
+                    return@post
+                }
+
+                benchmarkExecutorService = Executors.newSingleThreadExecutor()
+                benchmarkExecutorService!!.submit {
+                    val executor = BenchmarkExecutor(configPath, logsPath)
+                    executor.execute()
+                }
+                call.respond(HttpStatusCode.OK, "Benchmark execution started.")
+            }
+
+            // Stop benchmark execution
+            post("/stop-benchmark") {
+                if (benchmarkExecutorService == null || benchmarkExecutorService!!.isShutdown) {
+                    call.respond(HttpStatusCode.BadRequest, "No benchmark execution is running.")
+                    return@post
+                }
+
+                benchmarkExecutorService!!.shutdownNow()
+                call.respond(HttpStatusCode.OK, "Benchmark execution stopped.")
+            }
+
+            // Upload YAML configuration file
+            post("/upload-config") {
+                val configFileBytes = call.receive<ByteArray>()
+                File(configPath).writeBytes(configFileBytes)
+                call.respond(HttpStatusCode.OK, "Configuration file uploaded.")
+            }
+
+            // Retrieve benchmark logs
+            get("/retrieve-logs") {
+                val logFile = File(logsPath)
+                if (logFile.exists()) {
+                    call.respondFile(logFile)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "Log file not found.")
+                }
+            }
+        }
+    }.start(wait = true)
 }
 
 

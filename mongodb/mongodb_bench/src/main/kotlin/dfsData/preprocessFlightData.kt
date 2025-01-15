@@ -142,7 +142,7 @@ fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
 fun main(){
 
     // specify as parameter total number of rows the flightpoint data should contain. If all rows of the files should be included omit the parameter
-    createFlightPointsMobilityDB(10_000_000)
+    createFlightPointsMobilityDB()
 
     // creates trips for flights of all flight points
     // createFlightTripsGeomesa()

@@ -131,7 +131,7 @@ gcloud compute ssh "$firstInstanceName" --zone "$firstZone" -- "echo 'downloadin
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"flightpoints\")'"
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"flightpoints_ts\")'"
+# gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"flightpoints_ts\")'"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"cities\")'"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"airports\")'"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.getSiblingDB(\"$database\").createCollection(\"districts\")'"
@@ -141,12 +141,13 @@ gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p 
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'sh.enableSharding(\"$database\")'"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.flightpoints.createIndex({ flightId: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.flightpoints\", { flightId: \"hashed\" });'"
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.flightpoints.createIndex({ name: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.cities\", { name: \"hashed\" });'"
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.flightpoints.createIndex({ IATA: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.airports\", { IATA: \"hashed\" });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.flightpoints.createIndex({ flightId: 1 });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.cities.createIndex({ name: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.cities\", { name: \"hashed\" });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.airports.createIndex({ ICAO: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.airports\", { ICAO: \"hashed\" });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.districts.createIndex({ name: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.districts\", { name: \"hashed\" });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.counties.createIndex({ name: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.counties\", { name: \"hashed\" });'"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongosh -u $user -p $user_password --eval 'db.municipalities.createIndex({ name: \"hashed\" });' && mongosh -u $user -p $user_password --eval 'sh.shardCollection(\"${database}.municipalities\", { name: \"hashed\" });'"
 
-
-
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPoints.csv --batchSize=5000 --numInsertionWorkers=2 --username $user --password $user_password --authenticationDatabase admin"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPoints.csv --batchSize=10000 --numInsertionWorkers=2 --username $user --password $user_password --authenticationDatabase admin"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=cities --type=csv --headerline --file=/tmp/regData/cities.csv --batchSize=5000 --numInsertionWorkers=2 --username $user --password $user_password --authenticationDatabase admin"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=airports --type=csv --headerline --file=/tmp/regData/airports_mongo.csv --batchSize=5000 --numInsertionWorkers=2 --username $user --password $user_password --authenticationDatabase admin"
