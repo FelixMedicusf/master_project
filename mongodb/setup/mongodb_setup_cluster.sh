@@ -92,7 +92,7 @@ echo "Provisioning $currentInstanceName"
 
 # Start sharding servers on every instance
 gcloud compute ssh "$currentInstanceName" --zone $zone -- "
-sudo mongod --shardsvr --replSet shard${i}ReplSet --dbpath $data_dir --port 27018 --bind_ip 0.0.0.0 --auth --keyFile /etc/mongodb-keyfile --fork --logpath /var/log/mongodb/mongod.log --setParameter indexMaxNumGeneratedKeysPerDocument=1000000
+sudo mongod --shardsvr --replSet shard${i}ReplSet --dbpath $data_dir --port 27018 --bind_ip 0.0.0.0 --auth --keyFile /etc/mongodb-keyfile --fork --logpath /var/log/mongodb/mongod.log --setParameter indexMaxNumGeneratedKeysPerDocument=1000000 --setParameter internalQueryMaxAllowedDensifyDocs=100000000 
 "
 
 # Start mongos (routers) on every instance
@@ -113,6 +113,9 @@ rs.initiate({
     ]
 })'
 EOF
+
+gcloud compute ssh "$currentInstanceName" --zone "$zone" -- \
+"mongosh --host localhost --port 27018 --eval 'db.getSiblingDB(\"admin\").createUser({ user: \"$user\", pwd: \"$user_password\", roles: [ { role: \"root\", db: \"admin\" } ] });'"
 
 done
 

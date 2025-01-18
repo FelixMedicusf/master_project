@@ -68,6 +68,20 @@ class BenchmarkClient(private val serverUrl: String) {
             println("Error retrieving logs: ${e.message}")
         }
     }
+
+    fun triggerDataHandler() = runBlocking {
+        try {
+            val response: HttpResponse = client.post("$serverUrl/data-handler")
+            if (response.status == HttpStatusCode.OK) {
+                println("DataHandler operations completed successfully.")
+            } else {
+                println("Error triggering DataHandler: ${response.status}")
+                println("Message: ${response.bodyAsText()}")
+            }
+        } catch (e: Exception) {
+            println("Error triggering DataHandler: ${e.message}")
+        }
+    }
 }
 
 fun main() {
@@ -80,15 +94,18 @@ fun main() {
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)
 
-    println("\n1. Uploading configuration...")
-    client.uploadConfig(configPathMobilityDB)
+    println("\n1. Triggering DataHandler operations...")
+    client.triggerDataHandler()
 
-    println("\n2. Starting benchmark...")
+    println("\n2. Uploading configuration...")
+    client.uploadConfig(configPathMongoDB)
+
+    println("\n3. Starting benchmark...")
     client.startBenchmark()
 
-    //println("\n3. Stopping benchmark...")
-    //client.stopBenchmark()
+//    println("\n4. Stopping benchmark...")
+//    client.stopBenchmark()
 
-    //println("\n4. Retrieving logs...")
-    //client.retrieveLogs("path/to/save/benchmark_execution_logs.txt") // Replace with the actual destination path
+//    println("\n5. Retrieving logs...")
+//    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
 }

@@ -10,8 +10,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.*
 import com.mongodb.connection.ClusterSettings
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.bson.Document
 import org.bson.conversions.Bson
 import org.locationtech.jts.geom.Coordinate
@@ -21,7 +20,9 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
+import java.time.Instant
 import kotlin.collections.ArrayList
+import kotlin.coroutines.coroutineContext
 
 // This class is used to prepare the MongoDB for the benchmark.
 // Updating collections, inserting data about regions, creating the collection and inserting data for flightTrips, creating indexes on and sharding collections
@@ -97,14 +98,18 @@ class DataHandler(databaseName: String) {
             IndexOptions().unique(false) // Shard keys typically are not unique
         )
 
-        println("Compound index on 'timestamp' and 'flightId' created for collection flightpoints.")
+
 
         // Step 3: Shard the collection using the compound key
         adminDatabase.runCommand(
             Document("shardCollection", "${database.name}.flightpoints")
                 .append("key", Document("timestamp", 1).append("flightId", 1))
         )
+        println("Compound index on 'timestamp' and 'flightId' created for collection flightpoints and sharded on that index.")
 
+        flightPointsCollection.createIndex(Document("flightId", 1))
+
+        println("Created index on flightId of flightpoints collection")
         println("Updating cities collection ... ")
         updateCollection(citiesCollection, arrayOf("coordinates"))
     }
@@ -123,10 +128,6 @@ class DataHandler(databaseName: String) {
         val flightTripsCollection = database.getCollection("flighttrips")
         println("Creating flighttrips ...")
         createTripsCollection(flightPointsCollection, flightTripsCollection)
-        println("Creating trajectories for flighttrips ...")
-        createFlightTrajectories(flightTripsCollection)
-        //println("Interpolating flighttrips ...")
-        //interpolateFlightPoints(flightTripsCollection)
     }
 
     fun shardCollections(){
@@ -152,11 +153,6 @@ class DataHandler(databaseName: String) {
         createSpatialIndexes(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
         createCompoundIndex(flightPointsCollection, flightPointsTsCollection)
 
-//
-//        flightTripsCollection.updateMany(
-//            Document(),
-//            Document("\$unset", Document("points", ""))
-//        )
     }
 
     private fun createTimeIndexes(flightPointsCollection: MongoCollection<Document>){
@@ -186,14 +182,6 @@ class DataHandler(databaseName: String) {
         flightPointsCollection.createIndex(compoundIndex, indexOptions)
         flightPointsTsCollection.createIndex(compoundIndex, indexOptions)
 
-//        compoundIndex = Indexes.compoundIndex(
-//            Indexes.geo2dsphere("points.location"),
-//            Indexes.ascending("points.timestamp")
-//        )
-//        indexOptions = IndexOptions()
-//
-//        flightTripsCollection.createIndex(compoundIndex, indexOptions)
-//
         println("Created compound index on timestamp and geom field in ${flightPointsCollection.namespace.collectionName} and ${flightPointsTsCollection.namespace.collectionName}.")
     }
 
@@ -297,10 +285,10 @@ class DataHandler(databaseName: String) {
                 })
                 append("points", Document("\$push", Document().apply {
                     append("timestamp", "\$timestamp")
-                    append("location", Document().apply {
-                        append("type", "Point")
-                        append("coordinates", listOf("\$longitude", "\$latitude"))
-                    })
+//                    append("location", Document().apply {
+//                        append("type", "Point")
+//                        append("coordinates", listOf("\$longitude", "\$latitude"))
+//                    })
                     append("altitude", "\$altitude")
                     append("lon", "\$longitude")
                     append("lat", "\$latitude")
@@ -334,48 +322,6 @@ class DataHandler(databaseName: String) {
         println("Aggregation complete, data has been inserted into the ${flightTrips.namespace.collectionName} collection.")
     }
 
-
-    private fun interpolateFlightPoints(collection: MongoCollection<Document>, batchSize: Int = 10000) {
-        // Use a cursor-based approach with batchSize
-        val cursor = collection.find().batchSize(batchSize)
-
-        val bulkOperations = mutableListOf<WriteModel<Document>>()
-        var processedCount = 0
-
-        cursor.forEach { flight ->
-            val points = flight.getList("points", Document::class.java)
-            val interpolatedPoints = mutableListOf<Document>()
-
-            // Interpolate points within each flight
-            for (i in 0 until points.size - 1) {
-                val currentPoint = points[i]
-                val nextPoint = points[i + 1]
-                interpolatePointsBetween(currentPoint, nextPoint, interpolatedPoints)
-            }
-            interpolatedPoints.add(points.last())
-
-            // Prepare the update operation for the interpolated points
-            val update = Document("\$set", Document("points", interpolatedPoints))
-            bulkOperations.add(UpdateOneModel(Document("_id", flight["_id"]), update))
-
-            // Execute bulk write when batch size is reached
-            if (bulkOperations.size >= batchSize) {
-                collection.bulkWrite(bulkOperations)
-                bulkOperations.clear()
-                println("Executed bulk update for $batchSize documents.")
-            }
-
-            processedCount++
-        }
-
-        // Execute any remaining bulk operations
-        if (bulkOperations.isNotEmpty()) {
-            collection.bulkWrite(bulkOperations)
-            println("Executed bulk update for remaining ${bulkOperations.size} documents.")
-        }
-
-        println("Processed $processedCount documents in total.")
-    }
     private fun interpolatePointsBetween(currentPoint: Document, nextPoint: Document, result: MutableList<Document>) {
         val currentTimestamp = currentPoint.getDate("timestamp").toInstant()
         val nextTimestamp = nextPoint.getDate("timestamp").toInstant()
@@ -396,7 +342,7 @@ class DataHandler(databaseName: String) {
 
         var interpolatedTimestamp = currentTimestamp.plusSeconds(1)
 
-        result.add(currentPoint)
+        //result.add(currentPoint)
 
         while (interpolatedTimestamp.isBefore(nextTimestamp)) {
             val currentSeconds = currentTimestamp.epochSecond
@@ -416,13 +362,14 @@ class DataHandler(databaseName: String) {
         }
     }
 
-    private fun createFlightTrajectories(collection: MongoCollection<Document>, batchSize: Int = 7500) {
+    private fun createFlightTrajectories(flightTripsCollection: MongoCollection<Document>, flightIdLowerBound: Int = 0, flightIdUpperBound: Int = Int.MAX_VALUE, batchSize: Int = 7500) {
         val geometryFactory = GeometryFactory()
 
-        println("Starting Trajectory creation for all flights in the ${collection.namespace.collectionName} collection.")
+        println("Starting Trajectory creation for all flights in the ${flightTripsCollection.namespace.collectionName} collection.")
 
-        // Use a cursor-based approach with batchSize
-        val cursor = collection.find().batchSize(batchSize)
+        val filter = Document("flightId", Document().append("\$gt", flightIdLowerBound).append("\$lte", flightIdUpperBound))
+
+        val cursor = flightTripsCollection.find(filter).batchSize(batchSize)
 
         val bulkOperations = mutableListOf<WriteModel<Document>>()
         var processedCount = 0
@@ -432,14 +379,11 @@ class DataHandler(databaseName: String) {
 
             // Extract coordinates from the points
             val coordinates = points.mapNotNull { point ->
-                //val location = point.get("location", Document::class.java)
-                //val coords = location["coordinates"] as? List<*>
                 val lon = point.getDouble("lon")
                 val lat = point.getDouble("lat")
                 Coordinate((lon).toDouble(), (lat).toDouble())
             }.toTypedArray()
 
-            // Create a LineString if there are enough coordinates
             if (coordinates.size >= 2) {
                 val lineString = geometryFactory.createLineString(CoordinateArraySequence(coordinates))
 
@@ -454,7 +398,7 @@ class DataHandler(databaseName: String) {
 
             // Execute bulk write when batch size is reached
             if (bulkOperations.size >= batchSize) {
-                collection.bulkWrite(bulkOperations)
+                flightTripsCollection.bulkWrite(bulkOperations)
                 bulkOperations.clear()
                 println("Executed bulk update for $batchSize documents.")
             }
@@ -464,11 +408,12 @@ class DataHandler(databaseName: String) {
 
         // Execute any remaining operations
         if (bulkOperations.isNotEmpty()) {
-            collection.bulkWrite(bulkOperations)
+            flightTripsCollection.bulkWrite(bulkOperations)
             println("Executed bulk update for remaining ${bulkOperations.size} documents.")
         }
 
-        println("Trajectory creation completed for all flights of ${collection.namespace.collectionName}. Processed $processedCount documents.")
+        println("Trajectory creation completed for all flights of ${flightTripsCollection.namespace.collectionName}. Processed $processedCount documents.")
+
     }
 
     private fun createIndexAndShard(collection: MongoCollection<Document>, columnName: String) {
@@ -508,195 +453,79 @@ class DataHandler(databaseName: String) {
         }
     }
 
-    fun createTimeSeriesCollection(){
-        val flightTrips = database.getCollection("flighttrips")
-        val flightPointsTsCollection = database.getCollection("flightpoints_ts")
-        migrateFlightPoints(flightTrips, flightPointsTsCollection, database)
-    }
+//    fun createTimeSeriesCollection(){
+//        val flightPointsCollection = database.getCollection("flightpoints")
+//        val flightPointsTsCollection = database.getCollection("flightpoints_ts")
+//        migrateFlightPoints(flightPointsCollection, flightPointsTsCollection, database)
+//    }
 
-    private fun migrateFlightPoints(flightTripsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>, database: MongoDatabase) {
+    private suspend fun migrateFlightPoints(flightPointsCollection: MongoCollection<Document>, flightPointsTsCollection: MongoCollection<Document>, flightIdLowerBound: Int = 0, flightIdUpperBound: Int = 1000000000) {
 
-        try {
+        println("Started migrating of flightpoints with bounds: $flightIdLowerBound, $flightIdUpperBound in context: ${coroutineContext[Job]}")
 
-            val timeSeriesOptions = TimeSeriesOptions("timestamp").metaField("metadata").granularity(TimeSeriesGranularity.SECONDS)
-            val createOptions = CreateCollectionOptions()
-                .timeSeriesOptions(timeSeriesOptions)
-            database.createCollection(flightPointsTsCollection.namespace.collectionName, createOptions)
+        val filter = Document("flightId", Document().append("\$gt", flightIdLowerBound).append("\$lte", flightIdUpperBound))
 
 
-            var indexOptions = IndexOptions()
-            //val timestampIndex = Document("timestamp", 1)
-//            flightPointsTsCollection.createIndex(
-//                Document("metadata.flightId", 1).append("timestamp", 1),
-//                indexOptions
-//            )
-//            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
-//                .append("key", Document("metadata.flightId", 1).append("timestamp", 1))
-
-            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
-                .append("key", Document("timestamp", 1))
-
-
-//            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
-//                .append("key", Document("timestamp", 1))
-
-            adminDatabase.runCommand(shardingCommand)
-
-            println("Collection '${flightPointsTsCollection.namespace.collectionName}' created with time-series settings.")
-
-        } catch (e: Exception) {
-            println("Error while resetting the collection: ${e.message}")
-            return
-        }
+        println(filter)
 
         val bulkOps = mutableListOf<WriteModel<Document>>()
-        val batchSize = 200000
-        val fetchBatchSize = 7500
-        val projection = Projections.fields(
-            Projections.include("flightId", "airplaneType", "destinationAirport", "originAirport", "track", "points")
-        )
+        val batchSize = 300_000
+        val fetchBatchSize = 300_000
 
+        var processedCount = 0
 
         try {
 
-            flightTripsCollection.find().projection(projection).batchSize(fetchBatchSize).forEach { doc ->
+            flightPointsCollection.find(filter).batchSize(fetchBatchSize).forEach { doc ->
                 val flightId = doc.getInteger("flightId")
-                val airplaneType = doc.getString("airplaneType")
                 val destinationAirport = doc.getString("destinationAirport")
                 val originAirport = doc.getString("originAirport")
                 val track = doc.getInteger("track")
-                val points = doc.getList("points", Document::class.java)
+                val timestamp = doc.getDate("timestamp")
+                val altitude = doc.getDouble("altitude")
+                val location = doc.get("location", Document::class.java)
 
-                // Preprocess all points at once
+                // Prepare metadata fields
                 val metadata = Document(
                     mapOf(
                         "flightId" to flightId,
-                        "track" to track,
-                        "originAirport" to originAirport,
                         "destinationAirport" to destinationAirport,
-                        "airplaneType" to airplaneType,
+                        "originAirport" to originAirport,
+                        "track" to track
                     )
                 )
 
-                val currentBatch = points.map { point ->
-                    InsertOneModel(
-                        Document(
-                            mapOf(
-                                "metadata" to metadata,
-                                "timestamp" to point["timestamp"],
-                                "lon" to point["lon"],
-                                "lat" to point["lat"],
-                                "altitude" to point["altitude"],
-                            )
-                        )
+                // Prepare the time-series document
+                val timeSeriesDoc = Document(
+                    mapOf(
+                        "metadata" to metadata,
+                        "timestamp" to timestamp,
+                        "altitude" to altitude,
+                        "location" to location
                     )
-                }
+                )
 
-                // Add preprocessed operations to the bulkOps
-                bulkOps.addAll(currentBatch)
+                // Add to bulk operations
+                bulkOps.add(InsertOneModel(timeSeriesDoc))
 
-                // Execute bulk write when batch size is reached
+                // Perform bulk write when batch size is reached
                 if (bulkOps.size >= batchSize) {
                     flightPointsTsCollection.bulkWrite(bulkOps)
-                    bulkOps.clear() // Clear the bulkOps list
+                    bulkOps.clear()
+                    println("Conducted Bulk Op for $batchSize Docs in context: ${coroutineContext[Job]}.")// Clear the bulkOps list
                 }
+
+                processedCount++
             }
 
-// Final batch write for remaining operations
             if (bulkOps.isNotEmpty()) {
                 flightPointsTsCollection.bulkWrite(bulkOps)
+                println("Executed bulk update for remaining ${bulkOps.size} documents.")
             }
 
-//            flightTripsCollection.find().projection(projection).batchSize(fetchBatchSize).forEach { doc ->
-//                val flightId = doc.getInteger("flightId")
-//                val airplaneType = doc.getString("airplaneType")
-//                val destinationAirport = doc.getString("destinationAirport")
-//                val originAirport = doc.getString("originAirport")
-//                val track = doc.getInteger("track")
-//                val points = doc.getList("points", Document::class.java)
-//
-//                points.forEach { point ->
-//                    val bulkOp = InsertOneModel(
-//                        Document(mapOf(
-//                            // metadata entries
-//                            "metadata" to Document(
-//                                mapOf(
-//                                    "flightId" to flightId,
-//                                    "track" to track,
-//                                    "originAirport" to originAirport,
-//                                    "destinationAirport" to destinationAirport,
-//                                    "airplaneType" to airplaneType,
-//                                )
-//                            ),
-//                            "timestamp" to point["timestamp"],
-//                            "lon" to point["lon"],
-//                            "lat" to point["lat"],
-//                            "altitude" to point["altitude"],
-//                        ))
-//                    )
-//                    bulkOps.add(bulkOp)
-//
-//                    // Execute bulk write when batch size is reached
-//                    if (bulkOps.size >= batchSize) {
-//                        flightPointsTsCollection.bulkWrite(bulkOps)
-//                        bulkOps.clear() // Clear the bulkOps list
-//                    }
-//                }
-//            }
-//            println("Time-series data migrated successfully!")
-//
-//            // Execute any remaining operations
-//            if (bulkOps.isNotEmpty()) {
-//                flightPointsTsCollection.bulkWrite(bulkOps)
-//            }
+            println("Inserted $processedCount documents into flightpoints_ts collection.")
+            println("Time-series data migrated successfully!")
 
-            val densifyStage = Document(
-                "\$densify", Document()
-                    .append("field", "timestamp")
-                    .append("partitionByFields", listOf("metadata.flightId", "metadata.track"))
-                    .append(
-                        "range", Document()
-                            .append("step", 1)
-                            .append("unit", "second")
-                            .append("bounds", "partition")
-                    )
-            )
-
-            // Step 2: $fill stage
-            val fillStage = Document(
-                "\$fill", Document()
-                    .append("partitionByFields", listOf("metadata.flightId", "metadata.track"))
-                    .append(
-                        "sortBy", Document("timestamp", 1)
-                    )
-                    .append(
-                        "output", Document()
-                            .append("altitude", Document("method", "linear"))
-                            .append("lon", Document("method", "linear"))
-                            .append("lat", Document("method", "linear"))
-                    )
-            )
-
-
-            // Execute the pipeline
-            val pipeline = listOf(densifyStage, fillStage)
-            val result = flightPointsTsCollection.aggregate(pipeline).toList()
-
-            // TODO: transform coordinates to GeoJSON
-            val updateCoordinates = Document("\$set", mapOf(
-                "location" to Document(
-                    "type", "Point"
-                ).append(
-                    "coordinates", listOf("\$lon", "\$lat")
-                )
-            ))
-
-            val updateLocationsPipeline = mutableListOf<Bson>()
-
-            updateLocationsPipeline.add(updateCoordinates)
-
-            println("Creating GeoJSON fields for ${flightPointsTsCollection.namespace.collectionName}.")
-            flightPointsTsCollection.updateMany(Document(), pipeline)
 
         } catch (e: Exception) {
             println("Error during migration: ${e.message}")
@@ -704,26 +533,147 @@ class DataHandler(databaseName: String) {
     }
 
 
-    fun processFlightTripsByRange(
-        flightTripsCollection: MongoCollection<Document>,
-        flightPointsTsCollection: MongoCollection<Document>,
-        batchSize: Int,
-        flightIdThreshold: Int
+    fun createTrajsAndFlightPointsTsConcurrently(
+        flightIdThresholds: List<Int>
     ) {
-        runBlocking {
-            // Launch two coroutines for parallel processing
-            val largerFlightIdsJob = launch {
-                processFlightTrips(flightTripsCollection, flightPointsTsCollection, batchSize, flightIdThreshold, true)
+
+        val flightTripsCollection = database.getCollection("flighttrips")
+        val flightPointsTsCollection = database.getCollection("flightpoints_ts")
+        val flightPointsCollection = database.getCollection("flightpoints")
+
+        val coroutineNumber = flightIdThresholds.size - 1
+
+
+            runBlocking {
+
+                val createTrajsJobs = (0 until coroutineNumber).map { index ->
+                    launch(Dispatchers.IO) {
+                        try {
+                            val flightIdLowerBound = flightIdThresholds[index]
+                            val flightIdUpperBound = flightIdThresholds[index + 1]
+                            println("Creating trajectories for flighttrips collection.")
+
+                            createFlightTrajectories(flightTripsCollection, flightIdLowerBound, flightIdUpperBound)
+
+                        }catch (e: Exception){
+
+                            println("Error in trajectory creation coroutine: ${e.message}")
+                        }
+                    }
+                }
+
+                createTrajsJobs.joinAll()
             }
 
-            val smallerFlightIdsJob = launch {
-                processFlightTrips(flightTripsCollection, flightPointsTsCollection, batchSize, flightIdThreshold, false)
+        println("Deleting points arrays in flighttrips collection.")
+        flightTripsCollection.updateMany(
+            Document(),
+            Document("\$unset", Document("points", ""))
+        )
+
+
+        try {
+
+            val timeSeriesOptions = TimeSeriesOptions("timestamp").metaField("metadata").granularity(TimeSeriesGranularity.SECONDS)
+            val createOptions = CreateCollectionOptions()
+                .timeSeriesOptions(timeSeriesOptions)
+            database.createCollection(flightPointsTsCollection.namespace.collectionName, createOptions)
+            println("Collection '${flightPointsTsCollection.namespace.collectionName}' created with time-series settings.")
+
+
+            var indexOptions = IndexOptions()
+
+            println("Creating compound index (flightid, timestamp) on flightpoints_ts collection.")
+            flightPointsTsCollection.createIndex(
+                Document("metadata.flightId", 1).append("timestamp", 1),
+                indexOptions
+            )
+
+//            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+//                .append("key", Document("metadata.flightId", 1).append("timestamp", 1))
+
+            val shardingCommand = Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+                .append("key", Document("timestamp", 1))
+
+            adminDatabase.runCommand(shardingCommand)
+
+
+            val june1 = Instant.parse("2023-06-01T00:00:00Z")
+            val september1 = Instant.parse("2023-09-01T00:00:00Z")
+
+            val splitRanges = listOf(
+                Document("split", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("middle", Document("control.min.timestamp",  june1)), // MinKey -> June 1
+
+                Document("split", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("middle", Document("control.min.timestamp", september1))  // June 1 -> September 1
+            )
+
+
+            splitRanges.forEach { splitCommand ->
+                adminDatabase.runCommand(splitCommand)
             }
 
-            // Wait for both coroutines to finish
-            largerFlightIdsJob.join()
-            smallerFlightIdsJob.join()
+            val may1 = Instant.parse("2023-05-01T00:00:00Z")
+            val july1 = Instant.parse("2023-07-01T00:00:00Z")
+            val october1 = Instant.parse("2023-10-01T00:00:00Z")
+
+            val moveChunkCommands = listOf(
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", may1)) // MinKey -> June 1
+                    .append("to", "shard1ReplSet"),
+
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", july1)) // June 1 -> September 1
+                    .append("to", "shard2ReplSet"),
+
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", october1)) // September 1 -> MaxKey
+                    .append("to", "shard3ReplSet")
+            )
+
+            moveChunkCommands.forEach { moveChunkCommand ->
+                adminDatabase.runCommand(moveChunkCommand)
+            }
+
+
+        } catch (e: Exception) {
+            println("Error while resetting the collection: ${e.message}")
+            return
         }
+
+        println("Creating index on flightId on flightpoints_ts collection.")
+        flightPointsTsCollection.createIndex(Document("metadata.flightId", 1))
+
+        runBlocking {
+
+            val insertJobs = (0 until coroutineNumber).map { index ->
+                launch(Dispatchers.IO) {
+                    try {
+                    val flightIdLowerBound = flightIdThresholds[index]
+                    val flightIdUpperBound = flightIdThresholds[index + 1]
+                    println("Migrating flightpoints to flightpoints_ts.")
+                    migrateFlightPoints(flightPointsCollection, flightPointsTsCollection, flightIdLowerBound, flightIdUpperBound)
+                    }catch (e: Exception){
+                        println("Error in migration coroutine: ${e.message}")
+                    }
+                }
+            }
+
+            insertJobs.joinAll()
+        }
+
+            runBlocking {
+                val interpolateJobs = (0 until coroutineNumber).map { index ->
+                    val flightIdLowerBound = flightIdThresholds[index]
+                    val flightIdUpperBound = flightIdThresholds[index + 1]
+                    launch(Dispatchers.IO) {
+                        println("Interpolating flightpoints_ts.")
+                        interpolateFlightPointsTs(flightPointsTsCollection, flightIdLowerBound, flightIdUpperBound)
+                    }
+                }
+                interpolateJobs.joinAll()
+            }
     }
 
     suspend fun processFlightTrips(
@@ -784,14 +734,126 @@ class DataHandler(databaseName: String) {
         if (bulkOps.isNotEmpty()) {
             flightPointsTsCollection.bulkWrite(bulkOps)
         }
+
     }
 
+    private fun interpolateFlightPointsTs(
+        flightPointsTsCollection: MongoCollection<Document>,
+        flightIdLowerBound: Int = 0,
+        flightIdUpperBound: Int = 100000000,
+        batchSize: Int = 300000
+    ) {
 
+        val filter = Document("metadata.flightId", Document().append("\$gt", flightIdLowerBound).append("\$lte", flightIdUpperBound))
 
+        val batchSizeGroupedDocs = 5000
+        // Use aggregation to group by flightId and track
+        val cursor = flightPointsTsCollection.aggregate(
+            listOf(
+                // Add the $match stage for filtering by flightId
+                Document("\$match", filter),
 
+                // Sorting stage
+                Document("\$sort", Document("metadata.flightId", 1)
+                    .append("metadata.track", 1)
+                    .append("timestamp", 1)),
+
+                // Grouping stage
+                Document("\$group", Document()
+                    .append("_id", Document("flightId", "\$metadata.flightId")
+                        .append("track", "\$metadata.track"))
+                    .append("points", Document("\$push", Document("timestamp", "\$timestamp")
+                        .append("location", "\$location")
+                        .append("altitude", "\$altitude"))))
+            )
+        ).allowDiskUse(true).batchSize(batchSizeGroupedDocs)
+
+        val bulkOperations = mutableListOf<WriteModel<Document>>()
+        var processedCount = 0
+
+        cursor.forEach { groupedFlight ->
+            val flightId = groupedFlight.getEmbedded(listOf("_id", "flightId"), Number::class.java)?.toInt()
+            val track = groupedFlight.getEmbedded(listOf("_id", "track"), Number::class.java)?.toInt()
+            val points = groupedFlight.getList("points", Document::class.java)
+            val interpolatedPoints = mutableListOf<Document>()
+
+            // Interpolate points for each group of flightId and track
+            for (i in 0 until points.size - 1) {
+                val currentPoint = points[i]
+                val nextPoint = points[i + 1]
+                interpolatePointsBetween(currentPoint, nextPoint, interpolatedPoints)
+            }
+
+            // Prepare the bulk update operation
+            interpolatedPoints.forEach { point ->
+                val metadata = Document("flightId", flightId).append("track", track)
+                val timeSeriesDoc = Document("metadata", metadata)
+                    .append("timestamp", point["timestamp"])
+                    .append("altitude", point["altitude"])
+                    .append("location", point["location"])
+                bulkOperations.add(InsertOneModel(timeSeriesDoc))
+            }
+
+            // Execute bulk write when batch size is reached
+            if (bulkOperations.size >= batchSize) {
+                flightPointsTsCollection.bulkWrite(bulkOperations)
+                bulkOperations.clear()
+                println("Executed bulk update for $batchSize documents.")
+            }
+
+            processedCount++
+        }
+
+        // Execute any remaining bulk operations
+        if (bulkOperations.isNotEmpty()) {
+            flightPointsTsCollection.bulkWrite(bulkOperations)
+            println("Executed bulk update for remaining ${bulkOperations.size} documents.")
+        }
+
+        println("Processed $processedCount groups of flightId and track.")
+    }
+
+    private fun interpolatePointsTsBetween(currentPoint: Document, nextPoint: Document, result: MutableList<Document>) {
+        val currentTimestamp = currentPoint.getDate("timestamp").toInstant()
+        val nextTimestamp = nextPoint.getDate("timestamp").toInstant()
+
+        val currentLocation = currentPoint.get("location", Document::class.java)
+        val nextLocation = nextPoint.get("location", Document::class.java)
+
+        val currentCoordinatesList = currentLocation["coordinates"] as List<*>
+        val nextCoordinatesList = nextLocation["coordinates"] as List<*>
+
+        val currentLongitude = (currentCoordinatesList[0] as Number).toDouble()
+        val currentLatitude = (currentCoordinatesList[1] as Number).toDouble()
+        val nextLongitude = (nextCoordinatesList[0] as Number).toDouble()
+        val nextLatitude = (nextCoordinatesList[1] as Number).toDouble()
+
+        val currentAltitude = currentPoint.getDouble("altitude")
+        val nextAltitude = nextPoint.getDouble("altitude")
+
+        var interpolatedTimestamp = currentTimestamp.plusSeconds(1)
+
+        result.add(currentPoint)
+
+        while (interpolatedTimestamp.isBefore(nextTimestamp)) {
+            val currentSeconds = currentTimestamp.epochSecond
+            val nextSeconds = nextTimestamp.epochSecond
+            val interpolatedSeconds = interpolatedTimestamp.epochSecond
+
+            val interpolatedLongitude = currentLongitude + (nextLongitude - currentLongitude) * (interpolatedSeconds - currentSeconds) / (nextSeconds - currentSeconds)
+            val interpolatedLatitude = currentLatitude + (nextLatitude - currentLatitude) * (interpolatedSeconds - currentSeconds) / (nextSeconds - currentSeconds)
+            val interpolatedAltitude = currentAltitude + (nextAltitude - currentAltitude) * (interpolatedSeconds - currentSeconds) / (nextSeconds - currentSeconds)
+
+            result.add(Document().apply {
+                append("timestamp", java.util.Date.from(interpolatedTimestamp))
+                append("location", Document("type", "Point").append("coordinates", listOf(interpolatedLongitude, interpolatedLatitude)))
+                append("altitude", interpolatedAltitude)
+            })
+            interpolatedTimestamp = interpolatedTimestamp.plusSeconds(1)
+        }
+    }
 
 }
-
 
 
 
@@ -801,17 +863,12 @@ fun main() {
     handler.shardCollections()
     handler.insertRegionalData()
     handler.createFlightTrips()
-    handler.createTimeSeriesCollection()
+    handler.createTrajsAndFlightPointsTsConcurrently(listOf(69187656, 69379196, 69530071, 69650136, 77162997, 77432262))
     handler.createIndexes()
-    //handler.runQueries()
+
+//    handler.createFlightPointsTsConcurrently(listOf(69187656, 69379196, 69530071, 69650136, 77162997, 77432262))
 
 }
-
-
-
-
-
-
 
 
 

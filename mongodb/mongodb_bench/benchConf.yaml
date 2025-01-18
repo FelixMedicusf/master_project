@@ -1,9 +1,9 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "34.78.247.141"
-    - "34.79.128.155"
-    - "104.199.70.133"
+    - "35.205.246.163"
+    - "35.187.100.170"
+    - "34.140.20.156"
   threads: 2
   random_seed: 123
 
@@ -171,7 +171,7 @@ queryConfigs:
 
 
 
-# queries not being used
+  # queries not being used
 
   # bisher noch nicht implementiert (auch nicht in MobiltiyDB)
   - name: FlightDistanceInCounties
@@ -183,7 +183,7 @@ queryConfigs:
       - county
       - type
 
-# takes too long to execute
+  # takes too long to execute
   - name: flightsOnlyInOneDistrict
     use: False
     type: spatial
@@ -193,7 +193,7 @@ queryConfigs:
       - district
 
 
-# takes too long to execute (complex implementation)
+  # takes too long to execute (complex implementation)
   - name: crossedCountiesInPeriodWithDestination
     use: False
     type: spatiotemporal

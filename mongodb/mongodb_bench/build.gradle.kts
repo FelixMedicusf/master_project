@@ -29,7 +29,7 @@ dependencies {
     implementation("org.mongodb:bson:5.2.1")
     implementation("org.mongodb:bson-kotlinx:5.2.1")
 
-
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-serialization-jackson:$ktor_version")

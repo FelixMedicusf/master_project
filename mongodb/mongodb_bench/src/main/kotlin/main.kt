@@ -138,6 +138,31 @@ fun main() {
             jackson {}
         }
         routing {
+
+            post("/data-handler") {
+                try {
+                    val handler = DataHandler(DATABASE)
+
+                    // Perform DataHandler operations sequentially
+                    handler.updateDatabaseCollections()
+                    handler.shardCollections()
+                    handler.insertRegionalData()
+                    handler.createFlightTrips()
+                    handler.createTrajsAndFlightPointsTsConcurrently(
+                        listOf(69187656, 69379196, 69530071, 69650136, 77162997, 77432262)
+                    )
+                    handler.createIndexes()
+
+                    call.respond(HttpStatusCode.OK, "DataHandler operations completed successfully.")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.InternalServerError,
+                        "Error during DataHandler operations: ${e.message}"
+                    )
+                }
+            }
+
             // Start benchmark execution
             post("/start-benchmark") {
                 if (benchmarkExecutorService != null && !benchmarkExecutorService!!.isShutdown) {
