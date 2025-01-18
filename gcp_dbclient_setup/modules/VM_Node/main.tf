@@ -31,7 +31,7 @@ resource "google_compute_instance" "benchClient" {
     #!/bin/bash
     set -e
 
-    # Update package lists and install Java (if not already installed)
+    # Update package lists and install Java
     sudo apt update
     sudo apt install -y openjdk-11-jdk curl
 
