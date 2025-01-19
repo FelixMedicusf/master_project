@@ -5,6 +5,8 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
+import kotlin.math.ceil
+import kotlin.math.floor
 
 class BenchmarkClient(private val serverUrl: String) {
 
@@ -86,26 +88,35 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
-    val configPathMongoDB = "benchConfigMongoDB.yaml"
-    val configPathMobilityDB = "benchConfigMobilityDB.yaml"
-
-    val databaseClientAddress = "localhost:8080"
-
-    val serverUrl = "http://$databaseClientAddress"
-    val client = BenchmarkClient(serverUrl)
-
-    println("\n1. Triggering DataHandler operations...")
-    client.triggerDataHandler()
-
-    println("\n2. Uploading configuration...")
-    client.uploadConfig(configPathMongoDB)
-
-    println("\n3. Starting benchmark...")
-    client.startBenchmark()
+//    val configPathMongoDB = "benchConfigMongoDB.yaml"
+//    val configPathMobilityDB = "benchConfigMobilityDB.yaml"
+//
+//    val databaseClientAddress = "34.140.86.175:8080"
+//
+//    val serverUrl = "http://$databaseClientAddress"
+//    val client = BenchmarkClient(serverUrl)
+//
+//    println("\n1. Uploading configuration...")
+//    client.uploadConfig(configPathMongoDB)
+//
+//    println("\n2. Triggering DataHandler operations...")
+//    client.triggerDataHandler()
+//
+//
+//    println("\n3. Starting benchmark...")
+//    client.startBenchmark()
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()
 
 //    println("\n5. Retrieving logs...")
 //    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
+
+
 }
+
+
+
+
+
+

@@ -18,7 +18,6 @@ import java.nio.file.Paths
 import java.time.Instant
 import java.util.*
 import java.util.concurrent.*
-import kotlin.concurrent.thread
 import kotlin.random.Random
 
 const val USER = "felix"
@@ -53,6 +52,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val threadCount = config.benchmarkSettings.threads
         val nodes = config.benchmarkSettings.nodes
         val mainSeed = config.benchmarkSettings.randomSeed
+        val sut = config.benchmarkSettings.sut
         val mainRandom = Random(mainSeed)
         println("Using random seed: $mainSeed")
 
@@ -83,7 +83,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
         val benchEnd = Instant.now().toEpochMilli()
 
-        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd)
+        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut)
     }
 
     private fun loadConfig(): BenchmarkConfiguration? {
@@ -118,11 +118,14 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         return seeds
     }
 
-    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long) {
-        File(logsPath).writeText("${(benchEnd - benchStart)/1000}s\n")
-        File(logsPath).appendText(threadSeeds.joinToString(separator = ";") + "\n")
-        File(logsPath).appendText(executionLogs.joinToString(separator = "\n"))
+    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String) {
+
+        val file = File(logsPath)
+        file.appendText("threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords")
+        file.appendText("start: ${Date(benchStart)}, end :${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size}, "+ "thread seeds:" + threadSeeds.joinToString(separator = ";") + ", #nodes: $nodeNumber, queries executed: ${executionLogs.size}." + "\n")
+        file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
+
     }
 }
 
@@ -149,7 +152,7 @@ fun main() {
                     handler.insertRegionalData()
                     handler.createFlightTrips()
                     handler.createTrajsAndFlightPointsTsConcurrently(
-                        listOf(69187656, 69379196, 69530071, 69650136, 77162997, 77432262)
+                        listOf(0, 69978629, 70871771, 71735506, 72694844, 73571528, 74471618, 75443188, 76490007, 77412043, 77444163)
                     )
                     handler.createIndexes()
 

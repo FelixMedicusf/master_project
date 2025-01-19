@@ -10,12 +10,12 @@ variable "region" {
 
 variable "instance-name" {
   type = string
-  default = "benchClient-node"
+  default = "benchclient-node"
 }
 
 variable "network-name" {
   type = string 
-  default = "benchClient-network"
+  default = "benchclient-network"
 }
 
 variable "names_and_zones"{
@@ -23,6 +23,6 @@ variable "names_and_zones"{
 
   # europe-west1: Belgien, europe-west2: London, europe-west-3: FFM 
   default = {
-    benchClient-node-1 = "europe-west1-b"
+    benchclient-node-1 = "europe-west1-b"
   }
 }

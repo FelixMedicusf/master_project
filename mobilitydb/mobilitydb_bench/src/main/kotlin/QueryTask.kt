@@ -3,5 +3,4 @@ data class QueryTask(
     val type: String,
     val sql: String,
     val params: List<String> ?= null,
-
 )

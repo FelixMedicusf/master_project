@@ -140,7 +140,7 @@ class BenchThread(
                                 queryName = task.queryName,
                                 queryType = task.type,
                                 params =  params,
-                                paramValues = parameterValues.replace(",", ";"),
+                                paramValues = parameterValues.replace(",", "/"),
                                 round = 0,
                                 executionIndex = 0,
                                 startTime = response.first,
@@ -150,7 +150,6 @@ class BenchThread(
                                 latency = (endTime - response.first),
                                 records = response.fourth.size
                             )
-
                     )
                 }
 

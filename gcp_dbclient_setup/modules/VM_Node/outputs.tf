@@ -1,5 +1,5 @@
 output "instance_name" {
-    value = google_compute_instance.benchClient.name
+    value = google_compute_instance.benchclient.name
 }
 
 output "public_ip" {
@@ -7,5 +7,5 @@ output "public_ip" {
 }
 
 output "zone" {
-  value = google_compute_instance.benchClient.zone
+  value = google_compute_instance.benchclient.zone
 }

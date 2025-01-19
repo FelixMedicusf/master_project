@@ -68,14 +68,15 @@ class BenchThread(
                 val sqlQuery = if (task.params != null) {
                     this.formatSQLStatement(task.sql, task.params)
                 } else {
-                    task.sql
+                    Pair(task.sql, listOf())
                 }
 
 
                 val startTime = Instant.now().toEpochMilli()
-
-                val response = statement.executeQuery(sqlQuery)
+                val response = statement.executeQuery(sqlQuery.first)
                 val endTime = Instant.now().toEpochMilli()
+                val params = task.params?.joinToString(";") ?: ""
+                val parameterValues = sqlQuery.second.joinToString(";")
 
                 println(sqlQuery)
                 printSQLResponse(response)
@@ -86,11 +87,16 @@ class BenchThread(
                             threadName = threadName,
                             queryName = task.queryName,
                             queryType = task.type,
+                            params = params,
+                            paramValues = parameterValues.replace(",", "/"),
                             round = 0,
                             executionIndex = 0,
                             startTime = startTime,
                             endTime = endTime,
-                            latency = (endTime - startTime)/1000
+                            startTimeSecond = 0,
+                            endTimeSecond = 0,
+                            latency = (endTime - startTime)/1000,
+                            records = response.fetchSize
                         )
                     )
                 }
@@ -101,6 +107,7 @@ class BenchThread(
             // Catch any unexpected exceptions and print them to the console
             println("An error occurred in thread $threadName: ${e.message}")
             e.printStackTrace()
+
         } finally {
 
             try {
@@ -119,8 +126,9 @@ class BenchThread(
     }
 
 
-    private fun formatSQLStatement(sql: String, params: List<String>): String {
+    private fun formatSQLStatement(sql: String, params: List<String>): Pair<String, List<String>> {
         var parsedSql = sql
+        var values = mutableListOf<String>()
 
         for (param in params){
             val replacement = when (param) {
@@ -144,10 +152,14 @@ class BenchThread(
 
             }
 
-            if (replacement != null)parsedSql = parsedSql.replace(":$param", replacement)
+            if (replacement != null){
+                parsedSql = parsedSql.replace(":$param", replacement)
+                values.add(replacement)
+
+            }
 
         }
-        return parsedSql
+        return Pair(parsedSql, values)
     }
 
     private fun printSQLResponse(resultSet: ResultSet) {
@@ -169,6 +181,7 @@ class BenchThread(
                 }
                 println()
             }
+
 
             println()
 
@@ -267,7 +280,6 @@ class BenchThread(
             }
         }
 
-        //Ensure start is before end
         val (start, end) = if (timestamp1.isBefore(endDate)) {
             timestamp1 to endDate
         } else {
@@ -293,11 +305,11 @@ class BenchThread(
                 lines.drop(1).map { line ->
                     val values = line.split(",")
                     indicesToKeep.associate { header[it] to values[it] }
-                }.distinct() // Ensure distinct values during map creation
+                }.distinct()
             )
         }
 
-        return rows.toList() // Convert back to a List to match return type
+        return rows.toList()
     }
 
     private fun getRandomPlace(
