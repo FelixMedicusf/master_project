@@ -5,7 +5,7 @@ resource "google_compute_address" "static_ip" {
 
 resource "google_compute_instance" "benchclient" {
   name = var.instance-name
-  machine_type = "e2-standard-2"
+  machine_type = "c3-standard-8"
   zone = var.zone
   tags = ["allow-traffic", "allow-ssh"]
 

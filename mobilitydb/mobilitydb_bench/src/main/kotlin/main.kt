@@ -128,7 +128,7 @@ class BenchmarkExecutor(
                 statement.executeQuery("SELECT * FROM districts WHERE name=$randomDistrict")
                 statement.executeQuery("SELECT * FROM cities WHERE name=$randomCity")
 
-                statement.executeUpdate("SELECT flightid, track FROM flights WHERE trip && $randomTimespan")
+                statement.executeQuery("SELECT flightid, track FROM flights WHERE trip && $randomTimespan")
 
                 i++
             }

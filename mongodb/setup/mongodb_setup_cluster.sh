@@ -163,6 +163,6 @@ db.getSiblingDB(\"$database\").cities.createIndex({ name: \"hashed\" });
 '"
 
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPointslarge.csv --batchSize=100000 --numInsertionWorkers=4 --username $user --password $user_password --authenticationDatabase admin"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=flightpoints --type=csv --headerline --file=/tmp/FlightPointslarge.csv --batchSize=100000 --numInsertionWorkers=8 --username $user --password $user_password --authenticationDatabase admin"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=cities --type=csv --headerline --file=/tmp/regData/cities.csv --batchSize=50000 --numInsertionWorkers=4 --username $user --password $user_password --authenticationDatabase admin"
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "mongoimport --db=$database --collection=airports --type=csv --headerline --file=/tmp/regData/airports_mongo.csv --batchSize=50000 --numInsertionWorkers=4 --username $user --password $user_password --authenticationDatabase admin"

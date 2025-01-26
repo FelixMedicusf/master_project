@@ -1,9 +1,9 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "35.187.50.82"
-    - "146.148.121.140"
-    - "34.34.180.247"
+    - "34.76.181.39"
+    - "34.140.64.255"
+    - "34.76.7.28"
   threads: 2
   random_seed: 123
 
@@ -189,7 +189,6 @@ queryConfigs:
           distance: 300
 
   # spatiotemporal queries (6 (7) functioning queries)
-  # use
   - name: flightsInCountyInPeriod
     use: True
     type: spatiotemporal
@@ -210,6 +209,7 @@ queryConfigs:
       - parameters:
           period_medium: 2023-01-20 19:30:00,2023-01-20 20:00:00
           county: "Krs Herne"
+
   # join query
   - name: pairOfFlightsInMunicipalityInPeriod
     use: False
@@ -341,4 +341,14 @@ queryConfigs:
       - parameters:
           period_medium: 2023-05-13 01:45:21,2023-05-14 12:54:31
           county: "Krs Hamm"
+
+
+
+
+
+
+
+
+
+
 

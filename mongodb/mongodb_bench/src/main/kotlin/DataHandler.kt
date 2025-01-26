@@ -95,16 +95,51 @@ class DataHandler(databaseName: String) {
         val airportsCollection = database.getCollection("airports")
 
         // Flightpoints index creation
+        flightPointsCollection.createIndex(Document("flightId", "hashed"))
         flightPointsCollection.createIndex(Document("flightId", 1))
 
         adminDatabase.runCommand(
             Document("shardCollection", "${database.name}.flightpoints")
-                .append("key", Document("flightId", 1))
+                .append("key", Document("flightId", "hashed"))
         )
+
+//        val splitRanges = listOf(
+//            Document("split", "${database.name}.${flightPointsCollection.namespace.collectionName}")
+//                .append("middle", Document("flightId",  718748691)),
+//            Document("split", "${database.name}.${flightPointsCollection.namespace.collectionName}")
+//                .append("middle", Document("flightId", 745155131))
+//        )
+//
+//        splitRanges.forEach { splitCommand ->
+//            adminDatabase.runCommand(splitCommand)
+//        }
+//
+//        val moveChunkCommands = listOf(
+//            Document("moveChunk", "${database.name}.${flightPointsCollection.namespace.collectionName}")
+//                .append("find", Document("flightId", 706070471))
+//                .append("to", "shard1ReplSet"),
+//
+//            Document("moveChunk", "${database.name}.${flightPointsCollection.namespace.collectionName}")
+//                .append("find", Document("flightId", 732080411))
+//                .append("to", "shard2ReplSet"),
+//
+//            Document("moveChunk", "${database.name}.${flightPointsCollection.namespace.collectionName}")
+//                .append("find", Document("flightId", 760948540)) // September 1 -> MaxKey
+//                .append("to", "shard3ReplSet")
+//        )
+//
+//        moveChunkCommands.forEach { moveChunkCommand ->
+//            adminDatabase.runCommand(moveChunkCommand)
+//        }
+
+
         println("Created index on 'flightId' for collection flightpoints and sharded on that index.")
 
         println("Wait for rebalancing of documents in flightpoints collection.")
-        Thread.sleep(25_000)
+        Thread.sleep(90_000)
+
+        val disableBalancerCommand = Document("balancerStop", 1)
+        adminDatabase.runCommand(disableBalancerCommand)
 
         println("Updating flightpoints collection (creating timestamps and GeoJson) ... ")
 
@@ -122,7 +157,7 @@ class DataHandler(databaseName: String) {
             )
 
 
-        val separators = listOf(0, 700076001, 732177911, 735346091, 745304441, 774441640)
+        val separators = listOf(0, 700076001, 716126956, 732177911, 735346091, 745304441, 759873041, 774441640)
         val coroutineNumber = separators.size-1
 
         runBlocking {
@@ -156,7 +191,11 @@ class DataHandler(databaseName: String) {
             updateJobs.joinAll()
         }
 
-        flightPointsCollection.createIndex(Document("timestamp", 1))
+        val enableBalancerCommand = Document("balancerStart", 1)
+        adminDatabase.runCommand(enableBalancerCommand)
+        Thread.sleep(20_000)
+
+        //flightPointsCollection.createIndex(Document("timestamp", 1))
         flightPointsCollection.createIndex(Document("location","2dsphere"))
 
         var compoundIndex = Indexes.compoundIndex(
@@ -164,7 +203,7 @@ class DataHandler(databaseName: String) {
             Indexes.geo2dsphere("location"), // Geospatial index
         )
         var indexOptions = IndexOptions()
-        flightPointsCollection.createIndex(compoundIndex, indexOptions)
+        //flightPointsCollection.createIndex(compoundIndex, indexOptions)
 
         println("Created indexes for flightpoints collection.")
 
@@ -189,7 +228,7 @@ class DataHandler(databaseName: String) {
 
     }
 
-    private suspend fun retryWriteOperation(retries: Int = 50, block: suspend () -> Unit) {
+    private suspend fun retryWriteOperation(retries: Int = 5000, block: suspend () -> Unit) {
         repeat(retries) {
             try {
                 block()
@@ -451,7 +490,7 @@ class DataHandler(databaseName: String) {
                 Coordinate((lon).toDouble(), (lat).toDouble())
             }.toTypedArray()
 
-            if (coordinates.size >= 2) {
+            if (coordinates.size >= 2 && coordinates[0] != coordinates[coordinates.size-1]) {
                 val lineString = geometryFactory.createLineString(CoordinateArraySequence(coordinates))
 
                 // Convert LineString to GeoJSON format
@@ -808,13 +847,13 @@ fun main() {
 
     val separators = listOf(0, 700642631, 710076001, 718926541, 728177911, 736845861, 743346091, 754447851, 760302441, 773383481, 774441640)
     val handler = DataHandler("aviation_data")
-    handler.updateDatabaseCollections()
-    handler.shardCollections()
-    handler.insertRegionalData()
-    handler.createFlightTrips()
+//    handler.updateDatabaseCollections()
+//    handler.shardCollections()
+//    handler.insertRegionalData()
+//    handler.createFlightTrips()
     handler.createTrajectories(separators)
-    handler.createFlightsPointsTs(separators)
-    handler.createTimeSeriesCollectionIndexes()
+//    handler.createFlightsPointsTs(separators)
+//    handler.createTimeSeriesCollectionIndexes()
 
 }
 
