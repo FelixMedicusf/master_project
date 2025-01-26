@@ -1,7 +1,14 @@
-data class QueryConfiguration(val name: String, // name of the query
-                              val use: Boolean,// parameters to be used in the queries
-                              val type: String, // type of the query (temporal, spatial, or spatiotemporal
-                              val mongodbQuery: String, // the query to perform on the MongoDB
-                              val repetition: Int, // how often should each query with each parameter be executed
-                              val parameters: List<String> ?= null // what parameters does the query use
+import com.fasterxml.jackson.annotation.JsonProperty
+
+data class QueryConfiguration(
+    val name: String, // name of the query
+    val use: Boolean, // whether the query is enabled
+    val type: String, // type of the query (temporal, spatial, or spatiotemporal)
+    val repetition: Int, // how often each query with each parameter is executed
+    @JsonProperty("parameter_sets")
+    val parameterSets: List<QueryParameterSet>? = null // list of parameter sets with their values
+)
+
+data class QueryParameterSet(
+    val parameters: Map<String, String> // key-value pairs for parameter names and values
 )

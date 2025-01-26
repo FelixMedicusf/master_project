@@ -8,10 +8,10 @@ pg_pass_file="$HOME/.pgpass"
 
 CONFIG="
 # Memory settings
-shared_buffers = '8GB'
-work_mem = '64MB'
-maintenance_work_mem = '1024MB'
-effective_cache_size = '12GB'
+shared_buffers = '12GB'
+work_mem = '248MB'
+maintenance_work_mem = '2048MB'
+effective_cache_size = '24GB'
 
 # Parallel processing
 max_parallel_workers_per_gather = 4
@@ -20,10 +20,11 @@ max_parallel_workers = 16
 max_parallel_maintenance_workers = 4
 
 # I/O settings
-effective_io_concurrency = 200
+effective_io_concurrency = 300
 
 # WAL settings
-max_wal_size = '4GB'
+archive_mode = off
+max_wal_size = '10GB'
 min_wal_size = '2GB'
 
 # Autovacuum settings
@@ -34,11 +35,13 @@ autovacuum_vacuum_threshold = 50
 autovacuum_analyze_threshold = 50
 
 # Citus settings (if applicable)
-citus.max_parallel_workers_per_query = 4
+citus.max_parallel_workers_per_query = 6
 citus.task_scheduler_slots = 8
+citus.max_background_task_executors_per_node = 6
 "
 
 flight_data_resource_id="1REu74vRj6tsoPKO7J7bfOEjjdaWEY4Dm"
+flight_data_resource_id_large="1Q7Yio3eUulzE6jl8J1zkWJiLqrHOzSUv"
 cities_resource_id="1KPNtXMNCAIH2wgGeWQYnCbBfakhlOJz5"
 municipalities_resource_id="1IxS8b4RaNe9glfdk4ZurXrZiZFnJNhC5"
 counties_resource_id="1KkNU4iwMeIHDoBMhFI4eJkruTFlm3xAP"
@@ -174,7 +177,7 @@ fi
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y python3-pip && pip install gdown"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv"
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv && ~/.local/bin/gdown $flight_data_resource_id_large && sudo mv /home/felix/FlightPointsMobilityDBlarge.csv /tmp/FlightPointsMobilityDBlarge.csv"
 
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"

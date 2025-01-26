@@ -10,6 +10,7 @@ resource "google_compute_instance" "benchclient" {
   tags = ["allow-traffic", "allow-ssh"]
 
   depends_on=[google_compute_address.static_ip]
+  enable_display = true
   boot_disk {
     initialize_params {
       image="ubuntu-os-pro-cloud/ubuntu-pro-2204-lts"
@@ -37,6 +38,8 @@ startup-script = <<SCRIPT
 
   # Define the URL for the JAR file and the destination
   JAR_URL="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mongodb/mongodb_bench/mongodb_bench.main.jar"
+  # JAR_URL="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mongodb/"
+
   JAR_DEST="/opt/benchmarkingClient.jar"
 
   # Download the JAR file

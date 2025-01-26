@@ -9,10 +9,8 @@ import java.time.*
 import java.time.format.DateTimeFormatter
 
 fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
-
-
     val inputDirectory = "../../data/dfsData"
-    val outputCsvFile = "../../data/dfsData/output/FlightPointsMobilityDB.csv"
+    val outputCsvFilePattern = "../../data/dfsData/output/FlightPointsMobilityDB_part_%d.csv"
 
     val directory = File(inputDirectory)
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss")
@@ -32,41 +30,54 @@ fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
     var trackEndTime: LocalTime?
     var endDateTime: LocalDateTime? = null
     var flightTimestamps: MutableList<String> = mutableListOf("")
-
+    fun extractMonthFromFileName(fileName: String): String? {
+        val regex = Regex(".*_(\\d{2})\\d{2}\\.exp")
+        return regex.find(fileName)?.groups?.get(1)?.value
+    }
     var counter = 0
+    var fileCounter = 1
+    var currentRecordCount = 0
+
     if (directory.exists() && directory.isDirectory) {
-
-
         val expFiles = directory.listFiles { file -> file.extension == "exp" }
 
-        val writer = CSVWriter(FileWriter(outputCsvFile))
-        val header = "flightId,timestamp,airplaneType,originAirport,destinationAirport,track,latitude,longitude,altitude"
-        writer.writeNext(header.split(",").toTypedArray())
+        var writer: CSVWriter? = null
+        fun openNewWriter() {
+            writer?.close()
+            val newFileName = outputCsvFilePattern.format(fileCounter++)
+            writer = CSVWriter(FileWriter(newFileName))
+            val header = "flightId,timestamp,airplaneType,originAirport,destinationAirport,track,latitude,longitude,altitude"
+            writer?.writeNext(header.split(",").toTypedArray())
+        }
+
+        openNewWriter()
 
         for (currentExpFile in expFiles){
+            val fileMonth = extractMonthFromFileName(currentExpFile.name)?.toIntOrNull()
+            if (fileMonth != null) {
+                println("Processing file: ${currentExpFile.name}, extracted month: $fileMonth")
+            } else {
+                println("Processing file: ${currentExpFile.name}, month could not be extracted")
+                continue
+            }
             if(counter==totalNumberRows)break
             println("Processing file: ${currentExpFile.name}")
             val reader = CSVReader(FileReader(currentExpFile))
             var row = 1
 
             try {
-                // Remove entries where no longitude or latitude is given or entries for the same plane with the same timestamp
                 var record: Array<String>? = reader.readNext()
 
                 while (record != null) {
-
-                    if (record.isEmpty() || record.size < 2){
+                    if (record.isEmpty() || record.size < 2) {
                         record = reader.readNext()
-                        row+=1
+                        row += 1
                     }
 
                     if (record != null) {
-
                         try {
-
                             if (record.size > 4) {
-
-                                if (flightId!=record[0])flightTimestamps.clear()
+                                if (flightId != record[0]) flightTimestamps.clear()
 
                                 flightId = record[0]
                                 airplaneType = record[1]
@@ -84,20 +95,17 @@ fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
                                 var numberTrackPoints = record[10]
 
                                 metaData = !record.any { entry -> entry.isEmpty() }
-
-
                             } else {
-
-                                var seconds = record[0]
-                                var easting = record[1]
-                                var northing = "5${record[2]}"
-                                var altitude = record[3]
-                                var degreePos = utmToDegree("$utmZone N $easting $northing")
+                                val seconds = record[0]
+                                val easting = record[1]
+                                val northing = "5${record[2]}"
+                                val altitude = record[3]
+                                val degreePos = utmToDegree("$utmZone N $easting $northing")
 
                                 val writeRecord = arrayOfNulls<String>(9)
-
                                 writeRecord[0] = flightId
                                 var actualTime = startDateTime?.plusSeconds(seconds.toDouble().toLong())?.format(formatter)
+                                val actualMonth = actualTime?.toIntOrNull()
                                 writeRecord[1] = actualTime
                                 writeRecord[2] = airplaneType
                                 writeRecord[3] = originAirport
@@ -108,22 +116,24 @@ fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
                                 writeRecord[8] = altitude
 
                                 if (metaData && record.none { entry -> entry.isEmpty() } && !flightTimestamps.contains(actualTime)) {
-                                    writer.writeNext(writeRecord)
-                                    counter++
+                                    if (actualMonth != null && actualMonth == fileMonth) {
+                                        writer?.writeNext(writeRecord)
+                                        counter++
+                                    }
                                 }
 
                                 if (actualTime != null) {
                                     flightTimestamps.add(actualTime)
                                 }
                             }
-                        }catch (e: Exception){
+                        } catch (e: Exception) {
                             println("Could not process row: $row.")
-                            metaData=false
+                            metaData = false
                         }
 
                         record = reader.readNext()
-                        row+=1
-                        if(counter==totalNumberRows)break
+                        row += 1
+                        if (counter == totalNumberRows) break
                     }
                 }
             } finally {
@@ -131,19 +141,12 @@ fun createFlightPointsMobilityDB(totalNumberRows: Int = -1) {
                 reader.close()
             }
         }
-        writer.close()
-
+        writer?.close()
     } else {
         println("Directory does not exist or is not a directory")
     }
 }
 
-
-fun main(){
-
-    // specify as parameter total number of rows the flightpoint data should contain. If all rows of the files should be included omit the parameter
+fun main() {
     createFlightPointsMobilityDB()
-
-    // creates trips for flights of all flight points
-    // createFlightTripsGeomesa()
 }

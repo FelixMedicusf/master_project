@@ -1,0 +1,468 @@
+  - name: locationOfAirplaneAtInstant
+    use: False
+    type: temporal
+    sql: >
+      SELECT f.flightid, valueAtTimeStamp(f.altitude, :instant), ST_asText(valueAtTimeStamp(f.trip, :instant)) AS location, :instant
+      FROM flights f
+      WHERE attime(f.trip, :instant) IS NOT NULL;
+    repetition: 10
+    parameters:
+      - instant
+
+  - name: averageHourlyFlightsDuringDay
+    use: False
+    type: temporal
+    sql: >
+      WITH hourly_intervals AS (
+      SELECT generate_series(DATE :day::timestamp, (DATE :day + INTERVAL '1 day' - INTERVAL '1 second')::timestamp,
+      INTERVAL '1 hour'
+      ) AS start_time)
+      SELECT h.start_time, COUNT(f.flightid) AS active_flights
+      FROM hourly_intervals h LEFT JOIN flights f
+      ON
+      f.trip && span(h.start_time, h.start_time + INTERVAL '1 hour')
+      GROUP BY h.start_time
+      ORDER BY h.start_time;
+    repetition: 10
+    parameters:
+      - day
+
+  - name: flightsWithLocalOriginDestinationInPeriod
+    use: False
+    type: temporal no aggregate query
+    sql: >
+      SELECT
+          f.flightid,
+          f.origin AS origin_airport,
+          CASE WHEN c1.name IS NOT NULL THEN c1.name ELSE 'abroad' END AS origin_city,
+          f.destination AS destination_airport,
+          CASE WHEN c2.name IS NOT NULL THEN c2.name ELSE 'abroad' END AS destination_city
+      FROM flights f
+              LEFT JOIN airports a1 ON f.origin = a1.icao
+              LEFT JOIN cities c1 ON a1.city = c1.name
+              LEFT JOIN airports a2 ON f.destination = a2.icao
+              LEFT JOIN cities c2 ON a2.city = c2.name
+      WHERE
+          (f.origin IN (
+              SELECT a.icao
+              FROM airports a
+                       JOIN cities c ON a.city = c.name) OR
+           f.destination IN (
+               SELECT a.icao
+               FROM airports a JOIN cities c ON a.city = c.name))
+      AND f.trip && :period_short;
+    repetition: 10
+    parameters:
+      - period_short
+
+  - name: airportUtilizationInPeriod
+    use: False
+    type: temporal
+    sql: >
+      WITH departures AS (
+      SELECT f.origin AS airport, COUNT(DISTINCT f.flightid) AS departure_count
+      FROM flights f
+      WHERE f.trip && :period_medium
+      GROUP BY f.origin),
+      arrivals AS (
+      SELECT f.destination AS airport, COUNT(DISTINCT f.flightid) AS arrival_count
+      FROM flights f
+      WHERE f.trip && :period_medium
+      GROUP BY f.destination)
+      SELECT
+      COALESCE(d.airport, a.airport) AS airport,
+      COALESCE(d.departure_count, 0) AS departures,
+      COALESCE(a.arrival_count, 0) AS arrivals,
+      COALESCE(d.departure_count, 0) + COALESCE(a.arrival_count, 0) AS traffic_count
+      FROM departures d FULL JOIN arrivals a ON d.airport = a.airport
+      ORDER BY traffic_count DESC, departures DESC, arrivals DESC;
+    repetition: 10
+    parameters:
+      - period_medium
+
+  # Spatial queries
+  - name: flightsInCityRadius
+    use: False
+    type: spatial
+    sql: >
+      SELECT f.flightid, f.track, f.origin, f.destination, f.airplanetype
+      FROM flights f, cities c
+      WHERE c.name = :city AND eDwithin(f.trip, c.geom, :radius);
+    repetition: 10
+    parameters:
+      - city
+      - radius
+
+  - name: flightsIntersectingMunicipalities
+    use: False
+    type: spatial
+    sql: >
+      SELECT g.name, f.flightid, f.airplanetype, f.origin, f.destination
+      FROM flights f, municipalities g
+      WHERE st_intersects(f.traj, g.geom) AND g.name = :municipality;
+    repetition: 10
+    parameters:
+      - municipality
+
+  - name: countFlightsInCounties
+    use: False
+    type: spatial
+    sql: >
+      SELECT k.name, COUNT (*) as flight_count
+      FROM flights f, counties k
+      WHERE st_intersects(f.traj, k.geom) AND k.name = :county
+      GROUP BY k.name;
+    repetition: 10
+    parameters:
+      - county
+
+  - name: flightsCloseToMainCitiesLowAltitude
+    use: False
+    type: spatial
+    sql: >
+      SELECT p.flightid, p.altitude, p.airplanetype, p.timestamp
+      FROM flightpoints p, cities c
+      WHERE p.altitude <= :low_altitude AND ST_DWithin(p.geom, c.geom, :radius) AND c.population >= 200000
+    repetition: 10
+    parameters:
+      - low_altitude
+      - radius
+
+  - name: countiesLandingsDepartures
+    use: False
+    type: spatial
+    sql: >
+      WITH flight_origins AS (
+      SELECT f.flightid, a.city AS origin_city, c.geom AS origin_geom
+      FROM flights f JOIN airports a ON f.origin = a.icao JOIN cities c ON a.city = c.name
+      ),
+      flight_destinations AS (
+      SELECT f.flightid, a.city AS destination_city, c.geom AS destination_geom
+      FROM flights f JOIN airports a ON f.destination = a.icao JOIN cities c ON a.city = c.name
+      ),
+      region_origins AS (
+      SELECT r.name AS region_name, COUNT(fo.flightid) AS origin_count
+      FROM flight_origins fo JOIN counties r ON ST_Within(fo.origin_geom, r.geom)
+      WHERE r.name = :county
+      GROUP BY r.name
+      ),
+      region_destinations AS (
+      SELECT r.name AS region_name, COUNT(fd.flightid) AS destination_count
+      FROM flight_destinations fd JOIN counties r ON ST_Within(fd.destination_geom, r.geom)
+      WHERE r.name = :county
+      GROUP BY r.name
+      )
+      SELECT ro.region_name, ro.origin_count AS origin_count, rd.destination_count AS departures,
+      ro.origin_count + rd.destination_count AS overall_traffic
+      FROM region_origins ro FULL OUTER JOIN region_destinations rd ON ro.region_name = rd.region_name
+      ORDER BY overall_traffic DESC;
+    repetition: 10
+    parameters:
+      - county
+
+  - name: flightClosestToPoint
+    use: False
+    type: spatial
+    sql: >
+      SELECT f.flightid, f.airplaneType, f.origin, f.destination, f.trip |=| ST_GeomFromText('POINT(:point)', 4326) as min_distance
+      FROM flights f
+      WHERE f.trip |=| ST_GeomFromText('POINT(:point)', 4326) <= :distance;
+    repetition: 10
+    parameters:
+      - point
+      - distance
+
+  # spatiotemporal queries
+  - name: flightsInCountyInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT f.flightid, f.track
+      FROM flights f, counties k
+      WHERE k.name = :county AND f.trip && stbox(k.geom, :period_medium) AND eintersects(attime(f.trip, :period_medium), k.geom);
+    repetition: 10
+    parameters:
+      - period_medium
+      - county
+
+  # [0A000] ERROR: complex joins are only supported when all distributed tables are joined on their distribution columns with equal operator
+  # Does not work on distributed tables with citus (maybe only include in single setups?)
+  - name: pairOfFlightsInMunicipalityDuringPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT DISTINCT f1.flightId AS f1_flightid, f2.flightid AS f2_flightid, :instant, g.name
+      FROM flights f1, flights f2, municipality g
+      WHERE f1.flightid < f2.flightid AND g.name = :municipality AND f1.trip && stbox(g.geom, :period) AND
+      f2.trip && stbox(g.geom, :period) AND
+      eintersects(attime(f1.trip, :period), g.geom) AND
+      eintersects(attime(f2.trip, :period), g.geom);
+    repetition: 1000
+    parameters:
+      - period_short
+      - municipality
+
+  - name: countFlightsAtInstantInDistricts
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT b.name, COUNT (*)
+      FROM flights f, districts b
+      WHERE f.trip && stbox(b.geom, :instant) AND eintersects(attime(f.trip, :instant), b.geom) AND b.name = :district
+      GROUP BY b.name;
+    repetition: 10
+    parameters:
+      - instant
+      - district
+
+  - name: inCityRadiusInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT f.flightId, f.track, f.airplanetype, f.origin, f.destination
+      FROM flights as f, cities as c
+      WHERE c.name = :city AND eDwithin(attime(f.trip, :period_short), c.geom, :radius);
+    repetition: 10
+    parameters:
+      - period_short
+      - city
+      - radius
+
+  - name: flightDurationInMunicipalityLowAltitudeInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT g.name, f.flightid, f.origin, f.destination, f.airplanetype, sum(duration(whenFalse(attime(f.altitude, :period_medium) #< :low_altitude & tintersects(tgeompoint(attime(f.trip, :period_medium)), geometry(g.geom))))) AS totalTimeBelowAltitude
+      FROM flights f, municipalities g
+      WHERE g.name = :municipality AND f.trip && stbox(g.geom, :period_medium) AND eintersects(attime(f.trip, :period_medium), g.geom) AND duration(whenFalse(attime(f.altitude, :period_medium) #< :low_altitude & tintersects(tgeompoint(attime(f.trip, :period_medium)), geometry(g.geom)))) IS NOT NULL
+      GROUP BY g.name, f.flightid, g.name, f.origin, f.destination, f.airplanetype;
+    repetition: 10
+    parameters:
+      - period_medium
+      - municipality
+      - low_altitude
+
+  - name: averageHourlyFlightsDuringDayInCounty
+    use: False
+    type: spatiotemporal
+    sql: >
+      WITH hourly_intervals AS (
+      SELECT generate_series(DATE :day::timestamp, (DATE :day + INTERVAL '1 day' - INTERVAL '1 second')::timestamp,
+      INTERVAL '1 hour'
+      ) AS start_time)
+      SELECT h.start_time, COUNT(f.flightid) AS active_flights
+      FROM hourly_intervals h LEFT JOIN flights f
+      ON
+      f.trip && span(h.start_time, h.start_time + INTERVAL '1 hour'), counties k
+      WHERE eintersects(attime(f.trip, span(h.start_time, h.start_time + INTERVAL '1 hour')), k.geom) AND k.name = :county
+      GROUP BY h.start_time
+      ORDER BY h.start_time;
+    repetition: 10
+    parameters:
+      - day
+      - county
+
+  - name: flightsWithLocalOriginDestinationInPeriodInCounty
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT
+          f.flightid,
+          f.origin AS origin_airport,
+          CASE WHEN c1.name IS NOT NULL THEN c1.name ELSE 'abroad' END AS origin_city,
+          f.destination AS destination_airport,
+          CASE WHEN c2.name IS NOT NULL THEN c2.name ELSE 'abroad' END AS destination_city
+      FROM flights f
+              LEFT JOIN airports a1 ON f.origin = a1.icao
+              LEFT JOIN cities c1 ON a1.city = c1.name
+              LEFT JOIN airports a2 ON f.destination = a2.icao
+              LEFT JOIN cities c2 ON a2.city = c2.name, counties k
+      WHERE
+          (f.origin IN (
+              SELECT a.icao
+              FROM airports a
+                       JOIN cities c ON a.city = c.name) OR
+           f.destination IN (
+               SELECT a.icao
+               FROM airports a JOIN cities c ON a.city = c.name))
+      AND k.name = :county AND f.trip && stbox(k.geom, :period_medium) AND eintersects(attime(f.trip, :period_medium), k.geom)
+      ORDER BY origin_airport, destination_airport, f.flightid;
+    repetition: 10
+    parameters:
+      - period_medium
+      - county
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # temporal
+  - name: locationOfLowFlyingAirplanesTypeAtInstant
+    use: False
+    type: temporal no aggregate query
+    sql: >
+      SELECT f.flightid, :instant as time, valueAtTimeStamp(f.altitude, :instant), ST_asText(valueAtTimeStamp(f.trip, :instant)) AS location
+      FROM flights f
+      WHERE valueattimestamp(f.trip, :instant) IS NOT NULL AND valueattimestamp(f.altitude, :instant) < 5000;
+    repetition: 2
+    parameters:
+      - instant
+
+  - name: flightTimeLowAltitude
+    use: False
+    type: temporal aggregation query
+    sql: >
+      SELECT
+        f.flightid,
+        duration(f.altitude) AS total_duration,
+        duration(whenFalse(f.altitude #< 4000)) AS duration_below_4000,
+        CASE
+            WHEN extract(EPOCH FROM duration((whenFalse(f.altitude #< 4000)))) > 0 THEN
+                extract(EPOCH FROM duration((whenFalse(f.altitude #< 4000)))) /
+                extract(EPOCH FROM duration(f.altitude))
+        END AS low_altitude_ratio
+      FROM flights f
+      WHERE f.altitude && :period AND duration(whenFalse(f.altitude #< 4000)) IS NOT NULL;
+    repetition: 1000
+    parameters:
+      - period
+
+
+  # takes to long to run in MongoDB
+  - name: flightsOnlyInOneDistrict
+    use: False
+    type: spatial range query
+    sql: >
+      SELECT f.flightid, f.airplanetype, b.name
+      FROM flights f, districts b
+      WHERE aintersects(f.trip, b.geom) AND b.name = :district;
+    repetition: 1000
+    parameters:
+      - district
+
+
+
+  # spatiotemporal
+  - name: ClosePairOfPlanes (too long on Mongo)
+    use: False
+    type: spatiotemporal distance query (add constraint that f1.trip needs to be within period and inside a circle)
+    sql: >
+      SELECT f1.flightid, f2.flightid, f1.trip |=| f2.trip As MinDistance, f1.airplanetype, f2.airplanetype
+      FROM flights f1, flights f2, counties k
+      WHERE f1.trip |=| f2.trip < 10000 AND f1.flightid < f2.flightid AND
+      ORDER BY MinDistance ASC;
+    repetition: 1000
+    parameters:
+      - period
+
+  - name: ClosestToCityDuringTime
+    use: False
+    type: spatial range-query
+    sql: >
+      SELECT f.flightId, f.airplanetype, c.name, nearestapproachdistance(f.trip, c.geom) As min_distance, gettime(nearestapproachinstant(f.trip, c.geom)) As min_distance_time
+      FROM flights as f, cities as c
+      WHERE nearestapproachdistance(f.trip, c.geom) < :radius AND nearestapproachinstant(f.trip, c.geom) <@ :period AND c.name = :city
+      GROUP BY  f.flightId, c.name, f.airplanetype, f.trip, c.geom
+      ORDER BY nearestapproachdistance(f.trip, c.geom) ASC;
+    repetition: 1000
+    parameters:
+      - city
+      - radius
+      - period
+
+
+
+
+
+
+  # queries not being used
+
+  # bisher noch nicht implementiert (auch nicht in MobiltiyDB)
+  - name: FlightDistanceInCounties
+    use: False
+    type: spatial
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - county
+      - type
+
+  # takes too long to execute
+  - name: flightsOnlyInOneDistrict
+    use: False
+    type: spatial
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - district
+
+
+  # takes too long to execute (complex implementation)
+  - name: crossedCountiesInPeriodWithDestination
+    use: False
+    type: spatiotemporal
+    mongodbQuery: abc
+    repetition: 10
+    parameters:
+      - period_short
+
+  # takes very long to execute as filtering based on time or space is not possible before calculating distances of each pair of flightpoints
+  - name: closePairOfPlanes
+    use: False
+    type: spatiotemporal
+    mongodbQuery: abc
+    repetition: 1000
+    parameters:
+      - county
+
+
+
+
+  - name: flightsInCountyInPeriodTs
+    use: False
+    type: spatiotemporal
+    mongodbQuery: abc
+    repetition: 100
+    parameters:
+      - period
+      - county
+
+
+
+
+  # dont use (already better in spatio temporal)
+  - name: flightTimeLowAltitude
+    use: False
+    type: temporal
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - period_short
+
+
+
+  - name: countiesLandingsDepartures
+    use: False
+    type: spatial
+    mongodbQuery: abc
+    repetition: 2
+    parameters:
+      - county
+
+
+
+   - name: locationOfAirplaneAtInstant
+     use: False
+     type: temporal
+     mongodbQuery: abc
+     repetition: 2
+     parameters:
+       - instant

@@ -3,10 +3,10 @@ import kotlin.math.ceil
 
 
 // used for determine the lower and upper bounds of flightIds for the DataHandler for the different coroutines
-fun splitFlightDatasetByFlightId(){
+fun splitFlightPointDatasetByFlightId(){
     val filePath = "C:\\Users\\Felix Medicus\\Desktop\\Master_Thesis\\master_project\\data\\dfsData\\output\\FlightPointsMobilityDBlarge.csv"
 
-    val totalLines = 166933239
+    val totalLines = File(filePath).useLines { it.count() }
 
     for (i in 1..< 11) {
         try {
@@ -32,7 +32,15 @@ fun splitFlightDatasetByFlightId(){
 
     print(")")
 
+    println()
+    val lastLine = File(filePath).useLines { lines ->
+        lines.lastOrNull() // Retrieves the last line, or null if the file is empty
+    }
+
+    println("last line: $lastLine")
+
 }
+
 fun main(){
-    splitFlightDatasetByFlightId()
+    splitFlightPointDatasetByFlightId()
 }

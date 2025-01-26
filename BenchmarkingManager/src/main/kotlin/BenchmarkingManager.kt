@@ -1,5 +1,6 @@
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -10,7 +11,13 @@ import kotlin.math.floor
 
 class BenchmarkClient(private val serverUrl: String) {
 
-    private val client = HttpClient(CIO)
+    private val client = HttpClient(CIO) {
+        install(HttpTimeout) {
+            requestTimeoutMillis = 6_000_000 // 100 minutes
+            connectTimeoutMillis = 10_000  // 10 seconds
+            socketTimeoutMillis = 6_000_000  // 100 minutes
+        }
+    }
 
     fun uploadConfig(filePath: String) = runBlocking {
         try {
@@ -44,7 +51,19 @@ class BenchmarkClient(private val serverUrl: String) {
             println("Error starting benchmark: ${e.message}")
         }
     }
+    fun callCreateTrajsAndFlightPoints(inputList: List<Long>) = runBlocking {
+        try {
+            val response: HttpResponse = client.post("$serverUrl/create-trajs-and-flight-points") {
+                contentType(ContentType.Application.Json)
+                setBody(inputList) // Pass the list as JSON
+            }
 
+            println("Response: ${response.status}")
+            println("Message: ${response.bodyAsText()}")
+        } catch (e: Exception) {
+            println("Error calling createTrajsAndFlightPointsTsConcurrently: ${e.message}")
+        }
+    }
     fun stopBenchmark() = runBlocking {
         try {
             val response: HttpResponse = client.post("$serverUrl/stop-benchmark")
@@ -74,10 +93,10 @@ class BenchmarkClient(private val serverUrl: String) {
     fun triggerDataHandler() = runBlocking {
         try {
             val response: HttpResponse = client.post("$serverUrl/data-handler")
-            if (response.status == HttpStatusCode.OK) {
-                println("DataHandler operations completed successfully.")
+            if (response.status == HttpStatusCode.Accepted) {
+                println("DataHandler process has started on the server.")
             } else {
-                println("Error triggering DataHandler: ${response.status}")
+                println("Failed to start DataHandler: ${response.status}")
                 println("Message: ${response.bodyAsText()}")
             }
         } catch (e: Exception) {
@@ -88,27 +107,28 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
-//    val configPathMongoDB = "benchConfigMongoDB.yaml"
-//    val configPathMobilityDB = "benchConfigMobilityDB.yaml"
-//
-//    val databaseClientAddress = "34.140.86.175:8080"
-//
-//    val serverUrl = "http://$databaseClientAddress"
-//    val client = BenchmarkClient(serverUrl)
-//
-//    println("\n1. Uploading configuration...")
-//    client.uploadConfig(configPathMongoDB)
-//
+
+
+    val configPathMongoDB = "benchConfigMongoDB.yaml"
+    val configPathMobilityDB = "benchConfigMobilityDB.yaml"
+
+    val databaseClientAddress = "34.78.205.58:8080"
+
+    val serverUrl = "http://$databaseClientAddress"
+    val client = BenchmarkClient(serverUrl)
+
+    println("\n1. Uploading configuration...")
+    client.uploadConfig(configPathMongoDB)
+
+    client.callCreateTrajsAndFlightPoints(listOf(0))
 //    println("\n2. Triggering DataHandler operations...")
 //    client.triggerDataHandler()
+
 //
-//
-//    println("\n3. Starting benchmark...")
-//    client.startBenchmark()
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()
-
+//
 //    println("\n5. Retrieving logs...")
 //    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
 

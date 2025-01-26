@@ -11,6 +11,7 @@ import com.mongodb.client.model.*
 import com.mongodb.connection.ClusterSettings
 import org.bson.Document
 import java.io.File
+import java.io.PrintStream
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -79,9 +80,9 @@ class BenchThread(
                 }
                 .credential(
                     MongoCredential.createCredential(
-                        user,
+                        USER,
                         "admin",
-                        password.toCharArray()
+                        PASSWORD.toCharArray()
                     )
                 )
                 .build())
@@ -103,10 +104,23 @@ class BenchThread(
             val staticCollections = listOf(citiesCollection, airportsCollection, municipalitiesCollection, countiesCollection, districtsCollection)
             val dynamicCollections = listOf(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
 
+            val logFile = File("sql_response_log_${threadName}.txt")
+            if (logFile.exists()) {
+                logFile.delete()
+            }
+            logFile.createNewFile()
+
+            val printStream = PrintStream(logFile)
+
+
             // Ensure all threads start at the same time
             startLatch.await()
 
-            println("$threadName started executing at ${Instant.now()} with seed ${this.seed}.")
+            printStream.println("$threadName started executing at ${Instant.now()} with ${queryQueue.size} queries.")
+            println()
+            var i = 1
+
+            println("$threadName started executing at ${Instant.now()} with ${queryQueue.size} queries.")
 
         try{
             while (true) {
@@ -115,23 +129,43 @@ class BenchThread(
                 val mongoParameters: MutableList<Any> = mutableListOf(staticCollections, dynamicCollections)
                 val mongoValues: MutableList<Any> = mutableListOf()
 
-                if (task.params != null){
-                    mongoValues.addAll(returnParamValues(task.params))
+                if (task.paramSet != null){
+                    for (set in task.paramSet){
+
+                        if(set.key.contains("period")){
+                            mongoValues.add(set.value.split(","))
+                        }
+
+                        else if (set.key == "radius" || set.key == "low_altitude" || set.key == "distance"){
+                            mongoValues.add(set.value.toInt())
+                        }
+
+                        else if(set.key.contains("point")){
+                            mongoValues.add(set.value.split(",").forEach{it.toDouble()})
+                        }
+                        else {
+                            mongoValues.add(set.value)
+                        }
+
+
+
+
+                    }
                 }
 
-                println("${threadName} executing task: ${task.queryName} with parameter values: ${mongoValues}")
+
+                val params = task.paramSet?.keys?.joinToString(";") ?: ""
+                val parameterValues = mongoValues.joinToString(";")
 
                 mongoValues.forEach { value -> mongoParameters.add(value) }
 
                 val currentFunction = invokeFunctionByName(task.queryName)
+                printStream.println("$i: ${task.queryName} with params: $parameterValues")
                 val response = mongoParameters.let { params -> currentFunction.call(this, *params.toTypedArray()) }
                 val endTime = Instant.now().toEpochMilli()
 
-                printMongoResponse(response.fourth)
+                printStream.println(formatMongoResponse(response))
 
-
-                val params = task.params?.joinToString(";") ?: ""
-                val parameterValues = mongoValues.joinToString(";")
 
                 synchronized(log) {
                     log.add(
@@ -153,7 +187,11 @@ class BenchThread(
                     )
                 }
 
+                i++
             }
+
+            printStream.println("$threadName finished executing at ${Instant.now()}.")
+            println("$threadName finished executing at ${Instant.now()}.")
 
         } catch (e: Exception) {
             // Catch any unexpected exceptions and print them to the console
@@ -193,6 +231,27 @@ class BenchThread(
 
         }
         return values
+    }
+
+    private fun formatMongoResponse(response: Any?): String {
+        // Configure Jackson ObjectMapper for pretty JSON formatting
+        val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
+
+        val castedResponse = response as List<Document>
+        val stringBuilder = StringBuilder()
+
+        stringBuilder.append("MongoDB Response:\n")
+        castedResponse.forEach { document ->
+            try {
+                // Convert the Document to a JSON string and append it to the StringBuilder
+                val jsonString = mapper.writeValueAsString(document.toMap())
+                stringBuilder.append(jsonString).append("\n")
+            } catch (e: Exception) {
+                stringBuilder.append("Error formatting document: ${document.toJson()}").append("\n")
+            }
+        }
+
+        return stringBuilder.toString()
     }
 
     private fun printMongoResponse(response: Any?) {
@@ -1194,6 +1253,7 @@ class BenchThread(
                 .append("destinationAirport", 1)
                 .append("calculatedDistance", "\$dist.calculated")
                 .append("flightId", 1)
+                .append("trip", 1)
                 .append("_id", 0)
             )
         )
@@ -1235,31 +1295,31 @@ class BenchThread(
             polygon?.get("coordinates", List::class.java)
         }[0]
 
-        var secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                        Document(
-                            "location", Document(
-                                "\$geoWithin", Document(
-                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-                                )
-                            )
-                        ),
-                        Document(
-                            "timestamp", Document(
-                                "\$gte", startDate
-                            ).append(
-                                "\$lte", endDate
-                            )
-                        )
-                    )
-                )
-            ),
-            Document("\$group", Document("_id", "\$flightId"))
-        )
+//        var secondPipeline = listOf(
+//            Document(
+//                "\$match", Document(
+//                    "\$and", listOf(
+//                        Document(
+//                            "location", Document(
+//                                "\$geoWithin", Document(
+//                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
+//                                )
+//                            )
+//                        ),
+//                        Document(
+//                            "timestamp", Document(
+//                                "\$gte", startDate
+//                            ).append(
+//                                "\$lte", endDate
+//                            )
+//                        )
+//                    )
+//                )
+//            ),
+//            Document("\$group", Document("_id", "\$flightId"))
+//        )
 
-        secondPipeline = listOf(
+        val secondPipeline = listOf(
             Document(
                 "\$match", Document(
                     "timestamp", Document()
@@ -1770,14 +1830,14 @@ class BenchThread(
 
     }
 
-    fun averageHourlyFlightsDuringDayInCounty(
+    fun averageHourlyFlightsDuringDayInMunicipality(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
         day: String,
         countyName: String
     ): Quadrupel<Long, Long, Long, List<Document>>{
 
-        val countiesCollection = staticCollections[3]
+        val municipalityCollection = staticCollections[2]
         val flightPointsTsCollection = dynamicCollections[1]
 
         val startDate: Date = dateFormat.parse("$day 00:00:00")
@@ -1789,7 +1849,7 @@ class BenchThread(
         )
 
         val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
+        val firstResponse = municipalityCollection.aggregate(firstPipeline).toList()
         val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
 
         val name = firstResponse.get(0).getString("name")

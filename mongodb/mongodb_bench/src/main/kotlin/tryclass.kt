@@ -228,16 +228,37 @@ class tryclass {
 
 }
     fun main(){
-        val trxx = tryclass()
-        val params = mutableListOf("period_short", "point", "period",
-            "instant", "day", "radius", "low_altitude", "city", "airport", "municipality", "county", "district", "type")
 
-        println(trxx.generateRandomTimeSpan(trxx.random, trxx.formatter, 2023, 0))
+        val municipalitiesCode = generateListCode(municipalitiesPath, setOf("name"), "municipalities")
+        val countiesCode = generateListCode(countiesPath, setOf("name"), "counties")
+        val districtsCode = generateListCode(districtsPath, setOf("name"), "districts")
+        val citiesCode = generateListCode(citiesPath, setOf("area", "lat", "lon", "district", "name", "population"), "cities")
+        val airportsCode = generateListCode(airportsPath, setOf("IATA", "ICAO", "Airport name", "Country", "City"), "airports")
 
-        println(params)
-
-        val values = trxx.returnParamValues(params)
-
-        println(values)
+//        println(municipalitiesCode)
+//        println(countiesCode)
+//        println(districtsCode)
+//        println(citiesCode)
+//        println(airportsCode)
 
     }
+
+fun generateListCode(filePath: String, requiredColumns: Set<String>, variableName: String): String {
+    val rows = parseCSV(filePath, requiredColumns) // Reuse your parseCSV function
+
+    val listEntries = rows.joinToString(",\n") { row ->
+        val mapEntries = row.entries.joinToString(", ") { (key, value) -> "\"$key\" to \"$value\"" }
+        "    mapOf($mapEntries)"
+    }
+
+    return """
+        private val $variableName = listOf(
+$listEntries
+        )
+    """.trimIndent()
+}
+private val municipalitiesPath = "src/main/resources/municipalities.csv"
+private val countiesPath = "src/main/resources/counties.csv"
+private val districtsPath = "src/main/resources/districts.csv"
+private val citiesPath = "src/main/resources/cities.csv"
+private val airportsPath = "src/main/resources/airports.csv"

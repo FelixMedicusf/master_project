@@ -5,7 +5,7 @@ resource "google_compute_address" "static_ip" {
 
 resource "google_compute_instance" "mobilitydb" {
   name = var.instance-name
-  machine_type = "e2-standard-2"
+  machine_type = "c3-standard-8"
   zone = var.zone
   tags = ["allow-traffic", "allow-ssh"]
 
@@ -13,7 +13,7 @@ resource "google_compute_instance" "mobilitydb" {
   boot_disk {
     initialize_params {
       image="ubuntu-os-pro-cloud/ubuntu-pro-2204-lts"
-      size  = 30
+      size  = 150
       type = "pd-ssd"
     }
   }
