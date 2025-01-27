@@ -97,6 +97,8 @@ class DataHandler(databaseName: String) {
         // Flightpoints index creation
         flightPointsCollection.createIndex(Document("flightId", "hashed"))
         flightPointsCollection.createIndex(Document("flightId", 1))
+        //flightPointsCollection.createIndex(Document("timestamp", 1))
+
 
         adminDatabase.runCommand(
             Document("shardCollection", "${database.name}.flightpoints")
@@ -193,10 +195,10 @@ class DataHandler(databaseName: String) {
 
         val enableBalancerCommand = Document("balancerStart", 1)
         adminDatabase.runCommand(enableBalancerCommand)
-        Thread.sleep(20_000)
+        Thread.sleep(30_000)
 
         //flightPointsCollection.createIndex(Document("timestamp", 1))
-        flightPointsCollection.createIndex(Document("location","2dsphere"))
+        //flightPointsCollection.createIndex(Document("location","2dsphere"))
 
         var compoundIndex = Indexes.compoundIndex(
             Indexes.ascending("timestamp"), // Ascending index on timestamp
@@ -224,7 +226,6 @@ class DataHandler(databaseName: String) {
         println("Creating indexes for airports collection.")
         airportsCollection.createIndex(Document("City", "hashed"))
         airportsCollection.createIndex(Document("ICAO", "hashed"))
-
 
     }
 
@@ -329,10 +330,10 @@ class DataHandler(databaseName: String) {
         val databaseName = collection.namespace.databaseName
 
         if (collectionName == "flighttrips"){
-            collection.createIndex(Document(columnName, 1))
+            collection.createIndex(Document(columnName, "hashed"))
             adminDatabase.runCommand(
                 Document("shardCollection", "$databaseName.$collectionName")
-                    .append("key", Document(columnName, 1))
+                    .append("key", Document(columnName, "hashed"))
             )
             println("Collection '$collectionName' sharded on column '$columnName'.")
         }
@@ -428,7 +429,7 @@ class DataHandler(databaseName: String) {
 
     fun createTrajectories(
         flightIdThresholds: List<Int>,
-        batchSize: Int = 12500
+        batchSize: Int = 10000
     ) {
 
         val flightTripsCollection = database.getCollection("flighttrips")
@@ -503,10 +504,10 @@ class DataHandler(databaseName: String) {
             }
 
             // Execute bulk write when batch size is reached
-            if (bulkOperations.size >= batchSize) {
+            if (bulkOperations.size >= (batchSize)) {
                 flightTripsCollection.bulkWrite(bulkOperations)
                 bulkOperations.clear()
-                println("Executed bulk update for $batchSize documents (trajectory creation).")
+                println("Executed bulk update for ${batchSize } documents (trajectory creation).")
             }
 
             processedCount++
@@ -848,12 +849,12 @@ fun main() {
     val separators = listOf(0, 700642631, 710076001, 718926541, 728177911, 736845861, 743346091, 754447851, 760302441, 773383481, 774441640)
     val handler = DataHandler("aviation_data")
 //    handler.updateDatabaseCollections()
-//    handler.shardCollections()
 //    handler.insertRegionalData()
+//    handler.shardCollections()
 //    handler.createFlightTrips()
-    handler.createTrajectories(separators)
-//    handler.createFlightsPointsTs(separators)
-//    handler.createTimeSeriesCollectionIndexes()
+//    handler.createTrajectories(separators)
+    handler.createFlightsPointsTs(separators)
+    handler.createTimeSeriesCollectionIndexes()
 
 }
 

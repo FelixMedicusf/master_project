@@ -13,7 +13,7 @@ resource "google_compute_instance" "mongodb" {
   boot_disk {
     initialize_params {
       image="ubuntu-os-pro-cloud/ubuntu-pro-2204-lts"
-      size  = 150
+      size  = 160
       type = "pd-ssd"
     }
   }

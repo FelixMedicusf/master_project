@@ -34,7 +34,7 @@ const val USER = "felix"
 const val PASSWORD = "master"
 const val DATABASE = "aviation_data"
 var benchmarkExecutorService: ExecutorService? = null
-val separators = listOf(0, 681642631, 701642631, 710076001, 718926541, 728177911, 736845861, 745346091, 755447851, 765304441, 774385481, 774441640)
+val separators = listOf(0, 681642631, 701642631, 710076001, 718926541, 728177911, 736845861, 745346091, 755447851, 765304441, 772385481, 774441640)
 
 class BenchmarkExecutor(private val configPath: String, private val logsPath: String) {
 
@@ -352,7 +352,7 @@ fun main() {
     val logsPath = "src/main/resources/benchmark_execution_logs.txt"
 
     // Start HTTP server
-    embeddedServer(Netty, port = 8082) {
+    embeddedServer(Netty, port = 8080) {
         install(ContentNegotiation) {
             jackson {}
         }
@@ -368,33 +368,58 @@ fun main() {
 
         routing {
 
-            println("Starting Benchmarking Server v1.1")
+            println("Starting Benchmarking Server v1.2")
 
-            post("/create-trajs-and-flight-points") {
+            post("/create-ts-collection") {
                 try {
                     val handler = DataHandler(DATABASE)
 
                     try {
-                        handler.createTrajectories(separators)
                         handler.createFlightsPointsTs(separators)
-                        println("Trajectories time series data created.")
-                        call.respond(HttpStatusCode.OK, "Created trajectories ind flighttrips and time-series collection.")
+                        println("Time series data created.")
+                        call.respond(HttpStatusCode.OK, "Created time series data.")
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        println("Error during createTrajsAndFlightPointsTsConcurrently execution: ${e.message}")
+                        println("Error during creation of time series data: ${e.message}")
                         call.respond(
                             HttpStatusCode.InternalServerError,
-                            "Error during createTrajsAndFlightPointsTsConcurrently execution: ${e.message}"
+                            "Error during time series data creation: ${e.message}"
                         )
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
                     call.respond(
                         HttpStatusCode.BadRequest,
-                        "Invalid input for createTrajsAndFlightPointsTsConcurrently: ${e.message}"
+                        "Invalid input for create-ts-collection: ${e.message}"
                     )
                 }
             }
+
+            post("/create-trajectories") {
+                try {
+                    val handler = DataHandler(DATABASE)
+
+                    try {
+                        handler.createTrajectories(separators)
+                        println("Trajectories created.")
+                        call.respond(HttpStatusCode.OK, "Created trajectories.")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        println("Error during creation of trajectories: ${e.message}")
+                        call.respond(
+                            HttpStatusCode.InternalServerError,
+                            "Error during trajectories creation: ${e.message}"
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        "Invalid input for create-trajectories: ${e.message}"
+                    )
+                }
+            }
+
             post("/data-handler") {
                 try {
                     val handler = DataHandler(DATABASE)

@@ -1,9 +1,9 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "34.76.181.39"
-    - "34.140.64.255"
-    - "34.76.7.28"
+    - "35.195.159.119"
+    - "34.140.85.128"
+    - "104.199.100.157"
   threads: 2
   random_seed: 123
 
@@ -341,14 +341,3 @@ queryConfigs:
       - parameters:
           period_medium: 2023-05-13 01:45:21,2023-05-14 12:54:31
           county: "Krs Hamm"
-
-
-
-
-
-
-
-
-
-
-

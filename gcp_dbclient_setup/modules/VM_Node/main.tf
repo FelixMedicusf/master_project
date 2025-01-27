@@ -56,8 +56,8 @@ startup-script = <<SCRIPT
   chmod +x $JAR_DEST
 
   # Start the JAR file
-  echo "Starting JAR file..."
-  nohup java -jar $JAR_DEST > /var/log/your-application.log 2>&1 &
+  # echo "Starting JAR file..."
+  # nohup java -jar $JAR_DEST > /var/log/your-application.log 2>&1 &
 
   echo "Application started successfully."
   SCRIPT

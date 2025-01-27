@@ -51,19 +51,34 @@ class BenchmarkClient(private val serverUrl: String) {
             println("Error starting benchmark: ${e.message}")
         }
     }
-    fun callCreateTrajsAndFlightPoints(inputList: List<Long>) = runBlocking {
+    fun callCreateTimeSeriesData() = runBlocking {
         try {
-            val response: HttpResponse = client.post("$serverUrl/create-trajs-and-flight-points") {
+            val response: HttpResponse = client.post("$serverUrl/create-ts-collection") {
                 contentType(ContentType.Application.Json)
-                setBody(inputList) // Pass the list as JSON
+                // Pass the list as JSON
             }
 
             println("Response: ${response.status}")
             println("Message: ${response.bodyAsText()}")
         } catch (e: Exception) {
-            println("Error calling createTrajsAndFlightPointsTsConcurrently: ${e.message}")
+            println("Error calling create-ts-collection: ${e.message}")
         }
     }
+
+    fun callCreateTrajectories() = runBlocking {
+        try {
+            val response: HttpResponse = client.post("$serverUrl/create-trajectories") {
+                contentType(ContentType.Application.Json)
+                // Pass the list as JSON
+            }
+
+            println("Response: ${response.status}")
+            println("Message: ${response.bodyAsText()}")
+        } catch (e: Exception) {
+            println("Error calling createTrajectories: ${e.message}")
+        }
+    }
+
     fun stopBenchmark() = runBlocking {
         try {
             val response: HttpResponse = client.post("$serverUrl/stop-benchmark")
@@ -112,7 +127,7 @@ fun main() {
     val configPathMongoDB = "benchConfigMongoDB.yaml"
     val configPathMobilityDB = "benchConfigMobilityDB.yaml"
 
-    val databaseClientAddress = "34.78.205.58:8080"
+    val databaseClientAddress = "34.140.62.153:8080"
 
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)
@@ -120,7 +135,7 @@ fun main() {
     println("\n1. Uploading configuration...")
     client.uploadConfig(configPathMongoDB)
 
-    client.callCreateTrajsAndFlightPoints(listOf(0))
+    client.callCreateTimeSeriesData()
 //    println("\n2. Triggering DataHandler operations...")
 //    client.triggerDataHandler()
 
