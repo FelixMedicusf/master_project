@@ -1,5 +1,6 @@
 plugins {
-    kotlin("jvm") version "2.0.21"
+    kotlin("jvm") version "1.9.10"
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 group = "org.example"
@@ -12,9 +13,13 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.3")
+// ContentNegotiation plugin
+    implementation("io.ktor:ktor-serialization-jackson:2.3.3")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
     implementation("io.ktor:ktor-client-core:2.3.3")
     implementation("io.ktor:ktor-client-cio:2.3.3")
-    implementation("io.ktor:ktor-serialization-jackson:2.3.3")
     implementation("ch.qos.logback:logback-classic:1.4.12")
 }
 

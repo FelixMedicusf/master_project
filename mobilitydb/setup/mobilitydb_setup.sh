@@ -177,8 +177,7 @@ fi
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "sudo apt install -y python3-pip && pip install gdown"
 
-gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id && sudo mv /home/felix/FlightPointsMobilityDB.csv /tmp/FlightPointsMobilityDB.csv && ~/.local/bin/gdown $flight_data_resource_id_large && sudo mv /home/felix/FlightPointsMobilityDBlarge.csv /tmp/FlightPointsMobilityDBlarge.csv"
-
+gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading flightdata' && ~/.local/bin/gdown $flight_data_resource_id_large && sudo mv /home/felix/FlightPointsMobilityDBlarge.csv /tmp/FlightPointsMobilityDBlarge.csv"
 
 gcloud compute ssh $firstInstanceName --zone $firstZone -- "echo 'downloading regional Data' && sudo mkdir /tmp/regData && cd /tmp/regData && sudo chmod 777 . && ~/.local/bin/gdown $cities_resource_id && ~/.local/bin/gdown $municipalities_resource_id && ~/.local/bin/gdown $counties_resource_id && ~/.local/bin/gdown $districts_resource_id &&  ~/.local/bin/gdown $airports_resource_id"
 

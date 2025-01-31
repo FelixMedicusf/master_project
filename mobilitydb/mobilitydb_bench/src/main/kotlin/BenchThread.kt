@@ -24,24 +24,8 @@ class BenchThread(
     private val seed: Long
 ) : Thread(threadName) {
 
-
     private val random = Random(seed)
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    private val municipalitiesPath = "src/main/resources/municipalities.csv"
-    private val countiesPath = "src/main/resources/counties.csv"
-    private val districtsPath = "src/main/resources/districts.csv"
-    private val citiesPath = "src/main/resources/cities.csv"
-    private val airportsPath = "src/main/resources/airports.csv"
-    private val airplanetypesPath = "src/main/resources/airplanetypes.csv"
-
-
-    private val municipalities = parseCSV(municipalitiesPath, setOf("name"))
-    private val counties = parseCSV(countiesPath, setOf("name"))
-    private val districts = parseCSV(districtsPath, setOf("name"))
-    private val cities = parseCSV(citiesPath, setOf("area", "lat", "lon", "district", "name", "population"))
-    private val airports = parseCSV(airportsPath, setOf("IATA", "ICAO", "Airport name", "Country", "City"))
-    private val airplanetypes = File(airplanetypesPath).readLines()
-
 
     init {
         this.uncaughtExceptionHandler = UncaughtExceptionHandler { thread, exception ->
@@ -73,9 +57,9 @@ class BenchThread(
 
             if (threadName == "thread-0"){
                 statement.executeUpdate("SET citus.max_intermediate_result_size TO '12GB';")
-                statement.executeUpdate("ALTER DATABASE $DATABASE SET default_transaction_read_only = on;")
-                statement.execute("SET autovacuum = off;");
-                statement.execute("SET checkpoint_timeout = '1h';");
+                statement.executeUpdate("SET enable_seqscan = OFF;")
+                //statement.executeUpdate("SET checkpoint_timeout = '1h';");
+                //statement.execute("SET autovacuum = off;");
 
             }
             // Ensure all threads start at the same time
@@ -182,6 +166,7 @@ class BenchThread(
     private fun replaceParams(sql: String, paramSet: Map<String, String>): String {
         var parsedsql = sql
 
+
         for ((key, value) in paramSet) {
             parsedsql = parsedsql.replace(":${key}", value)
         }
@@ -201,15 +186,13 @@ class BenchThread(
                 "period" -> generateRandomTimeSpan(formatter = this.formatter, year=2023, random = this.random)
                 "instant" -> generateRandomTimestamp(formatter = this.formatter, random = this.random)
                 "day" -> getRandomDay(random = this.random, year = 2023)
-                "city" -> getRandomPlace(this.cities, "name", this.random)
-                "airport" -> getRandomPlace(this.airports, "Airport name", this.random)
-                "municipality" -> getRandomPlace(this.municipalities, "name", this.random)
-                "county" -> getRandomPlace(this.counties, "name", this.random)
-                "district" -> getRandomPlace(this.districts, "name", this.random)
+                "city" -> getRandomPlace(cities, "name", this.random)
+                "municipality" -> getRandomPlace(municipalities, "name", this.random)
+                "county" -> getRandomPlace(counties, "name", this.random)
+                "district" -> getRandomPlace(districts, "name", this.random)
                 "point" -> getRandomPoint(this.random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
                 "radius" -> ((random.nextDouble(0.25, 0.5) * 10)).toString(); // /6378.1
                 "low_altitude" -> (random.nextInt(300, 600) * 10).toString();
-                "type" -> "'${airplanetypes[random.nextInt(0, airplanetypes.size)]}'"
                 "distance" -> (random.nextInt(10, 100) * 10).toString() // in meter in MongoDB
                 else -> ""
 

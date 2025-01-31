@@ -1,0 +1,32 @@
+start: Wed Jan 29 01:51:07 CET 2025, end: Wed Jan 29 01:52:40 CET 2025, duration (s): 92. SUT: MongoDB, #threads: 4, #nodes: 3, queries executed: 30.
+threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,day;county,2023-02-17;Gem Geilenkirchen,0,0,1738111867839,1738111868190,1738111868190,1738111870995,3156,16
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,day;county,2023-05-04;Gem Marsberg,0,0,1738111867839,1738111868190,1738111868190,1738111872938,5099,24
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,day;county,2023-07-27;Gem Hennef (Sieg),0,0,1738111871026,1738111871148,1738111871148,1738111880274,9248,24
+thread-2,inCityRadiusInPeriod,spatiotemporal,period_short;city;radius,[2023-12-24 10:00:00/ 2023-12-24 23:59:59];Ennepetal;3.9197240514267796E-4,0,0,1738111880283,1738111880362,1738111880362,1738111880976,693,21
+thread-2,inCityRadiusInPeriod,spatiotemporal,period_short;city;radius,[2023-01-01 00:00:00/ 2023-01-01 08:00:00];Bad Salzuflen;3.1357792411414236E-4,0,0,1738111880981,1738111881006,1738111881006,1738111881047,66,0
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,period_medium;county,[2023-01-21 20:30:23/ 2023-01-22 08:09:51];Krs Rhein-Sieg-Kreis,0,0,1738111881100,0,0,1738111882543,1443,49
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,day;county,2023-11-27;Gem Brilon,0,0,1738111872955,1738111873079,1738111873079,1738111882671,9716,21
+thread-2,inCityRadiusInPeriod,spatiotemporal,period_short;city;radius,[2023-03-02 05:56:59/ 2023-03-03 19:42:20];Werl;1.5678896205707118E-4,0,0,1738111882555,1738111882582,1738111882582,1738111884589,2034,27
+thread-2,inCityRadiusInPeriod,spatiotemporal,period_short;city;radius,[2023-06-27 02:50:19/ 2023-06-28 02:08:00];Gladbeck;2.3518344308560678E-4,0,0,1738111884594,1738111884621,1738111884621,1738111885886,1292,24
+thread-0,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,period_medium;county,[2023-01-07 05:20:52/ 2023-01-08 07:34:28];Krs Herford,0,0,1738111882702,0,0,1738111888427,5725,7
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,instant,2023-07-07 00:00:44,0,0,1738111888431,1738111888539,1738111888540,1738111888677,246,1
+thread-0,flightsInCountyInPeriod,spatiotemporal,period_medium;county,[2023-04-17 02:35:04/ 2023-04-17 18:09:02];Krs Muelheim a.d. Ruhr,0,0,1738111888679,1738111888711,1738111888711,1738111891603,2924,194
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,instant,2023-02-28 19:13:46,0,0,1738111891616,1738111891720,1738111891720,1738111891873,257,1
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatial-temporal,period_medium;municipality;low_altitude,[2023-11-11 10:46:18/ 2023-11-11 18:59:34];Gem Ascheberg;1540,0,0,1738111891876,1738111891904,1738111891904,1738111893727,1851,48
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,instant,2023-12-05 00:36:35,0,0,1738111893734,1738111893842,1738111893842,1738111893944,210,1
+thread-0,flightsInCountyInPeriod,spatiotemporal,period_medium;county,[2023-01-20 19:30:00/ 2023-01-20 20:00:00];Krs Herne,0,0,1738111893946,1738111893973,1738111893973,1738111894103,157,3
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,instant,2023-09-06 08:18:07,0,0,1738111894105,1738111894145,1738111894145,1738111894246,141,1
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,period_medium;county,[2023-05-13 01:45:21/ 2023-05-14 12:54:31];Krs Hamm,0,0,1738111885918,0,0,1738111898073,12155,53
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,period_medium;county,[2023-03-15 06:56:37/ 2023-03-16 10:46:57];Krs Duisburg,0,0,1738111898103,0,0,1738111902846,4743,64
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,day;county,2023-05-31;Gem Aachen,0,0,1738111894249,1738111894275,1738111894275,1738111903965,9716,24
+thread-1,flightsInCountyInPeriod,spatiotemporal,period_medium;county,[2023-08-04 06:56:35/ 2023-08-07 15:43:21];Krs Olpe,0,0,1738111867839,1738111868191,1738111868191,1738111905334,37495,1616
+thread-1,inCityRadiusInPeriod,spatiotemporal,period_short;city;radius,[2023-07-24 00:00:00/ 2023-07-25 00:00:00];Vlotho;1.9598620257133898E-4,0,0,1738111905356,1738111905464,1738111905464,1738111906422,1066,8
+thread-0,flightsInCountyInPeriod,spatiotemporal,period_medium;county,[2023-05-18 14:44:44/ 2023-05-20 06:12:05];Krs Gelsenkirchen,0,0,1738111903967,1738111903991,1738111903991,1738111912900,8933,167
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,instant,2023-05-07 22:00:58,0,0,1738111912902,1738111913009,1738111913009,1738111913142,240,1
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatial-temporal,period_medium;municipality;low_altitude,[2023-04-09 19:54:27/ 2023-04-13 18:50:24];Gem Erwitte;1360,0,0,1738111902849,1738111902875,1738111902875,1738111918440,15591,243
+thread-3,flightsInCountyInPeriod,spatiotemporal,period_medium;county,[2023-06-03 08:05:09/ 2023-06-08 22:24:03];Krs Herford,0,0,1738111867839,1738111868190,1738111868190,1738111920502,52663,700
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatial-temporal,period_medium;municipality;low_altitude,[2023-10-06 11:18:05/ 2023-10-20 00:27:58];Gem Rheine;1500,0,0,1738111918444,1738111918473,1738111918473,1738111923119,4675,830
+thread-3,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,period_medium;county,[2023-06-08 13:09:05/ 2023-06-08 19:28:17];Krs Duesseldorf,0,0,1738111920544,0,0,1738111923435,2891,215
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatial-temporal,period_medium;municipality;low_altitude,[2023-05-28 19:09:14/ 2023-06-01 13:00:38];Gem Kirchlengern;1750,0,0,1738111913143,1738111913167,1738111913167,1738111927550,14407,168
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatial-temporal,period_medium;municipality;low_altitude,[2023-10-06 16:02:04/ 2023-10-15 09:05:36];Gem Lippetal;1850,0,0,1738111906425,1738111906451,1738111906451,1738111960507,54082,902

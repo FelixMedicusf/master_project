@@ -1,0 +1,3372 @@
+thread-0 started executing at 2025-01-29T00:51:07.522204900Z.
+1: averageHourlyFlightsDuringDayInMunicipality with params: 2023-05-04;Gem Marsberg
+MongoDB Response:
+{
+  "activeFlights" : 2,
+  "hour" : 0
+}
+{
+  "activeFlights" : 3,
+  "hour" : 1
+}
+{
+  "activeFlights" : 1,
+  "hour" : 2
+}
+{
+  "activeFlights" : 2,
+  "hour" : 3
+}
+{
+  "activeFlights" : 2,
+  "hour" : 4
+}
+{
+  "activeFlights" : 6,
+  "hour" : 5
+}
+{
+  "activeFlights" : 6,
+  "hour" : 6
+}
+{
+  "activeFlights" : 8,
+  "hour" : 7
+}
+{
+  "activeFlights" : 11,
+  "hour" : 8
+}
+{
+  "activeFlights" : 6,
+  "hour" : 9
+}
+{
+  "activeFlights" : 6,
+  "hour" : 10
+}
+{
+  "activeFlights" : 7,
+  "hour" : 11
+}
+{
+  "activeFlights" : 6,
+  "hour" : 12
+}
+{
+  "activeFlights" : 5,
+  "hour" : 13
+}
+{
+  "activeFlights" : 4,
+  "hour" : 14
+}
+{
+  "activeFlights" : 6,
+  "hour" : 15
+}
+{
+  "activeFlights" : 7,
+  "hour" : 16
+}
+{
+  "activeFlights" : 5,
+  "hour" : 17
+}
+{
+  "activeFlights" : 5,
+  "hour" : 18
+}
+{
+  "activeFlights" : 5,
+  "hour" : 19
+}
+{
+  "activeFlights" : 6,
+  "hour" : 20
+}
+{
+  "activeFlights" : 7,
+  "hour" : 21
+}
+{
+  "activeFlights" : 2,
+  "hour" : 22
+}
+{
+  "activeFlights" : 1,
+  "hour" : 23
+}
+
+2: averageHourlyFlightsDuringDayInMunicipality with params: 2023-11-27;Gem Brilon
+MongoDB Response:
+{
+  "activeFlights" : 2,
+  "hour" : 1
+}
+{
+  "activeFlights" : 1,
+  "hour" : 2
+}
+{
+  "activeFlights" : 1,
+  "hour" : 3
+}
+{
+  "activeFlights" : 3,
+  "hour" : 5
+}
+{
+  "activeFlights" : 6,
+  "hour" : 6
+}
+{
+  "activeFlights" : 5,
+  "hour" : 7
+}
+{
+  "activeFlights" : 9,
+  "hour" : 8
+}
+{
+  "activeFlights" : 9,
+  "hour" : 9
+}
+{
+  "activeFlights" : 7,
+  "hour" : 10
+}
+{
+  "activeFlights" : 3,
+  "hour" : 11
+}
+{
+  "activeFlights" : 7,
+  "hour" : 12
+}
+{
+  "activeFlights" : 3,
+  "hour" : 13
+}
+{
+  "activeFlights" : 7,
+  "hour" : 14
+}
+{
+  "activeFlights" : 7,
+  "hour" : 15
+}
+{
+  "activeFlights" : 2,
+  "hour" : 16
+}
+{
+  "activeFlights" : 4,
+  "hour" : 17
+}
+{
+  "activeFlights" : 5,
+  "hour" : 18
+}
+{
+  "activeFlights" : 3,
+  "hour" : 19
+}
+{
+  "activeFlights" : 7,
+  "hour" : 20
+}
+{
+  "activeFlights" : 8,
+  "hour" : 21
+}
+{
+  "activeFlights" : 1,
+  "hour" : 23
+}
+
+3: flightsWithLocalOriginDestinationInPeriodInCounty with params: [2023-01-07 05:20:52, 2023-01-08 07:34:28];Krs Herford
+MongoDB Response:
+{
+  "originAirport" : "EDDH",
+  "destinationAirport" : "EDDK",
+  "originCity" : [ "Hamburg" ],
+  "destinationCity" : [ "Cologne" ],
+  "airplaneType" : "LJ45"
+}
+{
+  "originAirport" : "EFHK",
+  "destinationAirport" : "EDDL",
+  "originCity" : [ "Helsinki" ],
+  "destinationCity" : [ "Duesseldorf" ],
+  "airplaneType" : "A320"
+}
+{
+  "originAirport" : "EDDK",
+  "destinationAirport" : "EDDH",
+  "originCity" : [ "Cologne" ],
+  "destinationCity" : [ "Hamburg" ],
+  "airplaneType" : "LJ45"
+}
+{
+  "originAirport" : "EDLW",
+  "destinationAirport" : "EPGD",
+  "originCity" : [ "Dortmund" ],
+  "destinationCity" : [ "Gda?sk" ],
+  "airplaneType" : "A320"
+}
+{
+  "originAirport" : "EDDG",
+  "destinationAirport" : "LTAI",
+  "originCity" : [ "Muenster" ],
+  "destinationCity" : [ "Antalya" ],
+  "airplaneType" : "B38M"
+}
+{
+  "originAirport" : "EFRO",
+  "destinationAirport" : "EDDL",
+  "originCity" : [ "Rovaniemi" ],
+  "destinationCity" : [ "Duesseldorf" ],
+  "airplaneType" : "A320"
+}
+{
+  "originAirport" : "EDDK",
+  "destinationAirport" : "EDDH",
+  "originCity" : [ "Cologne" ],
+  "destinationCity" : [ "Hamburg" ],
+  "airplaneType" : "LJ45"
+}
+
+4: countFlightsAtInstantInDistricts with params: 2023-07-07 00:00:44
+MongoDB Response:
+{
+  "Rbz Arnsberg" : 1,
+  "Rbz Detmold" : 4,
+  "Rbz Koeln" : 7,
+  "Rbz Duesseldorf" : 3,
+  "Rbz Muenster" : 2
+}
+
+5: flightsInCountyInPeriod with params: [2023-04-17 02:35:04, 2023-04-17 18:09:02];Krs Muelheim a.d. Ruhr
+MongoDB Response:
+{
+  "flightId" : 710190061,
+  "track" : 1
+}
+{
+  "flightId" : 710115531,
+  "track" : 1
+}
+{
+  "flightId" : 710186931,
+  "track" : 1
+}
+{
+  "flightId" : 710220851,
+  "track" : 1
+}
+{
+  "flightId" : 710257381,
+  "track" : 1
+}
+{
+  "flightId" : 710123931,
+  "track" : 1
+}
+{
+  "flightId" : 710245511,
+  "track" : 2
+}
+{
+  "flightId" : 710176991,
+  "track" : 1
+}
+{
+  "flightId" : 710121991,
+  "track" : 1
+}
+{
+  "flightId" : 710189171,
+  "track" : 1
+}
+{
+  "flightId" : 710200560,
+  "track" : 1
+}
+{
+  "flightId" : 710200991,
+  "track" : 1
+}
+{
+  "flightId" : 710134851,
+  "track" : 1
+}
+{
+  "flightId" : 710202761,
+  "track" : 1
+}
+{
+  "flightId" : 710117641,
+  "track" : 1
+}
+{
+  "flightId" : 710190721,
+  "track" : 1
+}
+{
+  "flightId" : 710261101,
+  "track" : 1
+}
+{
+  "flightId" : 710261461,
+  "track" : 1
+}
+{
+  "flightId" : 710118871,
+  "track" : 1
+}
+{
+  "flightId" : 710122821,
+  "track" : 1
+}
+{
+  "flightId" : 710138201,
+  "track" : 2
+}
+{
+  "flightId" : 710189371,
+  "track" : 1
+}
+{
+  "flightId" : 710227281,
+  "track" : 1
+}
+{
+  "flightId" : 710128231,
+  "track" : 1
+}
+{
+  "flightId" : 710132341,
+  "track" : 1
+}
+{
+  "flightId" : 710137081,
+  "track" : 1
+}
+{
+  "flightId" : 710172301,
+  "track" : 1
+}
+{
+  "flightId" : 710125901,
+  "track" : 1
+}
+{
+  "flightId" : 710236740,
+  "track" : 1
+}
+{
+  "flightId" : 710252941,
+  "track" : 1
+}
+{
+  "flightId" : 710200440,
+  "track" : 1
+}
+{
+  "flightId" : 710119251,
+  "track" : 1
+}
+{
+  "flightId" : 710141551,
+  "track" : 1
+}
+{
+  "flightId" : 710239911,
+  "track" : 1
+}
+{
+  "flightId" : 710246041,
+  "track" : 1
+}
+{
+  "flightId" : 710154381,
+  "track" : 2
+}
+{
+  "flightId" : 710153391,
+  "track" : 2
+}
+{
+  "flightId" : 710241341,
+  "track" : 1
+}
+{
+  "flightId" : 710141831,
+  "track" : 3
+}
+{
+  "flightId" : 710174951,
+  "track" : 1
+}
+{
+  "flightId" : 710126711,
+  "track" : 1
+}
+{
+  "flightId" : 710169280,
+  "track" : 2
+}
+{
+  "flightId" : 710154501,
+  "track" : 2
+}
+{
+  "flightId" : 710162321,
+  "track" : 2
+}
+{
+  "flightId" : 710167281,
+  "track" : 1
+}
+{
+  "flightId" : 710119841,
+  "track" : 1
+}
+{
+  "flightId" : 710185841,
+  "track" : 1
+}
+{
+  "flightId" : 710224640,
+  "track" : 4
+}
+{
+  "flightId" : 710252781,
+  "track" : 1
+}
+{
+  "flightId" : 710203241,
+  "track" : 1
+}
+{
+  "flightId" : 710247581,
+  "track" : 1
+}
+{
+  "flightId" : 710156131,
+  "track" : 1
+}
+{
+  "flightId" : 710205221,
+  "track" : 1
+}
+{
+  "flightId" : 710167691,
+  "track" : 1
+}
+{
+  "flightId" : 710124261,
+  "track" : 1
+}
+{
+  "flightId" : 710235641,
+  "track" : 1
+}
+{
+  "flightId" : 710154691,
+  "track" : 1
+}
+{
+  "flightId" : 710261641,
+  "track" : 1
+}
+{
+  "flightId" : 710161141,
+  "track" : 1
+}
+{
+  "flightId" : 710128371,
+  "track" : 1
+}
+{
+  "flightId" : 710160090,
+  "track" : 4
+}
+{
+  "flightId" : 710173421,
+  "track" : 1
+}
+{
+  "flightId" : 710160461,
+  "track" : 1
+}
+{
+  "flightId" : 710183551,
+  "track" : 1
+}
+{
+  "flightId" : 710227001,
+  "track" : 1
+}
+{
+  "flightId" : 710161741,
+  "track" : 1
+}
+{
+  "flightId" : 710172291,
+  "track" : 1
+}
+{
+  "flightId" : 710129101,
+  "track" : 1
+}
+{
+  "flightId" : 710159301,
+  "track" : 1
+}
+{
+  "flightId" : 710187870,
+  "track" : 1
+}
+{
+  "flightId" : 710135961,
+  "track" : 2
+}
+{
+  "flightId" : 710231870,
+  "track" : 1
+}
+{
+  "flightId" : 710165891,
+  "track" : 1
+}
+{
+  "flightId" : 710128541,
+  "track" : 1
+}
+{
+  "flightId" : 710240091,
+  "track" : 1
+}
+{
+  "flightId" : 710250410,
+  "track" : 3
+}
+{
+  "flightId" : 710203630,
+  "track" : 3
+}
+{
+  "flightId" : 710180801,
+  "track" : 1
+}
+{
+  "flightId" : 710120091,
+  "track" : 1
+}
+{
+  "flightId" : 710215931,
+  "track" : 2
+}
+{
+  "flightId" : 710138691,
+  "track" : 1
+}
+{
+  "flightId" : 710232951,
+  "track" : 1
+}
+{
+  "flightId" : 710255011,
+  "track" : 1
+}
+{
+  "flightId" : 710136651,
+  "track" : 1
+}
+{
+  "flightId" : 710249690,
+  "track" : 1
+}
+{
+  "flightId" : 710153271,
+  "track" : 1
+}
+{
+  "flightId" : 710227941,
+  "track" : 1
+}
+{
+  "flightId" : 710206751,
+  "track" : 1
+}
+{
+  "flightId" : 710244851,
+  "track" : 1
+}
+{
+  "flightId" : 710250661,
+  "track" : 1
+}
+{
+  "flightId" : 710251141,
+  "track" : 1
+}
+{
+  "flightId" : 710152721,
+  "track" : 1
+}
+{
+  "flightId" : 710222521,
+  "track" : 1
+}
+{
+  "flightId" : 710235611,
+  "track" : 1
+}
+{
+  "flightId" : 710124121,
+  "track" : 1
+}
+{
+  "flightId" : 710118421,
+  "track" : 1
+}
+{
+  "flightId" : 710157751,
+  "track" : 1
+}
+{
+  "flightId" : 710175221,
+  "track" : 1
+}
+{
+  "flightId" : 710179031,
+  "track" : 1
+}
+{
+  "flightId" : 710187371,
+  "track" : 1
+}
+{
+  "flightId" : 710119121,
+  "track" : 1
+}
+{
+  "flightId" : 710122981,
+  "track" : 1
+}
+{
+  "flightId" : 710194401,
+  "track" : 1
+}
+{
+  "flightId" : 710224151,
+  "track" : 1
+}
+{
+  "flightId" : 710251151,
+  "track" : 1
+}
+{
+  "flightId" : 710176101,
+  "track" : 1
+}
+{
+  "flightId" : 710140911,
+  "track" : 1
+}
+{
+  "flightId" : 710260331,
+  "track" : 1
+}
+{
+  "flightId" : 710182041,
+  "track" : 1
+}
+{
+  "flightId" : 710188891,
+  "track" : 1
+}
+{
+  "flightId" : 710193771,
+  "track" : 1
+}
+{
+  "flightId" : 710245071,
+  "track" : 1
+}
+{
+  "flightId" : 710250410,
+  "track" : 1
+}
+{
+  "flightId" : 710218541,
+  "track" : 1
+}
+{
+  "flightId" : 710224561,
+  "track" : 1
+}
+{
+  "flightId" : 710186691,
+  "track" : 1
+}
+{
+  "flightId" : 710131201,
+  "track" : 1
+}
+{
+  "flightId" : 710163161,
+  "track" : 1
+}
+{
+  "flightId" : 710164361,
+  "track" : 1
+}
+{
+  "flightId" : 710206131,
+  "track" : 1
+}
+{
+  "flightId" : 710177281,
+  "track" : 1
+}
+{
+  "flightId" : 710141511,
+  "track" : 1
+}
+{
+  "flightId" : 710120591,
+  "track" : 1
+}
+{
+  "flightId" : 710134381,
+  "track" : 1
+}
+{
+  "flightId" : 710117941,
+  "track" : 1
+}
+{
+  "flightId" : 710135511,
+  "track" : 1
+}
+{
+  "flightId" : 710236851,
+  "track" : 1
+}
+{
+  "flightId" : 710242531,
+  "track" : 1
+}
+{
+  "flightId" : 710196900,
+  "track" : 3
+}
+{
+  "flightId" : 710134061,
+  "track" : 1
+}
+{
+  "flightId" : 710122441,
+  "track" : 1
+}
+{
+  "flightId" : 710158921,
+  "track" : 1
+}
+{
+  "flightId" : 710192321,
+  "track" : 1
+}
+{
+  "flightId" : 710256900,
+  "track" : 1
+}
+{
+  "flightId" : 710204151,
+  "track" : 1
+}
+{
+  "flightId" : 710262791,
+  "track" : 1
+}
+{
+  "flightId" : 710130061,
+  "track" : 1
+}
+{
+  "flightId" : 710236491,
+  "track" : 2
+}
+{
+  "flightId" : 710147661,
+  "track" : 1
+}
+{
+  "flightId" : 710216681,
+  "track" : 1
+}
+{
+  "flightId" : 710191811,
+  "track" : 1
+}
+{
+  "flightId" : 710152481,
+  "track" : 1
+}
+{
+  "flightId" : 710122791,
+  "track" : 1
+}
+{
+  "flightId" : 710137311,
+  "track" : 2
+}
+{
+  "flightId" : 710118091,
+  "track" : 1
+}
+{
+  "flightId" : 710216061,
+  "track" : 1
+}
+{
+  "flightId" : 710178401,
+  "track" : 1
+}
+{
+  "flightId" : 710252681,
+  "track" : 1
+}
+{
+  "flightId" : 710214741,
+  "track" : 1
+}
+{
+  "flightId" : 710139021,
+  "track" : 1
+}
+{
+  "flightId" : 710131531,
+  "track" : 1
+}
+{
+  "flightId" : 710148821,
+  "track" : 2
+}
+{
+  "flightId" : 710191881,
+  "track" : 1
+}
+{
+  "flightId" : 710120221,
+  "track" : 1
+}
+{
+  "flightId" : 710120131,
+  "track" : 1
+}
+{
+  "flightId" : 710240471,
+  "track" : 1
+}
+{
+  "flightId" : 710246751,
+  "track" : 1
+}
+{
+  "flightId" : 710161381,
+  "track" : 1
+}
+{
+  "flightId" : 710129341,
+  "track" : 1
+}
+{
+  "flightId" : 710154471,
+  "track" : 1
+}
+{
+  "flightId" : 710211651,
+  "track" : 1
+}
+{
+  "flightId" : 710133201,
+  "track" : 1
+}
+{
+  "flightId" : 710153791,
+  "track" : 1
+}
+{
+  "flightId" : 710170901,
+  "track" : 2
+}
+{
+  "flightId" : 710220391,
+  "track" : 1
+}
+{
+  "flightId" : 710247341,
+  "track" : 1
+}
+{
+  "flightId" : 710224640,
+  "track" : 3
+}
+{
+  "flightId" : 710182251,
+  "track" : 1
+}
+{
+  "flightId" : 710149411,
+  "track" : 1
+}
+{
+  "flightId" : 710214801,
+  "track" : 1
+}
+{
+  "flightId" : 710122841,
+  "track" : 1
+}
+{
+  "flightId" : 710165971,
+  "track" : 1
+}
+{
+  "flightId" : 710146921,
+  "track" : 1
+}
+{
+  "flightId" : 710216511,
+  "track" : 1
+}
+{
+  "flightId" : 710239611,
+  "track" : 1
+}
+{
+  "flightId" : 710176861,
+  "track" : 1
+}
+{
+  "flightId" : 710182001,
+  "track" : 1
+}
+{
+  "flightId" : 710248021,
+  "track" : 1
+}
+{
+  "flightId" : 710168441,
+  "track" : 1
+}
+{
+  "flightId" : 710162111,
+  "track" : 1
+}
+{
+  "flightId" : 710171751,
+  "track" : 1
+}
+{
+  "flightId" : 710232530,
+  "track" : 3
+}
+{
+  "flightId" : 710169931,
+  "track" : 1
+}
+{
+  "flightId" : 710237771,
+  "track" : 1
+}
+{
+  "flightId" : 710148381,
+  "track" : 1
+}
+{
+  "flightId" : 710254811,
+  "track" : 1
+}
+{
+  "flightId" : 710122341,
+  "track" : 1
+}
+{
+  "flightId" : 710138241,
+  "track" : 1
+}
+{
+  "flightId" : 710117611,
+  "track" : 1
+}
+{
+  "flightId" : 710129671,
+  "track" : 1
+}
+{
+  "flightId" : 710180931,
+  "track" : 1
+}
+{
+  "flightId" : 710176661,
+  "track" : 1
+}
+{
+  "flightId" : 710133741,
+  "track" : 1
+}
+{
+  "flightId" : 710175091,
+  "track" : 1
+}
+
+6: countFlightsAtInstantInDistricts with params: 2023-02-28 19:13:46
+MongoDB Response:
+{
+  "Rbz Arnsberg" : 5,
+  "Rbz Detmold" : 0,
+  "Rbz Koeln" : 9,
+  "Rbz Duesseldorf" : 5,
+  "Rbz Muenster" : 4
+}
+
+7: flightDurationInMunicipalityLowAltitudeInPeriod with params: [2023-11-11 10:46:18, 2023-11-11 18:59:34];Gem Ascheberg;1540
+MongoDB Response:
+{
+  "flightId" : 765414631,
+  "originAirport" : "EPRZ",
+  "destinationAirport" : "EGVN",
+  "airplaneType" : "A332",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765360661,
+  "originAirport" : "EDDH",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765431381,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EDDL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765374041,
+  "originAirport" : "EDLE",
+  "destinationAirport" : "EDDG",
+  "airplaneType" : "C172",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765370671,
+  "originAirport" : "EVRA",
+  "destinationAirport" : "LEMG",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765370221,
+  "originAirport" : "LTFM",
+  "destinationAirport" : "EDDL",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765441921,
+  "originAirport" : "EDDP",
+  "destinationAirport" : "EGNX",
+  "airplaneType" : "B763",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765442821,
+  "originAirport" : "OMDB",
+  "destinationAirport" : "EGBB",
+  "airplaneType" : "B77W",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765421481,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "CRJ9",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765429881,
+  "originAirport" : "EDLE",
+  "destinationAirport" : "EDDG",
+  "airplaneType" : "C172",
+  "totalTimeBelowAltitude" : 138000
+}
+{
+  "flightId" : 765375661,
+  "originAirport" : "EBBR",
+  "destinationAirport" : "EFHK",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765444721,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EGGW",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765432911,
+  "originAirport" : "EDDP",
+  "destinationAirport" : "EGMC",
+  "airplaneType" : "C510",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765440611,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EDDL",
+  "airplaneType" : "E75S",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765344421,
+  "originAirport" : "EDDN",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765350831,
+  "originAirport" : "EBCI",
+  "destinationAirport" : "EFHK",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765427121,
+  "originAirport" : "EKCH",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765386231,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EDDM",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765369751,
+  "originAirport" : "EYSA",
+  "destinationAirport" : "ETNG",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765367611,
+  "originAirport" : "ESSA",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765379921,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LTFM",
+  "airplaneType" : "A332",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765432101,
+  "originAirport" : "EDDH",
+  "destinationAirport" : "EDLN",
+  "airplaneType" : "TBM8",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765433201,
+  "originAirport" : "EFHK",
+  "destinationAirport" : "EDDL",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765394041,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LHBP",
+  "airplaneType" : "B77L",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765441251,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "CRJ9",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765401721,
+  "originAirport" : "LDSP",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765416421,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765385221,
+  "originAirport" : "LIPZ",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E295",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765391941,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "PC12",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765444131,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "KSFO",
+  "airplaneType" : "A359",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765368811,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "KORD",
+  "airplaneType" : "B78X",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765378741,
+  "originAirport" : "EPRZ",
+  "destinationAirport" : "EGSS",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765407911,
+  "originAirport" : "EDDN",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765443711,
+  "originAirport" : "LSZH",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E290",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765354401,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "GCLP",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765380551,
+  "originAirport" : "LTFJ",
+  "destinationAirport" : "EHRD",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765392211,
+  "originAirport" : "EDDW",
+  "destinationAirport" : "GCRR",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765394001,
+  "originAirport" : "LIRN",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E295",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765348951,
+  "originAirport" : "LUKK",
+  "destinationAirport" : "EGGW",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765395101,
+  "originAirport" : "EYVI",
+  "destinationAirport" : "LFOB",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765444211,
+  "originAirport" : "EFHK",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765376921,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LTBU",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765376911,
+  "originAirport" : "LHBP",
+  "destinationAirport" : "EHRD",
+  "airplaneType" : "BE40",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765360401,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EGPH",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765407591,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "E75L",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765383281,
+  "originAirport" : "LSZH",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "BCS3",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765395901,
+  "originAirport" : "LIRF",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 765379421,
+  "originAirport" : "EDDM",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+
+8: countFlightsAtInstantInDistricts with params: 2023-12-05 00:36:35
+MongoDB Response:
+{
+  "Rbz Arnsberg" : 3,
+  "Rbz Detmold" : 1,
+  "Rbz Koeln" : 8,
+  "Rbz Duesseldorf" : 5,
+  "Rbz Muenster" : 0
+}
+
+9: flightsInCountyInPeriod with params: [2023-01-20 19:30:00, 2023-01-20 20:00:00];Krs Herne
+MongoDB Response:
+{
+  "flightId" : 694367911,
+  "track" : 1
+}
+{
+  "flightId" : 694369651,
+  "track" : 1
+}
+{
+  "flightId" : 694369331,
+  "track" : 1
+}
+
+10: countFlightsAtInstantInDistricts with params: 2023-09-06 08:18:07
+MongoDB Response:
+{
+  "Rbz Arnsberg" : 8,
+  "Rbz Detmold" : 5,
+  "Rbz Koeln" : 12,
+  "Rbz Duesseldorf" : 9,
+  "Rbz Muenster" : 4
+}
+
+11: averageHourlyFlightsDuringDayInMunicipality with params: 2023-05-31;Gem Aachen
+MongoDB Response:
+{
+  "activeFlights" : 8,
+  "hour" : 0
+}
+{
+  "activeFlights" : 6,
+  "hour" : 1
+}
+{
+  "activeFlights" : 5,
+  "hour" : 2
+}
+{
+  "activeFlights" : 5,
+  "hour" : 3
+}
+{
+  "activeFlights" : 18,
+  "hour" : 4
+}
+{
+  "activeFlights" : 12,
+  "hour" : 5
+}
+{
+  "activeFlights" : 12,
+  "hour" : 6
+}
+{
+  "activeFlights" : 12,
+  "hour" : 7
+}
+{
+  "activeFlights" : 13,
+  "hour" : 8
+}
+{
+  "activeFlights" : 14,
+  "hour" : 9
+}
+{
+  "activeFlights" : 19,
+  "hour" : 10
+}
+{
+  "activeFlights" : 24,
+  "hour" : 11
+}
+{
+  "activeFlights" : 9,
+  "hour" : 12
+}
+{
+  "activeFlights" : 14,
+  "hour" : 13
+}
+{
+  "activeFlights" : 14,
+  "hour" : 14
+}
+{
+  "activeFlights" : 19,
+  "hour" : 15
+}
+{
+  "activeFlights" : 14,
+  "hour" : 16
+}
+{
+  "activeFlights" : 21,
+  "hour" : 17
+}
+{
+  "activeFlights" : 18,
+  "hour" : 18
+}
+{
+  "activeFlights" : 14,
+  "hour" : 19
+}
+{
+  "activeFlights" : 4,
+  "hour" : 20
+}
+{
+  "activeFlights" : 7,
+  "hour" : 21
+}
+{
+  "activeFlights" : 6,
+  "hour" : 22
+}
+{
+  "activeFlights" : 2,
+  "hour" : 23
+}
+
+12: flightsInCountyInPeriod with params: [2023-05-18 14:44:44, 2023-05-20 06:12:05];Krs Gelsenkirchen
+MongoDB Response:
+{
+  "flightId" : 717568011,
+  "track" : 1
+}
+{
+  "flightId" : 717923281,
+  "track" : 1
+}
+{
+  "flightId" : 717567981,
+  "track" : 2
+}
+{
+  "flightId" : 717917601,
+  "track" : 2
+}
+{
+  "flightId" : 717792321,
+  "track" : 1
+}
+{
+  "flightId" : 717839841,
+  "track" : 2
+}
+{
+  "flightId" : 717777941,
+  "track" : 1
+}
+{
+  "flightId" : 717577131,
+  "track" : 3
+}
+{
+  "flightId" : 717669241,
+  "track" : 1
+}
+{
+  "flightId" : 717663951,
+  "track" : 1
+}
+{
+  "flightId" : 717728141,
+  "track" : 1
+}
+{
+  "flightId" : 717681181,
+  "track" : 2
+}
+{
+  "flightId" : 717809150,
+  "track" : 2
+}
+{
+  "flightId" : 717570211,
+  "track" : 1
+}
+{
+  "flightId" : 717686911,
+  "track" : 1
+}
+{
+  "flightId" : 717798261,
+  "track" : 1
+}
+{
+  "flightId" : 717851441,
+  "track" : 1
+}
+{
+  "flightId" : 717872951,
+  "track" : 1
+}
+{
+  "flightId" : 717823861,
+  "track" : 1
+}
+{
+  "flightId" : 717820551,
+  "track" : 3
+}
+{
+  "flightId" : 717873901,
+  "track" : 2
+}
+{
+  "flightId" : 717944071,
+  "track" : 1
+}
+{
+  "flightId" : 717573281,
+  "track" : 2
+}
+{
+  "flightId" : 717976831,
+  "track" : 2
+}
+{
+  "flightId" : 717856531,
+  "track" : 1
+}
+{
+  "flightId" : 717949001,
+  "track" : 2
+}
+{
+  "flightId" : 717926681,
+  "track" : 2
+}
+{
+  "flightId" : 717625681,
+  "track" : 3
+}
+{
+  "flightId" : 717613031,
+  "track" : 1
+}
+{
+  "flightId" : 717656871,
+  "track" : 1
+}
+{
+  "flightId" : 717924971,
+  "track" : 3
+}
+{
+  "flightId" : 717588371,
+  "track" : 1
+}
+{
+  "flightId" : 717939411,
+  "track" : 2
+}
+{
+  "flightId" : 717809151,
+  "track" : 1
+}
+{
+  "flightId" : 717709261,
+  "track" : 1
+}
+{
+  "flightId" : 717874851,
+  "track" : 1
+}
+{
+  "flightId" : 717667521,
+  "track" : 1
+}
+{
+  "flightId" : 717820511,
+  "track" : 1
+}
+{
+  "flightId" : 717965301,
+  "track" : 1
+}
+{
+  "flightId" : 717591941,
+  "track" : 1
+}
+{
+  "flightId" : 717968781,
+  "track" : 1
+}
+{
+  "flightId" : 717975531,
+  "track" : 1
+}
+{
+  "flightId" : 717569561,
+  "track" : 1
+}
+{
+  "flightId" : 717689561,
+  "track" : 1
+}
+{
+  "flightId" : 717652711,
+  "track" : 1
+}
+{
+  "flightId" : 717647431,
+  "track" : 1
+}
+{
+  "flightId" : 717552471,
+  "track" : 1
+}
+{
+  "flightId" : 717950561,
+  "track" : 1
+}
+{
+  "flightId" : 717582800,
+  "track" : 8
+}
+{
+  "flightId" : 717564551,
+  "track" : 1
+}
+{
+  "flightId" : 717573291,
+  "track" : 1
+}
+{
+  "flightId" : 717742711,
+  "track" : 1
+}
+{
+  "flightId" : 717709271,
+  "track" : 2
+}
+{
+  "flightId" : 717821351,
+  "track" : 2
+}
+{
+  "flightId" : 717648751,
+  "track" : 1
+}
+{
+  "flightId" : 717630521,
+  "track" : 2
+}
+{
+  "flightId" : 717699361,
+  "track" : 1
+}
+{
+  "flightId" : 717662851,
+  "track" : 1
+}
+{
+  "flightId" : 717681771,
+  "track" : 2
+}
+{
+  "flightId" : 717702071,
+  "track" : 1
+}
+{
+  "flightId" : 717916061,
+  "track" : 2
+}
+{
+  "flightId" : 717863521,
+  "track" : 1
+}
+{
+  "flightId" : 717973251,
+  "track" : 1
+}
+{
+  "flightId" : 717639861,
+  "track" : 1
+}
+{
+  "flightId" : 717874921,
+  "track" : 2
+}
+{
+  "flightId" : 717731611,
+  "track" : 1
+}
+{
+  "flightId" : 717733981,
+  "track" : 2
+}
+{
+  "flightId" : 717706271,
+  "track" : 1
+}
+{
+  "flightId" : 717662381,
+  "track" : 1
+}
+{
+  "flightId" : 717684391,
+  "track" : 1
+}
+{
+  "flightId" : 717966641,
+  "track" : 1
+}
+{
+  "flightId" : 717809150,
+  "track" : 1
+}
+{
+  "flightId" : 717934231,
+  "track" : 2
+}
+{
+  "flightId" : 717610591,
+  "track" : 2
+}
+{
+  "flightId" : 717811691,
+  "track" : 1
+}
+{
+  "flightId" : 717603381,
+  "track" : 1
+}
+{
+  "flightId" : 717646321,
+  "track" : 1
+}
+{
+  "flightId" : 717660741,
+  "track" : 1
+}
+{
+  "flightId" : 717689111,
+  "track" : 1
+}
+{
+  "flightId" : 717717861,
+  "track" : 2
+}
+{
+  "flightId" : 717780021,
+  "track" : 1
+}
+{
+  "flightId" : 717894580,
+  "track" : 4
+}
+{
+  "flightId" : 717843941,
+  "track" : 2
+}
+{
+  "flightId" : 717894581,
+  "track" : 3
+}
+{
+  "flightId" : 717958311,
+  "track" : 1
+}
+{
+  "flightId" : 717926301,
+  "track" : 1
+}
+{
+  "flightId" : 717965641,
+  "track" : 1
+}
+{
+  "flightId" : 717668011,
+  "track" : 3
+}
+{
+  "flightId" : 717785421,
+  "track" : 1
+}
+{
+  "flightId" : 717553041,
+  "track" : 1
+}
+{
+  "flightId" : 717969591,
+  "track" : 1
+}
+{
+  "flightId" : 717921051,
+  "track" : 2
+}
+{
+  "flightId" : 717702681,
+  "track" : 2
+}
+{
+  "flightId" : 717842441,
+  "track" : 1
+}
+{
+  "flightId" : 717595401,
+  "track" : 1
+}
+{
+  "flightId" : 717669221,
+  "track" : 2
+}
+{
+  "flightId" : 717904631,
+  "track" : 2
+}
+{
+  "flightId" : 717896611,
+  "track" : 2
+}
+{
+  "flightId" : 717964481,
+  "track" : 1
+}
+{
+  "flightId" : 717909751,
+  "track" : 1
+}
+{
+  "flightId" : 717664761,
+  "track" : 1
+}
+{
+  "flightId" : 717888051,
+  "track" : 1
+}
+{
+  "flightId" : 717939771,
+  "track" : 1
+}
+{
+  "flightId" : 717551421,
+  "track" : 1
+}
+{
+  "flightId" : 717856060,
+  "track" : 1
+}
+{
+  "flightId" : 717750351,
+  "track" : 2
+}
+{
+  "flightId" : 717791651,
+  "track" : 1
+}
+{
+  "flightId" : 717946821,
+  "track" : 1
+}
+{
+  "flightId" : 717616251,
+  "track" : 3
+}
+{
+  "flightId" : 717645261,
+  "track" : 1
+}
+{
+  "flightId" : 717792051,
+  "track" : 1
+}
+{
+  "flightId" : 717949541,
+  "track" : 1
+}
+{
+  "flightId" : 717956371,
+  "track" : 1
+}
+{
+  "flightId" : 717842481,
+  "track" : 1
+}
+{
+  "flightId" : 717547041,
+  "track" : 2
+}
+{
+  "flightId" : 717625680,
+  "track" : 7
+}
+{
+  "flightId" : 717783751,
+  "track" : 1
+}
+{
+  "flightId" : 717626921,
+  "track" : 1
+}
+{
+  "flightId" : 717619701,
+  "track" : 2
+}
+{
+  "flightId" : 717765741,
+  "track" : 2
+}
+{
+  "flightId" : 717653381,
+  "track" : 1
+}
+{
+  "flightId" : 717837931,
+  "track" : 1
+}
+{
+  "flightId" : 717608411,
+  "track" : 3
+}
+{
+  "flightId" : 717883291,
+  "track" : 1
+}
+{
+  "flightId" : 717869661,
+  "track" : 1
+}
+{
+  "flightId" : 717811251,
+  "track" : 1
+}
+{
+  "flightId" : 717966141,
+  "track" : 1
+}
+{
+  "flightId" : 717565081,
+  "track" : 4
+}
+{
+  "flightId" : 717601681,
+  "track" : 1
+}
+{
+  "flightId" : 717770791,
+  "track" : 1
+}
+{
+  "flightId" : 717908951,
+  "track" : 1
+}
+{
+  "flightId" : 717750761,
+  "track" : 1
+}
+{
+  "flightId" : 717924971,
+  "track" : 1
+}
+{
+  "flightId" : 717861311,
+  "track" : 1
+}
+{
+  "flightId" : 717944011,
+  "track" : 2
+}
+{
+  "flightId" : 717752071,
+  "track" : 1
+}
+{
+  "flightId" : 717715151,
+  "track" : 1
+}
+{
+  "flightId" : 717648431,
+  "track" : 1
+}
+{
+  "flightId" : 717634421,
+  "track" : 1
+}
+{
+  "flightId" : 717897401,
+  "track" : 1
+}
+{
+  "flightId" : 717974311,
+  "track" : 1
+}
+{
+  "flightId" : 717814820,
+  "track" : 1
+}
+{
+  "flightId" : 717610590,
+  "track" : 3
+}
+{
+  "flightId" : 717632801,
+  "track" : 1
+}
+{
+  "flightId" : 717778541,
+  "track" : 1
+}
+{
+  "flightId" : 717785420,
+  "track" : 5
+}
+{
+  "flightId" : 717891071,
+  "track" : 2
+}
+{
+  "flightId" : 717878001,
+  "track" : 1
+}
+{
+  "flightId" : 717964471,
+  "track" : 2
+}
+{
+  "flightId" : 717973551,
+  "track" : 1
+}
+{
+  "flightId" : 717660381,
+  "track" : 1
+}
+{
+  "flightId" : 717959251,
+  "track" : 1
+}
+{
+  "flightId" : 717596321,
+  "track" : 1
+}
+{
+  "flightId" : 717688691,
+  "track" : 1
+}
+{
+  "flightId" : 717749981,
+  "track" : 1
+}
+{
+  "flightId" : 717886381,
+  "track" : 2
+}
+{
+  "flightId" : 717659961,
+  "track" : 1
+}
+{
+  "flightId" : 717565080,
+  "track" : 4
+}
+{
+  "flightId" : 717626661,
+  "track" : 1
+}
+{
+  "flightId" : 717901201,
+  "track" : 1
+}
+{
+  "flightId" : 717618561,
+  "track" : 2
+}
+{
+  "flightId" : 717834681,
+  "track" : 1
+}
+{
+  "flightId" : 717732981,
+  "track" : 1
+}
+{
+  "flightId" : 717828891,
+  "track" : 1
+}
+{
+  "flightId" : 717708191,
+  "track" : 1
+}
+{
+  "flightId" : 717738601,
+  "track" : 2
+}
+{
+  "flightId" : 717663681,
+  "track" : 1
+}
+
+13: countFlightsAtInstantInDistricts with params: 2023-05-07 22:00:58
+MongoDB Response:
+{
+  "Rbz Arnsberg" : 8,
+  "Rbz Detmold" : 5,
+  "Rbz Koeln" : 11,
+  "Rbz Duesseldorf" : 7,
+  "Rbz Muenster" : 4
+}
+
+14: flightDurationInMunicipalityLowAltitudeInPeriod with params: [2023-05-28 19:09:14, 2023-06-01 13:00:38];Gem Kirchlengern;1750
+MongoDB Response:
+{
+  "flightId" : 721218241,
+  "originAirport" : "EBLG",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721164511,
+  "originAirport" : "EDAZ",
+  "destinationAirport" : "EDWO",
+  "airplaneType" : "P46T",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720942311,
+  "originAirport" : "EPWR",
+  "destinationAirport" : "EGNM",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721199661,
+  "originAirport" : "LPFR",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721318101,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKB",
+  "airplaneType" : "GLEX",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720757541,
+  "originAirport" : "EKCH",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720721661,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "E170",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720958381,
+  "originAirport" : "GVAC",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720705601,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EGNM",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721213631,
+  "originAirport" : "EPMO",
+  "destinationAirport" : "EDDG",
+  "airplaneType" : "C525",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720949311,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EGCC",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721118861,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EPMO",
+  "airplaneType" : "C525",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721135231,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720406941,
+  "originAirport" : "GCFV",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721134111,
+  "originAirport" : "EPLS",
+  "destinationAirport" : "EDLD",
+  "airplaneType" : "PC12",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720624491,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFPB",
+  "airplaneType" : "F900",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720744981,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720730241,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "EDLN",
+  "airplaneType" : "S22T",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720672251,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720437241,
+  "originAirport" : "EPGD",
+  "destinationAirport" : "EDLW",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720939931,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720630261,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720588571,
+  "originAirport" : "ESSB",
+  "destinationAirport" : "LEPA",
+  "airplaneType" : "C25B",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720988661,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721103701,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721042711,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721168921,
+  "originAirport" : "EGPH",
+  "destinationAirport" : "LTBS",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721201731,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720689411,
+  "originAirport" : "EGCC",
+  "destinationAirport" : "EPKK",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720785751,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EGGP",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720792121,
+  "originAirport" : "LEPA",
+  "destinationAirport" : "EDDH",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720705501,
+  "originAirport" : "EDDF",
+  "destinationAirport" : "ENGM",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721210631,
+  "originAirport" : "LFPG",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720670641,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LTFJ",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720629001,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720894071,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGNX",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721014251,
+  "originAirport" : "EBLG",
+  "destinationAirport" : "ZSYT",
+  "airplaneType" : "B77W",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720682711,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "E170",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721310491,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGGD",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720563261,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGMC",
+  "airplaneType" : "E55P",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721055671,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EIDW",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721168941,
+  "originAirport" : "EDDK",
+  "destinationAirport" : "ENGM",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720998521,
+  "originAirport" : "EDDP",
+  "destinationAirport" : "KCVG",
+  "airplaneType" : "B77L",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720975221,
+  "originAirport" : "EDHI",
+  "destinationAirport" : "LFBO",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721059661,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLC",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720578521,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "GCLP",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720974081,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLC",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720869621,
+  "originAirport" : "EPLL",
+  "destinationAirport" : "EGSS",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720677931,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EBBR",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721098571,
+  "originAirport" : "EGGW",
+  "destinationAirport" : "EPPO",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720972801,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGGW",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720898311,
+  "originAirport" : "EFHK",
+  "destinationAirport" : "EBBR",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721034121,
+  "originAirport" : "CYVR",
+  "destinationAirport" : "LSZH",
+  "airplaneType" : "A343",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720406651,
+  "originAirport" : "LPFR",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721274161,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EPWA",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720937241,
+  "originAirport" : "KCVG",
+  "destinationAirport" : "EDDP",
+  "airplaneType" : "B77L",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720590671,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LTFJ",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721225721,
+  "originAirport" : "KIAD",
+  "destinationAirport" : "LTFM",
+  "airplaneType" : "B789",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721075921,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EPWA",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720821751,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720702551,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721235981,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720732771,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720910361,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720906431,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFQQ",
+  "airplaneType" : "C56X",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721092961,
+  "originAirport" : "EGCC",
+  "destinationAirport" : "WSSS",
+  "airplaneType" : "A359",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721291761,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EPWA",
+  "airplaneType" : "E75S",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721293161,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721186051,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EPPO",
+  "airplaneType" : "C510",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720787461,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720495031,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721115351,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721085201,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "CYYZ",
+  "airplaneType" : "B788",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720809201,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLC",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720666181,
+  "originAirport" : "ZBAA",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "B77W",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720822861,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EDDG",
+  "airplaneType" : "BE20",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720676461,
+  "originAirport" : "EGPH",
+  "destinationAirport" : "LTBS",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721068521,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720394421,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720632591,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGWU",
+  "airplaneType" : "F2TH",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721193921,
+  "originAirport" : "LFQQ",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "C56X",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720373101,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EIDW",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720554541,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720404231,
+  "originAirport" : "EPKK",
+  "destinationAirport" : "EGNT",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720758821,
+  "originAirport" : "EHEH",
+  "destinationAirport" : "EPGD",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720939051,
+  "originAirport" : "ZHCC",
+  "destinationAirport" : "EBLG",
+  "airplaneType" : "B744",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721258321,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720940571,
+  "originAirport" : "EGKK",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720959891,
+  "originAirport" : "EDDP",
+  "destinationAirport" : "EIDW",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720675601,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGBB",
+  "airplaneType" : "C56X",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720732401,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EPWA",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721230491,
+  "originAirport" : "EPPO",
+  "destinationAirport" : "EGGD",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721024041,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720853111,
+  "originAirport" : "EGCC",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720730251,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLC",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721223361,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "LTFM",
+  "airplaneType" : "A306",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721191541,
+  "originAirport" : "EBBR",
+  "destinationAirport" : "EVRA",
+  "airplaneType" : "BCS3",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720961911,
+  "originAirport" : "EDDP",
+  "destinationAirport" : "EINN",
+  "airplaneType" : "B733",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720377871,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720479761,
+  "originAirport" : "EPLL",
+  "destinationAirport" : "EGGW",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720940471,
+  "originAirport" : "LPMA",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720800781,
+  "originAirport" : "EIKY",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "GL7T",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720532991,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720585431,
+  "originAirport" : "KCVG",
+  "destinationAirport" : "EDDP",
+  "airplaneType" : "B748",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721221751,
+  "originAirport" : "BIKF",
+  "destinationAirport" : "LJLJ",
+  "airplaneType" : "CRJ2",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721021771,
+  "originAirport" : "EDDF",
+  "destinationAirport" : "ENZV",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720377531,
+  "originAirport" : "EKCH",
+  "destinationAirport" : "LFMN",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721202871,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720981431,
+  "originAirport" : "EDWO",
+  "destinationAirport" : "EDAZ",
+  "airplaneType" : "P46T",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721111381,
+  "originAirport" : "EPWR",
+  "destinationAirport" : "EGNM",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720479401,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "KJFK",
+  "airplaneType" : "B763",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720767541,
+  "originAirport" : "EGPH",
+  "destinationAirport" : "EPKK",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720842511,
+  "originAirport" : "EGBB",
+  "destinationAirport" : "EPPO",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720420091,
+  "originAirport" : "OMAA",
+  "destinationAirport" : "KORD",
+  "airplaneType" : "A35K",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720845141,
+  "originAirport" : "UTTT",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721035531,
+  "originAirport" : "EGCC",
+  "destinationAirport" : "OBBI",
+  "airplaneType" : "B789",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721249721,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "LZIB",
+  "airplaneType" : "C525",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720959341,
+  "originAirport" : "EBLG",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721073681,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "KMIA",
+  "airplaneType" : "B788",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720902631,
+  "originAirport" : "EDLW",
+  "destinationAirport" : "EPGD",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720815741,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A20N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720655041,
+  "originAirport" : "LFPG",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "E170",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720536661,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721027031,
+  "originAirport" : "EGCC",
+  "destinationAirport" : "OTHH",
+  "airplaneType" : "B789",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721068501,
+  "originAirport" : "ZGSZ",
+  "destinationAirport" : "EBLG",
+  "airplaneType" : "B77L",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720609461,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LEBL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720394381,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720940401,
+  "originAirport" : "EGNT",
+  "destinationAirport" : "LTAI",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721217881,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "LGIR",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720561781,
+  "originAirport" : "LEJR",
+  "destinationAirport" : "EDDH",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721049271,
+  "originAirport" : "LSGG",
+  "destinationAirport" : "EKCH",
+  "airplaneType" : "CRJ9",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720593191,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720518791,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EDAZ",
+  "airplaneType" : "SF50",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720447881,
+  "originAirport" : "LTFM",
+  "destinationAirport" : "KIAD",
+  "airplaneType" : "B789",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721165591,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721262371,
+  "originAirport" : "EDVY",
+  "destinationAirport" : "EDXW",
+  "airplaneType" : "C25M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720805911,
+  "originAirport" : "LZKZ",
+  "destinationAirport" : "EGGP",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720702601,
+  "originAirport" : "EFTU",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720398341,
+  "originAirport" : "EGKK",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720717531,
+  "originAirport" : "EDDK",
+  "destinationAirport" : "EYKA",
+  "airplaneType" : "AT72",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720529331,
+  "originAirport" : "EPKT",
+  "destinationAirport" : "EGNM",
+  "airplaneType" : "A21N",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720427561,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721143851,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGKK",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720660621,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGGD",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720944801,
+  "originAirport" : "EDDF",
+  "destinationAirport" : "EDDW",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721278481,
+  "originAirport" : "CYYC",
+  "destinationAirport" : "LIRF",
+  "airplaneType" : "B789",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721041321,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720657591,
+  "originAirport" : "EHEH",
+  "destinationAirport" : "EPGD",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721268421,
+  "originAirport" : "EKRK",
+  "destinationAirport" : "LEIB",
+  "airplaneType" : "C25A",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721209591,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "EBLG",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720802031,
+  "originAirport" : "BIKF",
+  "destinationAirport" : "LSZH",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720405271,
+  "originAirport" : "LPMA",
+  "destinationAirport" : "EDDV",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721102731,
+  "originAirport" : "EHAM",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720704681,
+  "originAirport" : "EPWR",
+  "destinationAirport" : "EIDW",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720744781,
+  "originAirport" : "EDDL",
+  "destinationAirport" : "EDDB",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721089831,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EHAM",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720400261,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGSS",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720942741,
+  "originAirport" : "KJFK",
+  "destinationAirport" : "EDDP",
+  "airplaneType" : "A333",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720816911,
+  "originAirport" : "EKCH",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "BCS3",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720791061,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A320",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721322161,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLC",
+  "airplaneType" : "E190",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721301731,
+  "originAirport" : "EDDB",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "A321",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 721225211,
+  "originAirport" : "EVRA",
+  "destinationAirport" : "EBCI",
+  "airplaneType" : "B738",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720418671,
+  "originAirport" : "EDDV",
+  "destinationAirport" : "LFPG",
+  "airplaneType" : "E170",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720869291,
+  "originAirport" : "EPWA",
+  "destinationAirport" : "EGLL",
+  "airplaneType" : "B38M",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720471171,
+  "originAirport" : "EDDL",
+  "destinationAirport" : "EPGD",
+  "airplaneType" : "A319",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720790511,
+  "originAirport" : "EDBM",
+  "destinationAirport" : "EHTW",
+  "airplaneType" : "M28",
+  "totalTimeBelowAltitude" : 0
+}
+{
+  "flightId" : 720912081,
+  "originAirport" : "EDDG",
+  "destinationAirport" : "EDAV",
+  "airplaneType" : "PRM1",
+  "totalTimeBelowAltitude" : 0
+}
+
+thread-0 finished executing at 2025-01-29T00:52:07.551653Z.

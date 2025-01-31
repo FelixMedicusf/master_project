@@ -37,7 +37,6 @@ class BenchmarkExecutor(
     private val logsPath: String,
 ) {
 
-
     private val mapper: ObjectMapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(
             KotlinModule.Builder()
@@ -57,8 +56,6 @@ class BenchmarkExecutor(
     fun execute() {
         val config = loadConfig() ?: return
 
-
-
         val threadCount = config.benchmarkSettings.threads
         val nodes = config.benchmarkSettings.nodes
         val sut = config.benchmarkSettings.sut
@@ -72,9 +69,7 @@ class BenchmarkExecutor(
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-
-        warmUpSut(nodes[0], mainRandom = mainRandom)
-
+        //warmUpSut(nodes[0], mainRandom = mainRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -122,7 +117,7 @@ class BenchmarkExecutor(
                 val randomTimespan = generateRandomTimeSpan(mainRandom, formatter, 2023, 2)
 
                 statement.executeQuery("SELECT * FROM flights WHERE flightid=$randomFlightId")
-                statement.executeUpdate("SELECT * FROM flightpoints WHERE flightid=$randomFlightId")
+                statement.executeQuery("SELECT * FROM flightpoints WHERE flightid=$randomFlightId")
                 statement.executeQuery("SELECT * FROM counties WHERE name=$randomCounty")
                 statement.executeQuery("SELECT * FROM municipalities WHERE name=$randomMunicipality")
                 statement.executeQuery("SELECT * FROM districts WHERE name=$randomDistrict")
@@ -373,8 +368,11 @@ fun main() {
 
                     // Perform DataHandler operations sequentially
                     try {
-                        handler.processFlightData()
                         handler.processStaticData()
+                        handler.insertFlightPoints()
+                        handler.interpolateFlightPoints()
+                        handler.createGeographies()
+                        handler.createFlightTrips()
                         handler.createIndexes()
 
                         println("DataHandler operations completed successfully.")

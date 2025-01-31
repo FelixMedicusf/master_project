@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
@@ -29,6 +30,8 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.*
 import kotlin.random.Random
+
+
 
 const val USER = "felix"
 const val PASSWORD = "master"
@@ -71,7 +74,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        warmUpSut(nodes, mainRandom = mainRandom)
+        //warmUpSut(nodes, mainRandom = mainRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -354,7 +357,9 @@ fun main() {
     // Start HTTP server
     embeddedServer(Netty, port = 8080) {
         install(ContentNegotiation) {
-            jackson {}
+            jackson {
+                enable(SerializationFeature.INDENT_OUTPUT) // Pretty print JSON responses
+            }
         }
         install(StatusPages) {
             exception<Throwable> { call, cause ->
@@ -366,34 +371,16 @@ fun main() {
             }
         }
 
+
         routing {
 
-            println("Starting Benchmarking Server v1.2")
+            println("Starting Benchmarking Server v1.3")
+            // Maximum memory the JVM can use (heap size limit)
+            val runtime = Runtime.getRuntime()
+            val maxMemory = runtime.maxMemory() / (1024 * 1024)
+            println("Max Memory (heap limit): ${maxMemory} MB")
 
-            post("/create-ts-collection") {
-                try {
-                    val handler = DataHandler(DATABASE)
 
-                    try {
-                        handler.createFlightsPointsTs(separators)
-                        println("Time series data created.")
-                        call.respond(HttpStatusCode.OK, "Created time series data.")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        println("Error during creation of time series data: ${e.message}")
-                        call.respond(
-                            HttpStatusCode.InternalServerError,
-                            "Error during time series data creation: ${e.message}"
-                        )
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    call.respond(
-                        HttpStatusCode.BadRequest,
-                        "Invalid input for create-ts-collection: ${e.message}"
-                    )
-                }
-            }
 
             post("/create-trajectories") {
                 try {
@@ -420,19 +407,91 @@ fun main() {
                 }
             }
 
-            post("/data-handler") {
+            post("/migrate-flightpoints") {
                 try {
                     val handler = DataHandler(DATABASE)
 
                     try {
+                        handler.flightPointsMigration(separators)
+                        println("Migrated flightpoints to time series collection.")
+                        call.respond(HttpStatusCode.OK, "Migrated Flightpoints.")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        println("Error during creation of time series data: ${e.message}")
+                        call.respond(
+                            HttpStatusCode.InternalServerError,
+                            "Error during migration of flightpoints to time series collection: ${e.message}"
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        "Invalid input for migrate-flightpoints: ${e.message}"
+                    )
+                }
+            }
 
-                        handler.updateDatabaseCollections()
-                        handler.shardCollections()
-                        handler.insertRegionalData()
-                        handler.createFlightTrips()
-                        handler.createTrajectories(separators)
-                        handler.createFlightsPointsTs(separators)
-                        handler.createTimeSeriesCollectionIndexes()
+            post("/interpolate-flightpoints") {
+                try {
+                    val handler = DataHandler(DATABASE)
+
+                    try {
+                        handler.flightPointsInterpolation(separators)
+                        println("Interpolated flight points in time series collection.")
+                        call.respond(HttpStatusCode.OK, "Interpolated flightpoints.")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        println("Error during interpolation of flightpoints: ${e.message}")
+                        call.respond(
+                            HttpStatusCode.InternalServerError,
+                            "Error during interpolation of flightpoints: ${e.message}"
+                        )
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        "Invalid input for interpolate-flightpoints: ${e.message}"
+                    )
+                }
+            }
+
+
+            post("/data-handler") {
+                try {
+                    val handler = DataHandler(DATABASE)
+
+                    var executionPattern = call.receive<List<Int>>()
+                    if(executionPattern.isEmpty())executionPattern= listOf(1, 1, 1, 1, 1, 1, 1, 1)
+
+                    try {
+
+                        if(executionPattern[0] == 1){
+                            handler.updateDatabaseCollections()
+                        }
+                        if(executionPattern[1] == 1){
+                            handler.insertRegionalData()
+                        }
+                        if(executionPattern[2] == 1){
+                            handler.shardCollections()
+                        }
+                        if(executionPattern[3] == 1){
+                            handler.createFlightTrips()
+                        }
+                        if(executionPattern[4] == 1){
+                            handler.createTrajectories(separators)
+                        }
+                        if(executionPattern[5] == 1){
+                            handler.flightPointsMigration(separators)
+                        }
+                        if(executionPattern[6] == 1){
+                            handler.flightPointsInterpolation(separators)
+                        }
+                        if(executionPattern[7] == 1){
+                            handler.createTimeSeriesCollectionIndexes()
+                        }
+
                         println("DataHandler operations completed successfully.")
                         call.respond(HttpStatusCode.OK, "DataHandler operations completed successfully.")
                     } catch (e: Exception) {
@@ -491,7 +550,7 @@ fun main() {
                 call.respond(HttpStatusCode.OK, "Benchmark execution stopped.")
             }
 
-            // Upload YAML configuration file
+
             post("/upload-config") {
                 println("Uploading benchmark configurations.")
                 val configFileBytes = call.receive<ByteArray>()

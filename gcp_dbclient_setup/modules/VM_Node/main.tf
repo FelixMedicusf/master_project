@@ -52,6 +52,7 @@ startup-script = <<SCRIPT
       exit 1
   fi
 
+  sudo chmod 777 -R $JAR_DEST
   # Ensure the JAR file is executable
   chmod +x $JAR_DEST
 

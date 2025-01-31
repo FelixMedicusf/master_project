@@ -1,0 +1,2 @@
+start: Tue Jan 28 01:10:08 CET 2025, end: Tue Jan 28 01:10:39 CET 2025, duration (s): 30. SUT: MongoDB, #threads: 2, #nodes: 3, queries executed: 0.
+threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords

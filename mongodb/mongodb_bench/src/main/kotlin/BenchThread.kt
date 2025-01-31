@@ -116,11 +116,11 @@ class BenchThread(
             // Ensure all threads start at the same time
             startLatch.await()
 
-            printStream.println("$threadName started executing at ${Instant.now()} with ${queryQueue.size} queries.")
+            printStream.println("$threadName started executing at ${Instant.now()}.")
             println()
             var i = 1
 
-            println("$threadName started executing at ${Instant.now()} with ${queryQueue.size} queries.")
+            println("$threadName started executing at ${Instant.now()}.")
 
         try{
             while (true) {
@@ -135,13 +135,20 @@ class BenchThread(
                         if(set.key.contains("period")){
                             mongoValues.add(set.value.split(","))
                         }
-
-                        else if (set.key == "radius" || set.key == "low_altitude" || set.key == "distance"){
+                        else if(set.key == "radius"){
+                            val radiusInRadians = set.value.toDouble()/(1000*6378)
+                            mongoValues.add(radiusInRadians)
+                        }
+                        else if (set.key == "low_altitude"){
                             mongoValues.add(set.value.toInt())
                         }
-
                         else if(set.key.contains("point")){
-                            mongoValues.add(set.value.split(",").forEach{it.toDouble()})
+                            val coordinates: List<Double> = listOf(set.value.split(",")[0].toDouble(), set.value.split(",")[1].toDouble())
+                            mongoValues.add(coordinates)
+                        }
+                        else if(set.key.contains("distance")){
+                            val radiusInRadians = set.value.toDouble()
+                            mongoValues.add(radiusInRadians)
                         }
                         else {
                             mongoValues.add(set.value)
@@ -164,7 +171,7 @@ class BenchThread(
                 val response = mongoParameters.let { params -> currentFunction.call(this, *params.toTypedArray()) }
                 val endTime = Instant.now().toEpochMilli()
 
-                printStream.println(formatMongoResponse(response))
+                printStream.println(formatMongoResponse(response.fourth))
 
 
                 synchronized(log) {
@@ -1005,6 +1012,7 @@ class BenchThread(
 
         val firstResponse = countiesCollection.aggregate(firstPipeline).toList()
 
+
         val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
         //println(firstResponse)
         val name = firstResponse.get(0).getString("name")
@@ -1023,13 +1031,11 @@ class BenchThread(
                     )
                 )
             ),
-            Document("\$project",
-                Document("flightId", 1).append("airplaneType", 1).append("_id", 0).append("originAirport", 1)
-                    .append("destinationAirport", 1)
-            ),
             Document("\$count", "flight_count")
         )
 
+//        val explainPlan = flightTripsCollection.aggregate(secondPipeline).explain(ExplainVerbosity.EXECUTION_STATS)
+//        println("Query Plan for Second Pipeline: $explainPlan")
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
         val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
@@ -1080,7 +1086,7 @@ class BenchThread(
         val secondPipeline = listOf(
             Document("\$match", Document("altitude", Document("\$lt", low_altitude))),
             Document("\$match", Document("\$or", geoWithinConditions)),
-            Document("\$project", Document("flightId", 1).append("altitude", 1).append("airplaneType", 1).append("track", 1).append("_id", 0).append("timestamp", 1)),
+            Document("\$project", Document("flightId", 1).append("altitude", 1).append("airplaneType", 1).append("track", 1).append("_id", 0).append("timestamp", Document("\$dateToString", Document("format", "%Y-%m-%d %H:%M:%S").append("date", "\$timestamp")))),
             Document("\$group", Document("_id", Document("flightId", "\$flightId")
                 .append("altitude", "\$altitude")
                 .append("airplaneType", "\$airplaneType")
@@ -1088,7 +1094,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightPointsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
@@ -1233,7 +1239,7 @@ class BenchThread(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
         coordinates: List<Double>,
-        maxDistance: Int,
+        maxDistance: Double,
     ): Quadrupel<Long, Long, Long, List<Document>>{
 
         val flightTripsCollection = dynamicCollections[2]
@@ -1319,6 +1325,42 @@ class BenchThread(
 //            Document("\$group", Document("_id", "\$flightId"))
 //        )
 
+//        val secondPipeline = listOf(
+//            Document(
+//                "\$match", Document(
+//                    "timestamp", Document()
+//                        .append("\$gte", startDate) // Start of the period
+//                        .append("\$lte", endDate) // End of the period
+//                )
+//            ),
+//            Document(
+//                "\$match", Document(
+//                    "location", Document(
+//                        "\$geoWithin", Document(
+//                            "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
+//                        )
+//                    )
+//                )
+//            ),
+//            Document(
+//                "\$group", Document(
+//                    "_id", Document(
+//                        "flightId", "\$metadata.flightId"
+//                    ).append(
+//                        "track", "\$metadata.track"
+//                    )
+//                )
+//            ),
+//            Document(
+//                "\$project", Document(
+//                    "flightId", "\$_id.flightId"
+//                ).append(
+//                    "track", "\$_id.track"
+//                ).append(
+//                    "_id", 0
+//                )
+//            )
+//        )
         val secondPipeline = listOf(
             Document(
                 "\$match", Document(
@@ -1338,18 +1380,25 @@ class BenchThread(
             ),
             Document(
                 "\$group", Document(
-                    "_id", Document(
-                        "flightId", "\$metadata.flightId"
-                    ).append(
-                        "track", "\$metadata.track"
+                    "_id", null // Null _id because we don't want to group by a specific field
+                ).append(
+                    "distinctCombinations", Document(
+                        "\$addToSet", Document(
+                            "flightId", "\$metadata.flightId"
+                        ).append(
+                            "track", "\$metadata.track"
+                        )
                     )
                 )
             ),
             Document(
+                "\$unwind", "\$distinctCombinations"
+            ),
+            Document(
                 "\$project", Document(
-                    "flightId", "\$_id.flightId"
+                    "flightId", "\$distinctCombinations.flightId"
                 ).append(
-                    "track", "\$_id.track"
+                    "track", "\$distinctCombinations.track"
                 ).append(
                     "_id", 0
                 )
@@ -1766,9 +1815,13 @@ class BenchThread(
                 )
             ),
             Document(
+                "\$sort", Document("timestamp", 1)
+            ),
+            Document(
                 "\$group", Document()
                     .append("_id", Document()
                         .append("flightId", "\$metadata.flightId")
+                        .append("track", "\$metadata.track")
                         .append("originAirport", "\$metadata.originAirport")
                         .append("destinationAirport", "\$metadata.destinationAirport")
                         .append("airplaneType", "\$metadata.airplaneType")
@@ -1820,8 +1873,15 @@ class BenchThread(
                     .append("originAirport", "\$_id.originAirport")
                     .append("destinationAirport", "\$_id.destinationAirport")
                     .append("airplaneType", "\$_id.airplaneType")
-                    .append("totalTimeBelowAltitude", "\$totalTimeBelowAltitude.total") // Extract the total time
-            )
+                    .append("totalTimeBelowAltitude", Document(
+                        "\$concat", listOf(
+                            Document("\$toString", Document("\$divide", listOf("\$totalTimeBelowAltitude.total", 1000))),
+                            " seconds"
+                        )
+                    )) // Extract the total time
+            ),
+            Document("\$match", Document("totalTimeBelowAltitude", Document("\$ne", "0 seconds"))),
+
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
@@ -1879,12 +1939,14 @@ class BenchThread(
                 "\$project", Document()
                     .append("hour", Document("\$hour", "\$timestamp"))
                     .append("flightId", "\$metadata.flightId")
+                    .append("track", "\$metadata.track")
             ),
             Document(
                 "\$group", Document()
                     .append("_id", Document()
                         .append("hour", "\$hour")
                         .append("flightId", "\$flightId")
+                        .append("track", "\$track")
                     )
                     .append("count", Document("\$sum", 1))
             ),
@@ -2026,6 +2088,7 @@ class BenchThread(
         }[0]
 
 
+
         val pipeline = listOf(
             // Stage 1: Lookup cities for airports
             Document(
@@ -2117,8 +2180,9 @@ class BenchThread(
         )
 
         val queryTimeStart = Instant.now().toEpochMilli()
+        val endResult = airportsCollection.aggregate(pipeline).toList()
 
-        return Quadrupel(queryTimeStart, 0, 0, airportsCollection.aggregate(pipeline).toList())
+        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStart, endResult)
     }
 
 

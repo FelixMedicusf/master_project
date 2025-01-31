@@ -1,10 +1,10 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "35.195.159.119"
-    - "34.140.85.128"
-    - "104.199.100.157"
-  threads: 2
+    - "34.77.30.151"
+    - "35.187.97.235"
+    - "104.155.100.116"
+  threads: 4
   random_seed: 123
 
 queryConfigs:
@@ -28,7 +28,7 @@ queryConfigs:
           period: 2023-10-05 08:56:35,2023-10-10 11:26:36
   # use
   - name: locationOfAirplaneAtInstant
-    use: True
+    use: False
     type: temporal
     repetition: 2
     parameter_sets:
@@ -76,7 +76,7 @@ queryConfigs:
           period_short: 2023-12-24 23:31:34,2023-12-26 08:24:43
   # use
   - name: airportUtilizationInPeriod
-    use: True
+    use: False
     type: temporal
     repetition: 2
     parameter_sets:
@@ -129,9 +129,9 @@ queryConfigs:
           municipality: "Gem Balve"
       - parameters:
           municipality: "Gem Kranenburg"
-  # use
+  # use (takes veryyyyy long to execute) (query on trajectory field)
   - name: countFlightsInCounties
-    use: True
+    use: False
     type: spatial
     repetition: 2
     parameter_sets:
@@ -147,7 +147,7 @@ queryConfigs:
           county: "Krs Moenchengladbach"
   # use
   - name: flightsCloseToMainCitiesLowAltitude
-    use: True
+    use: False
     type: spatial
     repetition: 2
     parameter_sets:
@@ -168,7 +168,7 @@ queryConfigs:
           radius: 100
   # use
   - name: flightClosestToPoint
-    use: True
+    use: False
     type: spatial
     repetition: 2
     parameter_sets:
@@ -177,16 +177,16 @@ queryConfigs:
           distance: 150
       - parameters:
           point: 6.508335475259438,51.61901590207067
-          distance: 220
+          distance: 80
       - parameters:
           point: 7.038107227408294,51.256311458722024
-          distance: 115
+          distance: 75
       - parameters:
           point: 7.9319714196871915,51.261173877480914
-          distance: 240
+          distance: 40
       - parameters:
           point: 7.951155121394054,50.724243209930954
-          distance: 300
+          distance: 180
 
   # spatiotemporal queries (6 (7) functioning queries)
   - name: flightsInCountyInPeriod
@@ -341,14 +341,3 @@ queryConfigs:
       - parameters:
           period_medium: 2023-05-13 01:45:21,2023-05-14 12:54:31
           county: "Krs Hamm"
-
-
-
-
-
-
-
-
-
-
-
