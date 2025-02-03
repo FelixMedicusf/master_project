@@ -1,10 +1,10 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "34.77.30.151"
-    - "35.187.97.235"
-    - "104.155.100.116"
-  threads: 4
+    - "35.241.223.82"
+    - "34.78.41.234"
+    - "34.140.154.34"
+  threads: 8
   random_seed: 123
 
 queryConfigs:
@@ -12,7 +12,7 @@ queryConfigs:
   # Temporal queries (5 functioning queries, 3 chosen)
   # use
   - name: countActiveFlightsInPeriod
-    use: False
+    use: True
     type: temporal
     repetition: 2
     parameter_sets:
@@ -28,7 +28,7 @@ queryConfigs:
           period: 2023-10-05 08:56:35,2023-10-10 11:26:36
   # use
   - name: locationOfAirplaneAtInstant
-    use: False
+    use: True
     type: temporal
     repetition: 2
     parameter_sets:
@@ -76,7 +76,7 @@ queryConfigs:
           period_short: 2023-12-24 23:31:34,2023-12-26 08:24:43
   # use
   - name: airportUtilizationInPeriod
-    use: False
+    use: True
     type: temporal
     repetition: 2
     parameter_sets:
@@ -129,9 +129,9 @@ queryConfigs:
           municipality: "Gem Balve"
       - parameters:
           municipality: "Gem Kranenburg"
-  # use (takes veryyyyy long to execute) (query on trajectory field)
+  # use
   - name: countFlightsInCounties
-    use: False
+    use: True
     type: spatial
     repetition: 2
     parameter_sets:
@@ -147,18 +147,18 @@ queryConfigs:
           county: "Krs Moenchengladbach"
   # use
   - name: flightsCloseToMainCitiesLowAltitude
-    use: False
+    use: True
     type: spatial
     repetition: 2
     parameter_sets:
       - parameters:
-          low_altitude: 1050
+          low_altitude: 1200
           radius: 30
       - parameters:
-          low_altitude: 1200
+          low_altitude: 700
           radius: 60
       - parameters:
-          low_altitude: 580
+          low_altitude: 815
           radius: 70
       - parameters:
           low_altitude: 950
@@ -168,7 +168,7 @@ queryConfigs:
           radius: 100
   # use
   - name: flightClosestToPoint
-    use: False
+    use: True
     type: spatial
     repetition: 2
     parameter_sets:
@@ -177,16 +177,16 @@ queryConfigs:
           distance: 150
       - parameters:
           point: 6.508335475259438,51.61901590207067
-          distance: 80
+          distance: 220
       - parameters:
           point: 7.038107227408294,51.256311458722024
-          distance: 75
+          distance: 115
       - parameters:
           point: 7.9319714196871915,51.261173877480914
-          distance: 40
+          distance: 240
       - parameters:
           point: 7.951155121394054,50.724243209930954
-          distance: 180
+          distance: 350
 
   # spatiotemporal queries (6 (7) functioning queries)
   - name: flightsInCountyInPeriod

@@ -16,6 +16,14 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
 
+
+    implementation("org.locationtech.jts:jts-core:1.18.2")
+    implementation("org.locationtech.jts.io:jts-io-common:1.18.2") // Required for GeoJsonReader
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2") // JSON support
+
+
+
+
     // MongoDB
     implementation("org.mongodb:mongodb-driver-kotlin-coroutine:5.2.1")
     implementation("org.mongodb:mongodb-driver-sync:5.2.1")
@@ -54,4 +62,8 @@ tasks.test {
 
 kotlin {
     jvmToolchain(11)
+}
+
+dependencies {
+    implementation("org.locationtech.jts:jts-core:1.18.2")
 }

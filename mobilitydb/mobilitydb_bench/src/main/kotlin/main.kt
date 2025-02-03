@@ -26,7 +26,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-
 const val DATABASE = "aviation_data"
 const val USER = "felix"
 const val PASSWORD = "master"
@@ -69,7 +68,7 @@ class BenchmarkExecutor(
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        //warmUpSut(nodes[0], mainRandom = mainRandom)
+        warmUpSut(nodes[0], mainRandom = mainRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -101,7 +100,7 @@ class BenchmarkExecutor(
 
         val statement = connection.createStatement()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val repetitions = 100
+        val repetitions = 50
         var i = 0
 
 
@@ -123,9 +122,11 @@ class BenchmarkExecutor(
                 statement.executeQuery("SELECT * FROM districts WHERE name=$randomDistrict")
                 statement.executeQuery("SELECT * FROM cities WHERE name=$randomCity")
 
+                statement.executeQuery("SELECT * FROM flights f, counties c WHERE f.trip && stbox(c.geom, $randomTimespan) AND c.name = $randomCounty LIMIT 5")
                 statement.executeQuery("SELECT flightid, track FROM flights WHERE trip && $randomTimespan")
 
                 i++
+                println("next index: $i")
             }
         } catch (e: Exception) {
             e.printStackTrace()

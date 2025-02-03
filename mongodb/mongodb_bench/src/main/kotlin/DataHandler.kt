@@ -2,6 +2,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoCredential
 import com.mongodb.ServerAddress
@@ -9,12 +10,17 @@ import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.*
+import com.mongodb.client.model.geojson.Geometry
 import com.mongodb.connection.ClusterSettings
 import kotlinx.coroutines.*
 import org.bson.Document
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
 import org.locationtech.jts.geom.impl.CoordinateArraySequence
+import org.locationtech.jts.io.WKTReader
+import org.locationtech.jts.io.geojson.GeoJsonReader
+import org.locationtech.jts.io.geojson.GeoJsonWriter
+import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
 import java.io.File
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -170,7 +176,8 @@ class DataHandler(databaseName: String) {
         Thread.sleep(30_000)
 
         //flightPointsCollection.createIndex(Document("timestamp", 1))
-        //flightPointsCollection.createIndex(Document("location","2dsphere"))
+        flightPointsCollection.createIndex(Document("location","2dsphere"))
+        flightPointsCollection.createIndex(Document("altitude", 1))
 
         var compoundIndex = Indexes.compoundIndex(
             Indexes.ascending("timestamp"), // Ascending index on timestamp
@@ -247,20 +254,16 @@ class DataHandler(databaseName: String) {
                         val name = parts[0].trim()
                         val wktPolygon = parts[1].trim()
 
-                        try {
-                            val geoJsonPolygon = wktToGeoJson(wktPolygon)
+                        val simplifiedWktPolygon = simplifyPolygonWKT(wktPolygon, .008)
 
-                            // Reduce the polygon data points
-                            val simplifiedCoordinates = simplifyPolygon(geoJsonPolygon)
+                        val geoJsonPolygon = wktToGeoJson(simplifiedWktPolygon)
 
-                            val document = Document("name", name)
-                                .append("polygon", simplifiedCoordinates)
+                        val document = Document("name", name)
+                            .append("polygon", geoJsonPolygon)
 
-                            collection.insertOne(document)
+                        collection.insertOne(document)
 
-                        } catch (e: Exception) {
-                            println("Error processing line: $line, error: ${e.message}")
-                        }
+
                     } else {
                         println("Skipping invalid line: $line")
                     }
@@ -270,24 +273,19 @@ class DataHandler(databaseName: String) {
         println("All data has been loaded into the $collectionName collection.")
     }
 
-    // Helper function to simplify the polygon
-    private fun simplifyPolygon(geoJsonPolygon: Document): Document {
-        @Suppress("UNCHECKED_CAST")
-        val coordinates = geoJsonPolygon.get("coordinates") as List<List<List<Double>>>
-        // Simplify each ring (outer and inner rings in polygons)
-        val simplifiedCoordinates = coordinates.map { ring ->
-            if (ring.size > 2) {
-                val simplifiedRing = ring.filterIndexed { index, _ ->
-                    index == 0 || index == ring.lastIndex || index % 30 == 0
-                }
-                simplifiedRing
-            } else {
-                ring // If the ring has too few points, leave it untouched
-            }
+    private fun simplifyPolygonWKT(wkt: String, tolerance: Double): String {
+        val reader = WKTReader()
+        val geometry: org.locationtech.jts.geom.Geometry = reader.read(wkt)
+
+        // Ensure it does not log to console by accident
+        if (!geometry.isValid || geometry.isEmpty) {
+            throw IllegalArgumentException("Invalid or empty geometry")
         }
 
-        // Return a new GeoJSON Document with simplified coordinates
-        return Document("type", "Polygon").append("coordinates", simplifiedCoordinates)
+        val simplifiedGeometry = DouglasPeuckerSimplifier.simplify(geometry, tolerance)
+
+        // Explicitly return the WKT string, no printing
+        return simplifiedGeometry.toText()
     }
 
     private fun wktToGeoJson(wkt: String): Document {
@@ -296,12 +294,13 @@ class DataHandler(databaseName: String) {
             throw IllegalArgumentException("Invalid WKT format: $wkt")
         }
 
-        val coordinatesString = wkt.replace("POLYGON((", "").replace("))", "")
+        val coordinatesString = wkt.replace("POLYGON ((", "").replace("))", "")
 
         val coordinates = coordinatesString.split(", ").map { point ->
             val (lon, lat) = point.split(" ").map { it.toDouble() }
             listOf(lon, lat)
         }
+
 
         return Document("type", "Polygon")
             .append("coordinates", listOf(coordinates))
@@ -849,11 +848,13 @@ class DataHandler(databaseName: String) {
 
         val flightPointsTsCollection = database.getCollection("flightpoints_ts")
         println("Creating more indexes in ${flightPointsTsCollection.namespace.collectionName}.")
-        val indexOptions = IndexOptions().background(true)
+        val indexOptions = IndexOptions()
         flightPointsTsCollection.createIndex(Document("metadata.originAirport", "hashed"))
         println("Created hashed index on metadata.originAirport!")
         flightPointsTsCollection.createIndex(Document("metadata.destinationAirport", "hashed"))
         println("Created hashed index on metadata.destinationAirport!")
+
+        flightPointsTsCollection.createIndex(Document("altitude", 1))
 
         flightPointsTsCollection.createIndex(Document("location", "2dsphere"), indexOptions)
         println("Created 2dsphere index on location field!")
@@ -882,14 +883,14 @@ fun main() {
 
     val separators = listOf(0, 700642631, 710076001, 718926541, 728177911, 736845861, 743346091, 754447851, 760302441, 773383481, 774441640)
     val handler = DataHandler("aviation_data")
-//    handler.updateDatabaseCollections()
+    handler.updateDatabaseCollections()
     handler.insertRegionalData()
-//    handler.shardCollections()
-//    handler.createFlightTrips()
+    handler.shardCollections()
+    handler.createFlightTrips()
 //    handler.createTrajectories(separators)
 //    handler.flightPointsMigration(separators)
 //    handler.flightPointsInterpolation(separators)
-//    handler.createTimeSeriesCollectionIndexes()
+    handler.createTimeSeriesCollectionIndexes()
 
 }
 

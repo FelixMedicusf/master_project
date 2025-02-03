@@ -63,8 +63,6 @@ class BenchThread(
             exception.printStackTrace()
         }
 
-        val user = "felix"
-        val password = "master"
         val mongodbClientPort = 27017
 
         var mongodbHosts = ArrayList<ServerAddress>();
@@ -129,39 +127,39 @@ class BenchThread(
                 val mongoParameters: MutableList<Any> = mutableListOf(staticCollections, dynamicCollections)
                 val mongoValues: MutableList<Any> = mutableListOf()
 
-                if (task.paramSet != null){
-                    for (set in task.paramSet){
-
-                        if(set.key.contains("period")){
-                            mongoValues.add(set.value.split(","))
-                        }
-                        else if(set.key == "radius"){
-                            val radiusInRadians = set.value.toDouble()/(1000*6378)
-                            mongoValues.add(radiusInRadians)
-                        }
-                        else if (set.key == "low_altitude"){
-                            mongoValues.add(set.value.toInt())
-                        }
-                        else if(set.key.contains("point")){
-                            val coordinates: List<Double> = listOf(set.value.split(",")[0].toDouble(), set.value.split(",")[1].toDouble())
-                            mongoValues.add(coordinates)
-                        }
-                        else if(set.key.contains("distance")){
-                            val radiusInRadians = set.value.toDouble()
-                            mongoValues.add(radiusInRadians)
-                        }
-                        else {
-                            mongoValues.add(set.value)
-                        }
 
 
 
 
-                    }
-                }
+//                if (task.paramSet != null){
+//                    for (set in task.paramSet){
+//
+//                        if(set.key.contains("period")){
+//                            mongoValues.add(set.value.split(","))
+//                        }
+//                        else if(set.key == "radius"){
+//                            val radiusInRadians = set.value.toDouble()/(1000*6378)
+//                            mongoValues.add(radiusInRadians)
+//                        }
+//                        else if (set.key == "low_altitude"){
+//                            mongoValues.add(set.value.toInt())
+//                        }
+//                        else if(set.key.contains("point")){
+//                            val coordinates: List<Double> = listOf(set.value.split(",")[0].toDouble(), set.value.split(",")[1].toDouble())
+//                            mongoValues.add(coordinates)
+//                        }
+//                        else if(set.key.contains("distance")){
+//                            val radiusInRadians = set.value.toDouble()
+//                            mongoValues.add(radiusInRadians)
+//                        }
+//                        else {
+//                            mongoValues.add(set.value)
+//                        }
+//                    }
+//                }
 
 
-                val params = task.paramSet?.keys?.joinToString(";") ?: ""
+                //val params = task.paramSet?.keys?.joinToString(";") ?: ""
                 val parameterValues = mongoValues.joinToString(";")
 
                 mongoValues.forEach { value -> mongoParameters.add(value) }
@@ -180,7 +178,7 @@ class BenchThread(
                                 threadName = threadName,
                                 queryName = task.queryName,
                                 queryType = task.type,
-                                params =  params,
+                                params =  "",
                                 paramValues = parameterValues.replace(",", "/"),
                                 round = 0,
                                 executionIndex = 0,
@@ -1848,7 +1846,14 @@ class BenchThread(
                                         Document("\$ne", listOf("\$\$value.prev_altitude", null)), // Previous time is not 0
                                         Document("\$ne", listOf("\$\$value.prev_timestamp", null)), // Previous time is not 0
                                         Document("\$lt", listOf("\$\$this.altitude", lowAltitude)), // Current altitude < lowAltitude
-                                        Document("\$lt", listOf("\$\$value.prev_altitude", lowAltitude)) // Previous altitude < lowAltitude
+                                        Document("\$lt", listOf("\$\$value.prev_altitude", lowAltitude)),
+                                        Document("\$eq", listOf(
+                                            Document("\$subtract", listOf(
+                                                Document("\$toLong", "\$\$this.timestamp"),
+                                                Document("\$toLong", "\$\$value.prev_timestamp")
+                                            )),
+                                            1L
+                                        ))
                                     )),
                                     Document("prev_altitude", "\$\$this.altitude").append("prev_timestamp", "\$\$this.timestamp")
                                         .append("total", Document("\$add", listOf(
@@ -1900,8 +1905,9 @@ class BenchThread(
         val municipalityCollection = staticCollections[2]
         val flightPointsTsCollection = dynamicCollections[1]
 
-        val startDate: Date = dateFormat.parse("$day 00:00:00")
-        val endDate: Date = dateFormat.parse("$day 23:59:59")
+//        val startDate: Date = dateFormat.parse("$day 00:00:00")
+//        val endDate: Date = dateFormat.parse("$day 23:59:59")
+        val day: Date = dateFormat.parse("$day 00:00:00")
 
         val firstPipeline = listOf(
             Document("\$match", Document("name", countyName)),
@@ -1919,13 +1925,21 @@ class BenchThread(
         }[0]
 
         val secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "timestamp", Document()
-                        .append("\$gte", startDate)
-                        .append("\$lte", endDate)
-                )
-            ),
+            Document("\$match", Document(
+                "timestamp", Document()
+                    .append("\$gte", Document(
+                        "\$dateAdd", Document()
+                            .append("startDate", day)
+                            .append("unit", "hour")
+                            .append("amount", 0)
+                    ))
+                    .append("\$lt", Document(
+                        "\$dateAdd", Document()
+                            .append("startDate", day)
+                            .append("unit", "day")
+                            .append("amount", 1)
+                    ))
+            )),
             Document(
                 "\$match", Document(
                     "location", Document(

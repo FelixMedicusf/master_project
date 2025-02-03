@@ -142,6 +142,7 @@ fun main() {
     val configPathMongoDB = "benchConfigMongoDB.yaml"
     val configPathMobilityDB = "benchConfigMobilityDB.yaml"
 
+    //val benchmarkingClientHost = "35.187.55.236"
     val benchmarkingClientHost = "localhost"
     val databaseClientAddress = "$benchmarkingClientHost:8080"
 
@@ -149,7 +150,7 @@ fun main() {
     val client = BenchmarkClient(serverUrl)
 
     println("\n1. Uploading configuration...")
-    client.uploadConfig(configPathMobilityDB)
+    client.uploadConfig(configPathMongoDB)
 
 //    handler.updateDatabaseCollections() --> 0 index
 //    handler.insertRegionalData() --> 1 index
@@ -161,7 +162,7 @@ fun main() {
 //    handler.createTimeSeriesCollectionIndexes() -- 7 index
 
     // must be of size 8
-//    val executionPattern = listOf(0, 1, 1, 1, 1, 1, 1, 1)
+//    val executionPattern = listOf(0, 0, 0, 0, 1, 1, 1, 1)
 //    client.triggerDataHandler(executionPattern)
 
 

@@ -32,7 +32,7 @@ import java.util.concurrent.*
 import kotlin.random.Random
 
 
-
+val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 const val USER = "felix"
 const val PASSWORD = "master"
 const val DATABASE = "aviation_data"
@@ -69,12 +69,12 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val mainRandom = Random(mainSeed)
         println("Using random seed: $mainSeed")
 
-        val allQueries = prepareQueryTasks(config, mainSeed)
+        val allQueries = prepareQueryTasks(config, mainRandom)
         val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        //warmUpSut(nodes, mainRandom = mainRandom)
+        warmUpSut(nodes, mainRandom = mainRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -109,21 +109,15 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         }
     }
 
-    private fun prepareQueryTasks(config: BenchmarkConfiguration, seed: Long): MutableList<QueryTask> {
-        val random = Random(seed)
+
+    private fun prepareQueryTasks(config: BenchmarkConfiguration, random: Random): MutableList<QueryTask> {
         val allQueries = mutableListOf<QueryTask>()
+
         for (queryConfig in config.queryConfigs) {
-            if (queryConfig.use) {
-                if (queryConfig.parameterSets != null) {
-
-                    for(paramSet in queryConfig.parameterSets) {
-
-                        allQueries.add(
-                            QueryTask(queryConfig.name, queryConfig.type, paramSet.parameters)
-                        )
-                    }
-                } else {
-                        allQueries.add(QueryTask(queryConfig.name, queryConfig.type))
+            if (queryConfig.use && queryConfig.parameters != null) {
+                repeat(queryConfig.repetition){
+                    val paramValues = returnParamValues(queryConfig.parameters, random)
+                    allQueries.add(QueryTask(queryConfig.name, queryConfig.type, paramValues))
                 }
             }
         }
@@ -131,12 +125,107 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         return allQueries
     }
 
+//    private fun prepareQueryTasksold(config: BenchmarkConfiguration, seed: Long): MutableList<QueryTask> {
+//        val random = Random(seed)
+//        val allQueries = mutableListOf<QueryTask>()
+//        for (queryConfig in config.queryConfigs) {
+//            if (queryConfig.use) {
+//                if (queryConfig.parameterSets != null) {
+//
+//                    for(paramSet in queryConfig.parameterSets) {
+//
+//                        allQueries.add(
+//                            QueryTask(queryConfig.name, queryConfig.type, paramSet.parameters)
+//                        )
+//                    }
+//                } else {
+//                        allQueries.add(QueryTask(queryConfig.name, queryConfig.type))
+//                }
+//            }
+//        }
+//        allQueries.shuffle(random)
+//        return allQueries
+//    }
+
     private fun generateRandomSeeds(mainRandom: Random, threadCount: Int): List<Long> {
         val seeds = mutableListOf<Long>()
         for (i in 0..<threadCount) {
             seeds.add(mainRandom.nextLong())
         }
         return seeds
+    }
+
+
+    private fun returnParamValues(params: List<String>, random: Random): List<Any> {
+        var values = ArrayList<Any>()
+        for (param in params){
+            val replacement = when (param) {
+                "period_short" -> generateRandomTimeSpan(random=random, formatter = formatter, year=2023, mode=1)
+                "period_medium" -> generateRandomTimeSpan(random=random, formatter = formatter, year=2023, mode=2)
+                "period_long" -> generateRandomTimeSpan(random=random, formatter = formatter, year=2023, mode=3)
+                "period" -> generateRandomTimeSpan(formatter = formatter, year=2023, random = random)
+                "instant" -> generateRandomTimestamp(formatter = formatter, random = random)
+                "day" -> getRandomDay(random = random, year = 2023)
+                "city" -> getRandomPlace(cities, "name", random)
+                "municipality" -> getRandomPlace(municipalities, "name", random)
+                "county" -> getRandomPlace(counties, "name", random)
+                "district" -> getRandomPlace(districts, "name", random)
+                "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
+                "radius" -> (random.nextDouble(0.25, 0.5) * 10)/6378.1
+                "low_altitude" -> (random.nextInt(300, 600) * 10)
+                "distance" -> (random.nextInt(10, 100) * 10)
+                else -> ""
+
+            }
+            if (replacement != null) {
+                values.add(replacement)
+            }
+
+        }
+        return values
+    }
+
+
+    private fun getRandomPoint(random: Random, rectangle: List<List<Double>>): List<Double> {
+        val upperLeftLon = rectangle[0][0]
+        val upperLeftLat = rectangle[0][1]
+        val bottomRightLon = rectangle[1][0]
+        val bottomRightLat = rectangle[1][1]
+
+        val randomLon = upperLeftLon + random.nextDouble() * (bottomRightLon - upperLeftLon)
+
+        val randomLat = bottomRightLat + random.nextDouble() * (upperLeftLat - bottomRightLat)
+
+        // Return the random point
+        return listOf(randomLon, randomLat)
+    }
+
+
+    private fun getRandomDay(random: Random, year: Int): String {
+
+        val startDate = LocalDate.of(year, 1, 1)
+        val endDate = LocalDate.of(year, 12, 31)
+
+        val daysInYear = endDate.toEpochDay() - startDate.toEpochDay() + 1
+
+        val randomDay = startDate.plusDays(random.nextLong(0, daysInYear))
+
+        return "$randomDay"
+    }
+
+
+    private fun generateRandomTimestamp(random: Random, formatter: DateTimeFormatter): String {
+        val year = 2023
+        val dayOfYear = random.nextInt(1, 366) // Days in the year 2023
+        val hour = random.nextInt(0, 24)
+        val minute = random.nextInt(0, 60)
+        val second = random.nextInt(0, 60)
+
+        // Use LocalDate.ofYearDay to get the date and then add the time
+        val date = LocalDate.ofYearDay(year, dayOfYear)
+        val timestamp = LocalDateTime.of(date, java.time.LocalTime.of(hour, minute, second))
+
+        return timestamp.format(formatter)
     }
 
     private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String) {
@@ -180,7 +269,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val flightPointsTsCollection = mongoDatabase.getCollection("flightpoints_ts")
         val flightTripsCollection = mongoDatabase.getCollection("flighttrips")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val repetitions = 100
+        val repetitions = 50
         var i = 0
 
         println("Starting warm Up phase.")
@@ -212,6 +301,34 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                             .append(
                                 "_id", Document()
                                     .append("flightId", "\$metadata.flightId").append("track","\$metadata.track")))))
+
+
+                val firstPipeline = listOf(
+                    Document("\$match", Document("name", randomMunicipality)),
+                    Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
+                )
+                val firstResponse = municipalitiesCollection.aggregate(firstPipeline).toList()
+
+                val polygonCoordinates = firstResponse.mapNotNull { document ->
+                    val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
+                    polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
+                }[0]
+
+                flightPointsTsCollection.aggregate(listOf(
+                    Document(
+                        "\$match", Document(
+                            "location", Document(
+                                "\$geoWithin", Document(
+                                    "\$geometry", Document()
+                                        .append("type", "Polygon")
+                                        .append("coordinates", polygonCoordinates)
+                                )
+                            )
+                        )
+                    ),
+                    Document("\$limit", 5)),
+
+                )
 
 
                 i++

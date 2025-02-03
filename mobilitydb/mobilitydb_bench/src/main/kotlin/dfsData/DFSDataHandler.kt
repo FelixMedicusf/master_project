@@ -11,10 +11,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.locationtech.jts.io.WKTReader
+import org.locationtech.jts.simplify.DouglasPeuckerSimplifier
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.PreparedStatement
 import java.sql.Statement
 import kotlin.system.exitProcess
 
@@ -132,6 +137,7 @@ class DFSDataHandler(databaseName: String) {
         statement.executeUpdate(copyDataFromCsv)
         println("Data copied into flightPoints table.")
         statement.executeUpdate("CREATE INDEX idx_flightpoints_flightid ON flightpoints(flightid);")
+        statement.executeUpdate("CREATE INDEX idx_flightpoints_altitude ON flightpoints(altitude);")
         statement.executeUpdate("CREATE INDEX idx_flightpoints_flightid_track_timestamp ON flightpoints (flightId, track, timestamp);")
         println("Indexes created on flightpoints table for faster creation of flights table.")
 
@@ -230,7 +236,7 @@ class DFSDataHandler(databaseName: String) {
         }
         statement.executeUpdate("CREATE INDEX idx_interpolatedflightpoints_flightid ON interpolatedflightpoints(flightid);")
         statement.executeUpdate("CREATE INDEX idx_interpolatedflightpoints_flightid_track_timestamp ON interpolatedflightpoints (flightId, track, timestamp);")
-        println("Indexes created on flightpoints table for faster creation of flights table.")
+        println("Indexes created on interpolatedflightpoints table for faster creation of flights table.")
     }
 
     fun createGeographies() {
@@ -267,24 +273,23 @@ class DFSDataHandler(databaseName: String) {
                 track INTEGER,
                 altitude tfloat,
                 trip tgeogpoint,
-                observedtrip tgeogpoint, 
-                starttime timestamp
-            ) PARTITION BY RANGE (starttime);
+                observedtrip tgeogpoint
+            );
             """.trimIndent()
         )
         println("Created table flights.")
 
         statement.executeUpdate("ALTER TABLE flights SET UNLOGGED;")
 
-        if(distributed){
-            statement.executeUpdate("SELECT create_distributed_table('flights', 'flightid')")
-            statement.executeUpdate("""SELECT create_time_partitions(
-               table_name         := 'flights',
-               partition_interval := '1 month',
-                start_from := timestamp'2023-01-01 00:00:00',
-               end_at             := timestamp'2023-01-01 00:00:00' + '12 months'
-       );""".trimIndent())
-        }
+//        if(distributed){
+//            statement.executeUpdate("SELECT create_distributed_table('flights', 'flightid')")
+//            statement.executeUpdate("""SELECT create_time_partitions(
+//               table_name         := 'flights',
+//               partition_interval := '1 month',
+//                start_from := timestamp'2023-01-01 00:00:00',
+//               end_at             := timestamp'2023-01-01 00:00:00' + '12 months'
+//       );""".trimIndent())
+//        }
 
 
         (0..<seps.size-1).map { index ->
@@ -293,7 +298,7 @@ class DFSDataHandler(databaseName: String) {
 
             val query =
                 """
-            INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip, starttime)
+            INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
             SELECT 
                 flightId,
                 airplaneType,
@@ -311,9 +316,7 @@ class DFSDataHandler(databaseName: String) {
                 tgeogpointseq(
                     array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp)
                     FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'step'
-                ), 
-                starttimestamp(array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp) 
-                FILTER (WHERE track IS NOT NULL), 'step')
+                )
             FROM interpolatedflightpoints as ifp WHERE ifp.flightid > $flightIdLowerBound AND ifp.flightid <= $flightIdUpperBound 
             GROUP BY flightId, track, airplaneType, origin, destination;
         """.trimIndent()
@@ -325,18 +328,18 @@ class DFSDataHandler(databaseName: String) {
         println("Dropping table interpolatedlflightpoints.")
         statement.executeUpdate("DROP TABLE interpolatedflightpoints CASCADE")
 
+        statement.executeUpdate("CREATE INDEX idx_flights_trip_gist ON flights USING GIST(trip);")
         if (distributed){
+        statement.executeUpdate("CLUSTER flights USING idx_flights_trip_gist;")
+        println("Clustered flights by gist index.")
+            statement.executeUpdate("ALTER TABLE flights ADD COLUMN shard_key BIGINT;")
+            statement.executeUpdate("CREATE SEQUENCE flights_shard_seq;")
+            statement.executeUpdate("UPDATE flights SET shard_key = nextval('flights_shard_seq');")
 
-//        statement.executeUpdate("CLUSTER flights USING trip_gist_idx;")
-//        println("Clustered flights by gist index.")
-//                statement.executeUpdate("ALTER TABLE flights ADD COLUMN shard_key BIGINT;")
-//                statement.executeUpdate("CREATE SEQUENCE flights_shard_seq;")
-//                statement.executeUpdate("UPDATE flights SET shard_key = nextval('flights_shard_seq');")
+            statement.executeQuery(
+                "SELECT create_distributed_table('flights', 'shard_key');"
 
-//            statement.executeQuery(
-//                "SELECT create_distributed_table('flights', 'flightid');"
-//
-//            )
+            )
             println("Distributed Table flights with flightid as sharding key.")
         }
 
@@ -454,60 +457,118 @@ class DFSDataHandler(databaseName: String) {
         }
     }
 
+    private fun simplifyPolygonWKT(wkt: String, tolerance: Double): String {
+        val reader = WKTReader()
+        val geometry: org.locationtech.jts.geom.Geometry = reader.read(wkt)
+
+        // Ensure it does not log to console by accident
+        if (!geometry.isValid || geometry.isEmpty) {
+            throw IllegalArgumentException("Invalid or empty geometry")
+        }
+
+        val simplifiedGeometry = DouglasPeuckerSimplifier.simplify(geometry, tolerance)
+
+        // Explicitly return the WKT string, no printing
+        return simplifiedGeometry.toText()
+    }
+
     private fun insertRegionalData(region: String) {
         try {
             println("Processing regional data for $region.")
-            statement.executeUpdate(
-                """
-                CREATE TEMP TABLE temp_stage_$region (
-                    row_number SERIAL PRIMARY KEY,
-                    name VARCHAR(255),
-                    latitude DOUBLE PRECISION,
-                    longitude DOUBLE PRECISION
-                );
-                """.trimIndent()
-            )
-            statement.executeUpdate(
-                """
-                COPY temp_stage_$region(name, latitude, longitude)
-                FROM '/tmp/regData/$region.csv' WITH (FORMAT csv, HEADER true);
-            """.trimIndent()
-            )
+//            statement.executeUpdate(
+//                """
+//                CREATE TEMP TABLE temp_stage_$region (
+//                    row_number SERIAL PRIMARY KEY,
+//                    name VARCHAR(255),
+//                    latitude DOUBLE PRECISION,
+//                    longitude DOUBLE PRECISION
+//                );
+//                """.trimIndent()
+//            )
+//            statement.executeUpdate(
+//                """
+//                COPY temp_stage_$region(name, latitude, longitude)
+//                FROM '/tmp/regData/$region.csv' WITH (FORMAT csv, HEADER true);
+//            """.trimIndent()
+//            )
 
-            statement.executeUpdate(
-                """
-                CREATE TEMP TABLE temp_$region (
-                    row_number SERIAL PRIMARY KEY,
-                    name VARCHAR(255),
-                    latitude DOUBLE PRECISION,
-                    longitude DOUBLE PRECISION
-                );
-            """.trimIndent()
-            )
-
-            statement.executeUpdate(
-                """
-                INSERT INTO temp_$region (name, latitude, longitude)
-                SELECT name, latitude, longitude
-                FROM (
-                    SELECT 
-                        name, latitude, longitude,
-                        ROW_NUMBER() OVER (PARTITION BY name ORDER BY row_number) AS row_num,
-                        COUNT(*) OVER (PARTITION BY name) AS total_rows  -- Partitioning ensures total count per region
-                    FROM temp_stage_$region
-                ) t
-                WHERE row_num = 1 OR row_num % 30 = 0 OR row_num = total_rows;
-            """.trimIndent()
-            )
-
-            statement.executeUpdate(
-                """
+            statement.executeUpdate("""
                 CREATE TABLE $region (
-                    name VARCHAR(255),
-                    Geom geography(Polygon, 4326) NOT NULL
-                );
-                """.trimIndent()
-            )
+                id SERIAL PRIMARY KEY, 
+                name VARCHAR(255) NOT NULL, 
+                geom GEOMETRY(POLYGON, 4326)
+                )
+            """.trimIndent())
+
+            val csvFile = "/$region-wkt.csv"  // Ensure the file is placed in `resources/`
+            val inputStream = object {}.javaClass.getResourceAsStream(csvFile)
+                ?: throw IllegalArgumentException("File $csvFile not found!")
+
+            val reader = InputStreamReader(inputStream, StandardCharsets.UTF_8)
+            val lines = reader.readLines().drop(1)  // Skip header
+
+            val sql = "INSERT INTO $region (name, geom) VALUES (?, ST_GeomFromText(?, 4326))"
+
+
+
+//            statement.executeUpdate(
+//                """
+//                CREATE TEMP TABLE temp_$region (
+//                    row_number SERIAL PRIMARY KEY,
+//                    name VARCHAR(255),
+//                    latitude DOUBLE PRECISION,
+//                    longitude DOUBLE PRECISION
+//                );
+//            """.trimIndent()
+//            )
+
+
+            connection.autoCommit = false
+            val statement: PreparedStatement = connection.prepareStatement(sql)
+
+            for (line in lines) {
+                val parts = line.split(";") // CSV is separated by ";"
+                if (parts.size < 2) continue
+
+                val name = parts[0].trim()
+                val wkt = parts[1].trim()
+
+                val simplifiedWkt = simplifyPolygonWKT(wkt, .008)
+
+                statement.setString(1, name)
+                statement.setString(2, simplifiedWkt)
+                statement.addBatch()
+            }
+
+            statement.executeBatch()
+            connection.commit()
+
+            connection.autoCommit = true
+
+
+//            statement.executeUpdate(
+//                """
+//                INSERT INTO temp_$region (name, latitude, longitude)
+//                SELECT name, latitude, longitude
+//                FROM (
+//                    SELECT
+//                        name, latitude, longitude,
+//                        ROW_NUMBER() OVER (PARTITION BY name ORDER BY row_number) AS row_num,
+//                        COUNT(*) OVER (PARTITION BY name) AS total_rows  -- Partitioning ensures total count per region
+//                    FROM temp_stage_$region
+//                ) t
+//                WHERE row_num = 1 OR row_num % 30 = 0 OR row_num = total_rows;
+//            """.trimIndent()
+//            )
+//
+//            statement.executeUpdate(
+//                """
+//                CREATE TABLE $region (
+//                    name VARCHAR(255),
+//                    Geom geography(Polygon, 4326) NOT NULL
+//                );
+//                """.trimIndent()
+//            )
 
             if (distributed) {
                 try {
@@ -556,7 +617,7 @@ class DFSDataHandler(databaseName: String) {
 
     fun createIndexes(){
 
-        statement.executeUpdate("ALTER TABLE citus.flights DROP COLUMN IF EXISTS observedtrip;")
+        statement.executeUpdate("ALTER TABLE flights DROP COLUMN IF EXISTS observedtrip;")
         createFlightPointsIndex()
         createFlightTripsIndex()
         createStaticTablesIndexes()
@@ -573,13 +634,13 @@ class DFSDataHandler(databaseName: String) {
 
     private fun createFlightTripsIndex(){
 
-        statement.executeUpdate("CREATE INDEX trip_gist_idx ON citus.flights USING GIST(trip);")
-        statement.executeUpdate("CREATE INDEX idx_flights_trip_spgist ON citus.flights USING SPGIST (trip);")
-        statement.executeUpdate("CREATE INDEX idx_flights_altitude_gist ON citus.flights USING GIST(altitude);")
-        statement.executeUpdate("CREATE INDEX idx_flights_flightid ON citus.flights (flightid);")
-        statement.executeUpdate("CREATE INDEX idx_flights_traj_gist ON citus.flights USING gist(traj)")
-        statement.executeUpdate("CREATE INDEX idx_flights_origin_hash ON citus.flights USING hash(origin);")
-        statement.executeUpdate("CREATE INDEX idx_flights_destination_hash ON citus.flights USING hash(destination);")
+
+       // statement.executeUpdate("CREATE INDEX idx_flights_trip_spgist ON flights USING SPGIST (trip);")
+        statement.executeUpdate("CREATE INDEX idx_flights_altitude_gist ON flights USING GIST(altitude);")
+        statement.executeUpdate("CREATE INDEX idx_flights_flightid ON flights (flightid);")
+        statement.executeUpdate("CREATE INDEX idx_flights_traj_gist ON flights USING gist(traj)")
+        statement.executeUpdate("CREATE INDEX idx_flights_origin_hash ON flights USING hash(origin);")
+        statement.executeUpdate("CREATE INDEX idx_flights_destination_hash ON flights USING hash(destination);")
         println("Created Indexes for flights.")
 
     }
@@ -637,9 +698,9 @@ class DFSDataHandler(databaseName: String) {
 
     fun createTrajectoryColumn() {
 
-        statement.executeUpdate("ALTER TABLE citus.flights ADD COLUMN traj GEOGRAPHY;")
-        statement.executeUpdate("UPDATE citus.flights SET traj = trajectory(observedtrip)")
-        statement.executeUpdate("ALTER TABLE citus.flights DROP COLUMN IF EXISTS observedtrip;")
+        statement.executeUpdate("ALTER TABLE flights ADD COLUMN traj GEOGRAPHY;")
+        statement.executeUpdate("UPDATE flights SET traj = trajectory(observedtrip)")
+        statement.executeUpdate("ALTER TABLE flights DROP COLUMN IF EXISTS observedtrip;")
         println("Added and populated traj column in flights table.")
 
     }
@@ -648,12 +709,12 @@ class DFSDataHandler(databaseName: String) {
 
 fun main() {
     val handler = DFSDataHandler("aviation_data")
-//    handler.processStaticData()
-//    handler.insertFlightPoints()
-//    handler.interpolateFlightPoints()
-//    handler.createGeographies()
-//    handler.createFlightTrips()
-//    handler.createTrajectoryColumn()
+    handler.processStaticData()
+    handler.insertFlightPoints()
+    handler.interpolateFlightPoints()
+    handler.createGeographies()
+    handler.createFlightTrips()
+    handler.createTrajectoryColumn()
     handler.createIndexes()
 
 }

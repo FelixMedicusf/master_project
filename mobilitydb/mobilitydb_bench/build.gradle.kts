@@ -14,6 +14,11 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+
+    implementation("org.locationtech.jts:jts-core:1.18.2")
+    implementation("org.locationtech.jts.io:jts-io-common:1.18.2") // Required for GeoJsonReader
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2") // JSON support
+
     implementation("org.postgresql:postgresql:42.7.4")
     implementation ("com.opencsv:opencsv:5.5.2")
     implementation("org.slf4j:slf4j-simple:2.0.10")
