@@ -143,14 +143,14 @@ fun main() {
     val configPathMobilityDB = "benchConfigMobilityDB.yaml"
 
     //val benchmarkingClientHost = "35.187.55.236"
-    val benchmarkingClientHost = "localhost"
+    val benchmarkingClientHost = "104.199.59.45"
     val databaseClientAddress = "$benchmarkingClientHost:8080"
 
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)
 
-    println("\n1. Uploading configuration...")
-    client.uploadConfig(configPathMongoDB)
+//    println("\n1. Uploading configuration...")
+//    client.uploadConfig(configPathMongoDB)
 
 //    handler.updateDatabaseCollections() --> 0 index
 //    handler.insertRegionalData() --> 1 index
@@ -170,15 +170,15 @@ fun main() {
 //    client.callInterpolateFlightPoints()
 //    println("\n2. Triggering DataHandler operations...")
 //    client.triggerDataHandler()
-
-    client.startBenchmark()
+//
+//    client.startBenchmark()
 //
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()
 //
-//    println("\n5. Retrieving logs...")
-//    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
+    println("\n5. Retrieving logs...")
+    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
 
 
 }

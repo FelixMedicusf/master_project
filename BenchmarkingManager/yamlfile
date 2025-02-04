@@ -120,9 +120,10 @@
     use: False
     type: spatial
     sql: >
-      SELECT p.flightid, p.altitude, p.airplanetype, p.timestamp
+      SELECT p.flightid, p.track, p.airplanetype
       FROM flightpoints p, cities c
       WHERE p.altitude <= :low_altitude AND ST_DWithin(p.geom, c.geom, :radius) AND c.population >= 200000
+      GROUP BY p.flightid, p.track;
     repetition: 10
     parameters:
       - low_altitude

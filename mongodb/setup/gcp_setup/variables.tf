@@ -21,11 +21,9 @@ variable "network-name" {
 variable "names_and_zones"{
   type = map(string)
 
-  # europe-west1: Belgien, europe-west2: London, europe-west-3: FFM 
+  # europe-west1: Belgien
   default = {
     mongodb-node-1 = "europe-west1-b"
-    mongodb-node-2 = "europe-west1-b"
-    mongodb-node-3 = "europe-west1-b"
   }
 }
 

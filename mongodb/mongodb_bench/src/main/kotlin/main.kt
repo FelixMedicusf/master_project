@@ -67,6 +67,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val mainSeed = config.benchmarkSettings.randomSeed
         val sut = config.benchmarkSettings.sut
         val mainRandom = Random(mainSeed)
+        val warmUpRandom = Random(4545)
         println("Using random seed: $mainSeed")
 
         val allQueries = prepareQueryTasks(config, mainRandom)
@@ -74,7 +75,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        warmUpSut(nodes, mainRandom = mainRandom)
+        warmUpSut(nodes, 50, warmUpRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -94,8 +95,10 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
         val benchEnd = Instant.now().toEpochMilli()
 
-        mergeLogFilesAndCleanUp("sql_response_log_combined.txt", "sql_response_log_.*\\.txt")
-        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut)
+        mergeLogFilesAndCleanUp("mongo_response_log_combined.txt", "mongo_response_log_.*\\.txt")
+        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut, mainSeed)
+        benchmarkExecutorService!!.shutdownNow()
+
     }
 
     private fun loadConfig(): BenchmarkConfiguration? {
@@ -114,7 +117,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val allQueries = mutableListOf<QueryTask>()
 
         for (queryConfig in config.queryConfigs) {
-            if (queryConfig.use && queryConfig.parameters != null) {
+            if (queryConfig.use) {
                 repeat(queryConfig.repetition){
                     val paramValues = returnParamValues(queryConfig.parameters, random)
                     allQueries.add(QueryTask(queryConfig.name, queryConfig.type, paramValues))
@@ -125,28 +128,6 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         return allQueries
     }
 
-//    private fun prepareQueryTasksold(config: BenchmarkConfiguration, seed: Long): MutableList<QueryTask> {
-//        val random = Random(seed)
-//        val allQueries = mutableListOf<QueryTask>()
-//        for (queryConfig in config.queryConfigs) {
-//            if (queryConfig.use) {
-//                if (queryConfig.parameterSets != null) {
-//
-//                    for(paramSet in queryConfig.parameterSets) {
-//
-//                        allQueries.add(
-//                            QueryTask(queryConfig.name, queryConfig.type, paramSet.parameters)
-//                        )
-//                    }
-//                } else {
-//                        allQueries.add(QueryTask(queryConfig.name, queryConfig.type))
-//                }
-//            }
-//        }
-//        allQueries.shuffle(random)
-//        return allQueries
-//    }
-
     private fun generateRandomSeeds(mainRandom: Random, threadCount: Int): List<Long> {
         val seeds = mutableListOf<Long>()
         for (i in 0..<threadCount) {
@@ -154,7 +135,6 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         }
         return seeds
     }
-
 
     private fun returnParamValues(params: List<String>, random: Random): List<Any> {
         var values = ArrayList<Any>()
@@ -172,8 +152,8 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 "district" -> getRandomPlace(districts, "name", random)
                 "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
                 "radius" -> (random.nextDouble(0.25, 0.5) * 10)/6378.1
-                "low_altitude" -> (random.nextInt(300, 600) * 10)
-                "distance" -> (random.nextInt(10, 100) * 10)
+                "low_altitude" -> (random.nextInt(5, 60) * 10)
+                "distance" -> (random.nextInt(5, 30) * 10)
                 else -> ""
 
             }
@@ -228,16 +208,16 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         return timestamp.format(formatter)
     }
 
-    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String) {
+    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String, mainSeed: Long) {
 
         val file = File(logsPath)
-        file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size}, " + "#nodes: $nodeNumber, queries executed: ${executionLogs.size}." + "\n")
+        file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size}, " + "#nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
         file.appendText("threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
 
-    private fun warmUpSut(mongodbIps: List<String>, mainRandom: Random){
+    private fun warmUpSut(mongodbIps: List<String>, repetitions: Int = 50, warmUpRandom: Random){
 
         val mongodbClientPort = 27017
         var mongodbHosts = ArrayList<ServerAddress>();
@@ -269,19 +249,18 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val flightPointsTsCollection = mongoDatabase.getCollection("flightpoints_ts")
         val flightTripsCollection = mongoDatabase.getCollection("flighttrips")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val repetitions = 50
         var i = 0
 
         println("Starting warm Up phase.")
         try {
             while (i < repetitions){
 
-                val randomFlightId = mainRandom.nextLong(691877560, 774441640)
-                val randomMunicipality = getRandomPlace(municipalities, "name", mainRandom)
-                val randomCounty = getRandomPlace(counties, "name", mainRandom)
-                val randomDistrict = getRandomPlace(districts, "name", mainRandom)
-                val randomCity = getRandomPlace(cities, "name", mainRandom)
-                val randomTimespan = generateRandomTimeSpan(mainRandom, formatter, 2023, 1)
+                val randomFlightId = warmUpRandom.nextLong(691877560, 774441640)
+                val randomMunicipality = getRandomPlace(municipalities, "name", warmUpRandom)
+                val randomCounty = getRandomPlace(counties, "name", warmUpRandom)
+                val randomDistrict = getRandomPlace(districts, "name", warmUpRandom)
+                val randomCity = getRandomPlace(cities, "name", warmUpRandom)
+                val randomTimespan = generateRandomTimeSpan(warmUpRandom, formatter, 2023, 1)
 
                 flightPointsTsCollection.aggregate(listOf(Document("\$match", Document("flightId", randomFlightId))))
                 flightTripsCollection.aggregate(listOf(Document("\$match", Document("flightId", randomFlightId))))
@@ -469,7 +448,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
 fun main() {
     // Path to the config and logs
     val configPath = "benchConf.yaml"
-    val logsPath = "src/main/resources/benchmark_execution_logs.txt"
+    val logsPath = "mongo_benchmark_execution_logs.txt"
 
     // Start HTTP server
     embeddedServer(Netty, port = 8080) {

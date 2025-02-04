@@ -1,10 +1,10 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "35.233.59.139"
-    - "34.76.232.208"
-    - "130.211.101.40"
-  threads: 8
+    - "35.241.223.82"
+    - "34.78.41.234"
+    - "34.140.154.34"
+  threads: 16
   random_seed: 123
 
 queryConfigs:
@@ -14,330 +14,153 @@ queryConfigs:
   - name: countActiveFlightsInPeriod
     use: True
     type: temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period: 2023-07-28 15:16:33,2023-08-11 14:00:31
-      - parameters:
-          period: 2023-04-12 07:21:03,2023-04-17 17:52:48
-      - parameters:
-          period: 2023-11-10 23:09:32,2023-11-15 21:45:31
-      - parameters:
-          period: 2023-10-19 06:48:37,2023-11-07 18:55:52
-      - parameters:
-          period: 2023-10-05 08:56:35,2023-10-10 11:26:36
+    repetition: 50
+    parameters:
+      - period_long
   # use
   - name: locationOfAirplaneAtInstant
     use: True
     type: temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          instant: 2023-03-12 09:09:31
-      - parameters:
-          instant: 2023-04-21 04:43:41
-      - parameters:
-          instant: 2023-07-14 22:23:21
-      - parameters:
-          instant: 2023-01-09 09:02:35
-      - parameters:
-          instant: 2023-06-05 15:52:50
-
-  - name: averageHourlyFlightsDuringDay
-    use: False
-    type: temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          day: "2023-11-05"
-      - parameters:
-          day: "2023-09-30"
-      - parameters:
-          day: "2023-08-01"
-      - parameters:
-          day: "2023-04-19"
-      - parameters:
-          day: "2023-12-20"
-
-  - name: flightsWithLocalOriginDestinationInPeriod
-    use: False
-    type: temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_short: 2023-12-15 10:41:32,2023-12-16 18:59:39
-      - parameters:
-          period_short: 2023-08-10 08:22:09,2023-08-10 14:35:38
-      - parameters:
-          period_short: 2023-04-14 19:14:25,2023-04-16 19:06:08
-      - parameters:
-          period_short: 2023-08-01 17:48:45,2023-08-02 19:29:29
-      - parameters:
-          period_short: 2023-12-24 23:31:34,2023-12-26 08:24:43
+    repetition: 50
+    parameters:
+      - instant
   # use
   - name: airportUtilizationInPeriod
     use: True
     type: temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_medium: 2023-11-18 16:11:21,2023-12-02 11:47:42
-      - parameters:
-          period_medium: 2023-03-19 19:27:56,2023-03-29 17:04:06
-      - parameters:
-          period_medium: 2023-08-27 23:40:31,2023-08-30 11:46:54
-      - parameters:
-          period_medium: 2023-08-24 21:39:27,2023-09-04 09:51:41
-      - parameters:
-          period_medium: 2023-02-17 22:18:10,2023-02-27 21:50:27
+    repetition: 50
+    parameters:
+      - period_medium
 
   # Spatial queries (5 functioning, 3 chosen)
-
-  - name: flightsInCityRadius
-    use: False
-    type: spatial
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          city: "Guetersloh"
-          radius: 50
-      - parameters:
-          city: "Cologne"
-          radius: 100
-      - parameters:
-          city: "Dortmund"
-          radius: 75
-      - parameters:
-          city: "Buende"
-          radius: 30
-      - parameters:
-          city: "Moers"
-          radius: 150
-
-  - name: flightsIntersectingMunicipalities
-    use: False
-    type: spatial
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          municipality: "Gem Horn-Bad Meinberg"
-      - parameters:
-          municipality: "Gem Huertgenwald"
-      - parameters:
-          municipality: "Gem Warburg"
-      - parameters:
-          municipality: "Gem Balve"
-      - parameters:
-          municipality: "Gem Kranenburg"
   # use
   - name: countFlightsInCounties
     use: True
     type: spatial
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          county: "Krs Rhein-Sieg-Kreis"
-      - parameters:
-          county: "Krs Remscheid"
-      - parameters:
-          county: "Krs Oberbergischer Kreis"
-      - parameters:
-          county: "Krs Duesseldorf"
-      - parameters:
-          county: "Krs Moenchengladbach"
+    repetition: 50
+    parameters:
+      - county
+
   # use
   - name: flightsCloseToMainCitiesLowAltitude
     use: True
     type: spatial
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          low_altitude: 1200
-          radius: 30
-      - parameters:
-          low_altitude: 700
-          radius: 60
-      - parameters:
-          low_altitude: 815
-          radius: 70
-      - parameters:
-          low_altitude: 950
-          radius: 65
-      - parameters:
-          low_altitude: 750
-          radius: 100
+    repetition: 50
+    parameters:
+      - low_altitude
+      - radius
+
   # use
   - name: flightClosestToPoint
     use: True
     type: spatial
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          point: 7.365475485030469,51.44282685124891
-          distance: 150
-      - parameters:
-          point: 6.508335475259438,51.61901590207067
-          distance: 220
-      - parameters:
-          point: 7.038107227408294,51.256311458722024
-          distance: 115
-      - parameters:
-          point: 7.9319714196871915,51.261173877480914
-          distance: 240
-      - parameters:
-          point: 7.951155121394054,50.724243209930954
-          distance: 350
+    repetition: 50
+    parameters:
+      - point
+      - distance
 
   # spatiotemporal queries (6 (7) functioning queries)
   - name: flightsInCountyInPeriod
     use: True
     type: spatiotemporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_medium: 2023-05-18 14:44:44,2023-05-20 06:12:05
-          county: "Krs Gelsenkirchen"
-      - parameters:
-          period_medium: 2023-08-04 06:56:35,2023-08-07 15:43:21
-          county: "Krs Olpe"
-      - parameters:
-          period_medium: 2023-04-17 02:35:04,2023-04-17 18:09:02
-          county: "Krs Muelheim a.d. Ruhr"
-      - parameters:
-          period_medium: 2023-06-03 08:05:09,2023-06-08 22:24:03
-          county: "Krs Herford"
-      - parameters:
-          period_medium: 2023-01-20 19:30:00,2023-01-20 20:00:00
-          county: "Krs Herne"
+    repetition: 50
+    parameters:
+      - period_short
+      - county
 
-  # join query
+  # join query (use in single setup)
   - name: pairOfFlightsInMunicipalityInPeriod
     use: False
     type: spatiotemporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_short: 2023-09-10 19:51:12,2023-09-11 19:55:56
-          municipality: "Gem Augustdorf"
-      - parameters:
-          period_short: 2023-08-15 17:52:01,2023-08-16 08:58:06
-          municipality: "Gem Sonsbeck"
-      - parameters:
-          period_short: 2023-05-13 01:26:19,2023-05-14 13:11:58
-          municipality: "Gem Dahlem"
-      - parameters:
-          period_short: 2023-06-28 05:50:01,2023-06-28 17:44:05
-          municipality: "Gem Meerbusch"
-      - parameters:
-          period_short: 2023-10-09 03:32:04,2023-10-09 19:47:49
-          municipality: "Gem Langenberg"
+    repetition: 50
+    parameters:
+      - period_short
+      - municipality
+
   # use
   - name: countFlightsAtInstantInDistricts
     use: True
     type: spatiotemporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          instant: 2023-12-05 00:36:35
-      - parameters:
-          instant: 2023-07-07 00:00:44
-      - parameters:
-          instant: 2023-02-28 19:13:46
-      - parameters:
-          instant: 2023-09-06 08:18:07
-      - parameters:
-          instant: 2023-05-07 22:00:58
+    repetition: 50
+    parameters:
+      - instant
+
   # use
   - name: inCityRadiusInPeriod
     use: True
     type: spatiotemporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_short: 2023-06-27 02:50:19,2023-06-28 02:08:00
-          city: "Gladbeck"
-          radius: 1500
-      - parameters:
-          period_short: 2023-07-24 00:00:00,2023-07-25 00:00:00
-          city: "Vlotho"
-          radius: 1250
-      - parameters:
-          period_short: 2023-12-24 10:00:00,2023-12-24 23:59:59
-          city: "Ennepetal"
-          radius: 2500
-      - parameters:
-          period_short: 2023-01-01 00:00:00,2023-01-01 08:00:00
-          city: "Bad Salzuflen"
-          radius: 2000
-      - parameters:
-          period_short: 2023-03-02 05:56:59,2023-03-03 19:42:20
-          city: "Werl"
-          radius: 1000
+    repetition: 50
+    parameters:
+      - period_medium
+      - city
+      - radius
+
   # use
   - name: flightDurationInMunicipalityLowAltitudeInPeriod
     use: True
     type: spatial-temporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          period_medium: 2023-04-09 19:54:27,2023-04-13 18:50:24
-          municipality: "Gem Erwitte"
-          low_altitude: 1360
-      - parameters:
-          period_medium: 2023-10-06 11:18:05,2023-10-20 00:27:58
-          municipality: "Gem Rheine"
-          low_altitude: 1500
-      - parameters:
-          period_medium: 2023-10-06 16:02:04,2023-10-15 09:05:36
-          municipality: "Gem Lippetal"
-          low_altitude: 1850
-      - parameters:
-          period_medium: 2023-05-28 19:09:14,2023-06-01 13:00:38
-          municipality: "Gem Kirchlengern"
-          low_altitude: 1750
-      - parameters:
-          period_medium: 2023-11-11 10:46:18,2023-11-11 18:59:34
-          municipality: "Gem Ascheberg"
-          low_altitude: 1540
+    repetition: 50
+    parameters:
+      - period_short
+      - municipality
+      - low_altitude
+
+  # use
+  - name: flightsInMunicipalityLowAltitudeInPeriod
+    use: True
+    type: spatial-temporal
+    repetition: 50
+    parameters:
+      - period_short
+      - municipality
+      - low_altitude
+
   # use
   - name: averageHourlyFlightsDuringDayInMunicipality
     use: True
     type: spatiotemporal
-    repetition: 2
-    parameter_sets:
-      - parameters:
-          day: 2023-11-27
-          county: "Gem Brilon"
-      - parameters:
-          day: 2023-07-27
-          county: "Gem Hennef (Sieg)"
-      - parameters:
-          day: 2023-05-31
-          county: "Gem Aachen"
-      - parameters:
-          day: 2023-05-04
-          county: "Gem Marsberg"
-      - parameters:
-          day: 2023-02-17
-          county: "Gem Geilenkirchen"
+    repetition: 50
+    parameters:
+      - day
+      - municipality
   # use
   - name: flightsWithLocalOriginDestinationInPeriodInCounty
     use: True
     type: spatiotemporal
+    repetition: 50
+    parameters:
+      - period_medium
+      - county
+
+
+
+
+  # currently not in use
+  - name: averageHourlyFlightsDuringDay
+    use: False
+    type: temporal
+    repetition: 50
+    parameters:
+      - day
+
+  - name: flightsWithLocalOriginDestinationInPeriod
+    use: False
+    type: temporal
     repetition: 2
-    parameter_sets:
-      - parameters:
-          period_medium: 2023-01-21 20:30:23,2023-01-22 08:09:51
-          county: "Krs Rhein-Sieg-Kreis"
-      - parameters:
-          period_medium: 2023-06-08 13:09:05,2023-06-08 19:28:17
-          county: "Krs Duesseldorf"
-      - parameters:
-          period_medium: 2023-01-07 05:20:52,2023-01-08 07:34:28
-          county: "Krs Herford"
-      - parameters:
-          period_medium: 2023-03-15 06:56:37,2023-03-16 10:46:57
-          county: "Krs Duisburg"
-      - parameters:
-          period_medium: 2023-05-13 01:45:21,2023-05-14 12:54:31
-          county: "Krs Hamm"
+    parameters:
+      - period_short
+
+  - name: flightsInCityRadius
+    use: False
+    type: spatial
+    repetition: 2
+    parameters:
+      - city
+      - radius
+
+  - name: flightsIntersectingMunicipalities
+    use: False
+    type: spatial
+    repetition: 2
+    parameters:
+      - municipality

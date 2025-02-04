@@ -1,5 +1,5 @@
 data class QueryTask(
     val queryName: String,
     val type: String,
-    val paramValues: List<Any>  ?= null,
+    val paramValues: List<Any>
 )

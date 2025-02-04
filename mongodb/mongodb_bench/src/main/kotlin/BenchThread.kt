@@ -38,24 +38,7 @@ class BenchThread(
 ) : Thread(threadName) {
 
     private var mongoDatabase: MongoDatabase
-    private val seed = givenSeed
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-    private val random = Random(seed)
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-    private val municipalitiesPath = "src/main/resources/municipalities.csv"
-    private val countiesPath = "src/main/resources/counties.csv"
-    private val districtsPath = "src/main/resources/districts.csv"
-    private val citiesPath = "src/main/resources/cities.csv"
-    private val airportsPath = "src/main/resources/airports.csv"
-    private val airplanetypesPath = "src/main/resources/airplanetypes.csv"
-
-    private val municipalities = parseCSV(municipalitiesPath, setOf("name"))
-    private val counties = parseCSV(countiesPath, setOf("name"))
-    private val districts = parseCSV(districtsPath, setOf("name"))
-    private val cities = parseCSV(citiesPath, setOf("area", "lat", "lon", "district", "name", "population"))
-    private val airports = parseCSV(airportsPath, setOf("IATA", "ICAO", "Airport name", "Country", "City"))
-    private val airplanetypes = File(airplanetypesPath).readLines()
-
 
     init {
         this.uncaughtExceptionHandler = UncaughtExceptionHandler { thread, exception ->
@@ -102,14 +85,13 @@ class BenchThread(
             val staticCollections = listOf(citiesCollection, airportsCollection, municipalitiesCollection, countiesCollection, districtsCollection)
             val dynamicCollections = listOf(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
 
-            val logFile = File("sql_response_log_${threadName}.txt")
+            val logFile = File("mongo_response_log_${threadName}.txt")
             if (logFile.exists()) {
                 logFile.delete()
             }
             logFile.createNewFile()
 
             val printStream = PrintStream(logFile)
-
 
             // Ensure all threads start at the same time
             startLatch.await()
@@ -125,60 +107,29 @@ class BenchThread(
                 val task = queryQueue.poll() ?: break
 
                 val mongoParameters: MutableList<Any> = mutableListOf(staticCollections, dynamicCollections)
-                val mongoValues: MutableList<Any> = mutableListOf()
-
-
-
-
-
-//                if (task.paramSet != null){
-//                    for (set in task.paramSet){
-//
-//                        if(set.key.contains("period")){
-//                            mongoValues.add(set.value.split(","))
-//                        }
-//                        else if(set.key == "radius"){
-//                            val radiusInRadians = set.value.toDouble()/(1000*6378)
-//                            mongoValues.add(radiusInRadians)
-//                        }
-//                        else if (set.key == "low_altitude"){
-//                            mongoValues.add(set.value.toInt())
-//                        }
-//                        else if(set.key.contains("point")){
-//                            val coordinates: List<Double> = listOf(set.value.split(",")[0].toDouble(), set.value.split(",")[1].toDouble())
-//                            mongoValues.add(coordinates)
-//                        }
-//                        else if(set.key.contains("distance")){
-//                            val radiusInRadians = set.value.toDouble()
-//                            mongoValues.add(radiusInRadians)
-//                        }
-//                        else {
-//                            mongoValues.add(set.value)
-//                        }
-//                    }
-//                }
-
 
                 //val params = task.paramSet?.keys?.joinToString(";") ?: ""
-                val parameterValues = mongoValues.joinToString(";")
+                val parameterValues = task.paramValues.joinToString(";")
 
-                mongoValues.forEach { value -> mongoParameters.add(value) }
+                task.paramValues.forEach { value -> mongoParameters.add(value) }
 
                 val currentFunction = invokeFunctionByName(task.queryName)
                 printStream.println("$i: ${task.queryName} with params: $parameterValues")
                 val response = mongoParameters.let { params -> currentFunction.call(this, *params.toTypedArray()) }
                 val endTime = Instant.now().toEpochMilli()
 
-                printStream.println(formatMongoResponse(response.fourth))
+
+                if(task.queryName.contains("altitude") || task.queryName.contains("Altitude")){
+                    printStream.println(formatMongoResponse(response.fourth))
+                }
 
 
                 synchronized(log) {
-                    log.add(
+                        log.add(
                             QueryExecutionLog(
                                 threadName = threadName,
                                 queryName = task.queryName,
                                 queryType = task.type,
-                                params =  "",
                                 paramValues = parameterValues.replace(",", "/"),
                                 round = 0,
                                 executionIndex = 0,
@@ -189,8 +140,8 @@ class BenchThread(
                                 latency = (endTime - response.first),
                                 records = response.fourth.size
                             )
-                    )
-                }
+                        )
+                    }
 
                 i++
             }
@@ -207,36 +158,7 @@ class BenchThread(
         }
     }
 
-    private fun returnParamValues(params: List<String>): List<Any> {
-        var values = ArrayList<Any>()
-        for (param in params){
-            val replacement = when (param) {
-                "period_short" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=1)
-                "period_medium" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=2)
-                "period_long" -> generateRandomTimeSpan(random=this.random, formatter = this.formatter, year=2023, mode=3)
-                "period" -> generateRandomTimeSpan(formatter = this.formatter, year=2023, random = this.random)
-                "instant" -> generateRandomTimestamp(formatter = this.formatter, random = this.random)
-                "day" -> getRandomDay(random = this.random, year = 2023)
-                "city" -> getRandomPlace(this.cities, "name", this.random)
-                "airport" -> getRandomPlace(this.airports, "Airport name", this.random)
-                "municipality" -> getRandomPlace(this.municipalities, "name", this.random)
-                "county" -> getRandomPlace(this.counties, "name", this.random)
-                "district" -> getRandomPlace(this.districts, "name", this.random)
-                "point" -> getRandomPoint(this.random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
-                "radius" -> (random.nextDouble(0.25, 0.5) * 10)/6378.1
-                "low_altitude" -> (random.nextInt(300, 600) * 10)
-                "type" -> "${airplanetypes[random.nextInt(0, airplanetypes.size)]}"
-                "distance" -> (random.nextInt(10, 100) * 10)
-                else -> ""
 
-            }
-            if (replacement != null) {
-                values.add(replacement)
-            }
-
-        }
-        return values
-    }
 
     private fun formatMongoResponse(response: Any?): String {
         // Configure Jackson ObjectMapper for pretty JSON formatting
@@ -274,168 +196,6 @@ class BenchThread(
                 println("Error formatting document: ${document.toJson()}")
             }
         }
-    }
-
-    private fun generateRandomTimestamp(random: Random, formatter: DateTimeFormatter): String {
-        val year = 2023
-        val dayOfYear = random.nextInt(1, 366) // Days in the year 2023
-        val hour = random.nextInt(0, 24)
-        val minute = random.nextInt(0, 60)
-        val second = random.nextInt(0, 60)
-
-        // Use LocalDate.ofYearDay to get the date and then add the time
-        val date = LocalDate.ofYearDay(year, dayOfYear)
-        val timestamp = LocalDateTime.of(date, java.time.LocalTime.of(hour, minute, second))
-
-        return timestamp.format(formatter)
-    }
-
-    // Function to generate a random time span (period) within 2023
-    private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter, year: Int, mode: Int = 0): List<String> {
-
-        // Generate pseudo random timestamps based on the mode
-        // 1: for short time range (0-2 days), 2: for medium time range (2 days - 1 month), 3: for long time range (1 - 12 Month)
-        // 0: Full random (0 days to 12 months)
-        val startDayOfYear = random.nextInt(1, 366)
-        val startHour = random.nextInt(0, 24)
-        val startMinute = random.nextInt(0, 60)
-        val startSecond = random.nextInt(0, 60)
-
-        val date1 = LocalDate.ofYearDay(year, startDayOfYear)
-        val timestamp1 = LocalDateTime.of(date1, java.time.LocalTime.of(startHour, startMinute, startSecond))
-
-        // Calculate the end timestamp based on the mode
-        val endDate: LocalDateTime = when (mode) {
-            1 -> {
-                // Up to 2 days
-                val secondsToShift = random.nextLong(0, 172801)
-                val tentativeEnd = if (random.nextBoolean()) {
-                    timestamp1.plusSeconds(secondsToShift)
-                } else {
-                    timestamp1.minusSeconds(secondsToShift)
-                }
-                if (tentativeEnd.year == year){
-                    tentativeEnd
-                } else if (tentativeEnd.year > year) {
-                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
-                } else if (tentativeEnd.year < year){
-                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
-                } else timestamp1
-            }
-            2 -> {
-                // Between 2 days and 30 days
-                val secondsToShift = random.nextLong(172800, 2592001)
-                val tentativeEnd = if (random.nextBoolean()) {
-                    timestamp1.plusSeconds(secondsToShift)
-                } else {
-                    timestamp1.minusSeconds(secondsToShift)
-                }
-                if (tentativeEnd.year == year){
-                    tentativeEnd
-                } else if (tentativeEnd.year > year) {
-                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
-                } else if (tentativeEnd.year < year){
-                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
-                } else timestamp1
-            }
-            3 -> {
-                // Between 1 and 12 months
-                val secondsToShift = random.nextLong(259200, 31536001)
-                val tentativeEnd = if (random.nextBoolean()) {
-                    timestamp1.plusSeconds(secondsToShift)
-                } else {
-                    timestamp1.minusSeconds(secondsToShift)
-                }
-                if (tentativeEnd.year == year){
-                    tentativeEnd
-                } else if (tentativeEnd.year > year) {
-                    timestamp1.withDayOfYear(365).withHour(23).withMinute(59).withSecond(59)
-                } else if (tentativeEnd.year < year){
-                    timestamp1.withDayOfYear(1).withHour(1).withMinute(1).withSecond(1)
-                } else timestamp1
-            }
-            else -> {
-                // Full random (0 days to 12 months)
-                val randomDay = random.nextInt(1, 366)
-                val randomHour = random.nextInt(0, 24)
-                val randomMinute = random.nextInt(0, 60)
-                val randomSecond = random.nextInt(0, 60)
-                val date2 = LocalDate.ofYearDay(year, randomDay)
-                LocalDateTime.of(date2, java.time.LocalTime.of(randomHour, randomMinute, randomSecond))
-            }
-        }
-
-        // Ensure start is before end
-        val (start, end) = if (timestamp1.isBefore(endDate)) {
-            timestamp1 to endDate
-        } else {
-            endDate to timestamp1
-        }
-
-        return listOf(start.format(formatter), end.format(formatter))
-    }
-
-
-    private fun parseCSV(filePath: String, requiredColumns: Set<String>): List<Map<String, String>> {
-        val rows = mutableSetOf<Map<String, String>>()
-        val lines = File(filePath).readLines()
-
-        if (lines.isNotEmpty()) {
-            val header = lines.first().split(",")
-
-            val indicesToKeep = header.withIndex()
-                .filter { it.value in requiredColumns }
-                .map { it.index }
-
-            rows.addAll(
-                lines.drop(1).map { line ->
-                    val values = line.split(",")
-                    indicesToKeep.associate { header[it] to values[it] }
-                }.distinct()
-            )
-        }
-
-        return rows.toList()
-    }
-
-    private fun getRandomPlace(
-        parsedData: List<Map<String, String>>,
-        columnName: String,
-        random: Random
-    ): String? {
-
-        val columnValues = parsedData.mapNotNull { it[columnName] }
-
-        if (columnValues.isEmpty()) return null
-
-        return columnValues[random.nextInt(columnValues.size)]
-    }
-
-    private fun getRandomPoint(random: Random, rectangle: List<List<Double>>): List<Double> {
-        val upperLeftLon = rectangle[0][0]
-        val upperLeftLat = rectangle[0][1]
-        val bottomRightLon = rectangle[1][0]
-        val bottomRightLat = rectangle[1][1]
-
-        val randomLon = upperLeftLon + random.nextDouble() * (bottomRightLon - upperLeftLon)
-
-        val randomLat = bottomRightLat + random.nextDouble() * (upperLeftLat - bottomRightLat)
-
-        // Return the random point
-        return listOf(randomLon, randomLat)
-    }
-
-
-    private fun getRandomDay(random: Random, year: Int): String {
-
-        val startDate = LocalDate.of(year, 1, 1)
-        val endDate = LocalDate.of(year, 12, 31)
-
-        val daysInYear = endDate.toEpochDay() - startDate.toEpochDay() + 1
-
-        val randomDay = startDate.plusDays(random.nextLong(0, daysInYear))
-
-        return "$randomDay"
     }
 
 
@@ -499,7 +259,7 @@ class BenchThread(
 
         val queryTimeStart = Instant.now().toEpochMilli()
         // Execute the aggregation
-        val results = flightPointsTsCollection.aggregate(pipeline)
+        val results = flightPointsTsCollection.aggregate(pipeline).allowDiskUse(true)
 
         // Convert results to a list of Documents
         return Quadrupel(queryTimeStart, 0, 0, results.into(mutableListOf()))
@@ -533,7 +293,7 @@ class BenchThread(
                     )
                     .append(
                         "latitude",
-                        Document("\$arrayElemAt", listOf("\$location.coordinates", 0))
+                        Document("\$arrayElemAt", listOf("\$location.coordinates", 1))
                     )
             ),
             Document(
@@ -1086,9 +846,9 @@ class BenchThread(
             Document("\$match", Document("\$or", geoWithinConditions)),
             Document("\$project", Document("flightId", 1).append("altitude", 1).append("airplaneType", 1).append("track", 1).append("_id", 0).append("timestamp", Document("\$dateToString", Document("format", "%Y-%m-%d %H:%M:%S").append("date", "\$timestamp")))),
             Document("\$group", Document("_id", Document("flightId", "\$flightId")
-                .append("altitude", "\$altitude")
+                .append("track", "\$track")
                 .append("airplaneType", "\$airplaneType")
-                .append("timestamp", "\$timestamp")))
+                ))
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
@@ -1237,7 +997,7 @@ class BenchThread(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
         coordinates: List<Double>,
-        maxDistance: Double,
+        maxDistance: Int,
     ): Quadrupel<Long, Long, Long, List<Document>>{
 
         val flightTripsCollection = dynamicCollections[2]
@@ -1256,6 +1016,7 @@ class BenchThread(
                 .append("originAirport", 1)
                 .append("destinationAirport", 1)
                 .append("calculatedDistance", "\$dist.calculated")
+                .append("location", "\$dist.location")
                 .append("flightId", 1)
                 .append("trip", 1)
                 .append("_id", 0)
@@ -1852,7 +1613,7 @@ class BenchThread(
                                                 Document("\$toLong", "\$\$this.timestamp"),
                                                 Document("\$toLong", "\$\$value.prev_timestamp")
                                             )),
-                                            1L
+                                            1000L
                                         ))
                                     )),
                                     Document("prev_altitude", "\$\$this.altitude").append("prev_timestamp", "\$\$this.timestamp")
@@ -1888,6 +1649,92 @@ class BenchThread(
             Document("\$match", Document("totalTimeBelowAltitude", Document("\$ne", "0 seconds"))),
 
         )
+
+        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
+        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
+
+    }
+
+
+    fun flightsInMunicipalityLowAltitudeInPeriod(
+        staticCollections: List<MongoCollection<Document>>,
+        dynamicCollections: List<MongoCollection<Document>>,
+        period: List<String>,
+        municipalityName: String,
+        lowAltitude: Int
+    ): Quadrupel<Long, Long, Long, List<Document>>{
+
+
+        val municipalitiesCollection = staticCollections[2]
+        val flightPointsTsCollection = dynamicCollections[1]
+
+        val startDate: Date = dateFormat.parse(period[0])
+        val endDate: Date = dateFormat.parse(period[1])
+
+        val firstPipeline = listOf(
+            Document("\$match", Document("name", municipalityName)),
+            Document("\$project", Document("polygon.coordinates", 1).append("_id", 0).append("name", 1))
+        )
+
+        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
+        val firstResponse = municipalitiesCollection.aggregate(firstPipeline).toList()
+        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
+        //println(firstResponse)
+        val name = firstResponse.get(0).getString("name")
+        val polygonCoordinates = firstResponse.mapNotNull { document ->
+            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
+            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
+        }[0]
+
+
+
+        val secondPipeline = listOf(
+            Document(
+                "\$match", Document(
+                    "timestamp", Document()
+                        .append("\$gte", startDate) // Start of the period
+                        .append("\$lte", endDate) // End of the period
+                )
+            ),
+            Document(
+                "\$match", Document(
+                    "altitude", Document()
+                        .append("\$lte", lowAltitude)
+                )
+            ),
+            Document(
+                "\$match", Document(
+                    "location", Document(
+                        "\$geoWithin", Document(
+                            "\$geometry", Document()
+                                .append("type", "Polygon")
+                                .append("coordinates", polygonCoordinates)
+                        )
+                    )
+                )
+            ),
+            Document(
+                "\$group", Document()
+                    .append("_id", Document()
+                        .append("flightId", "\$metadata.flightId")
+                        .append("track", "\$metadata.track")
+                        .append("originAirport", "\$metadata.originAirport")
+                        .append("destinationAirport", "\$metadata.destinationAirport")
+                        .append("airplaneType", "\$metadata.airplaneType")
+                    )
+            ),
+            Document(
+                "\$project", Document()
+                    .append("_id", 0)  // Remove _id field
+                    .append("flightId", "\$_id.flightId")
+                    .append("track", "\$_id.track")
+                    .append("originAirport", "\$_id.originAirport")
+                    .append("destinationAirport", "\$_id.destinationAirport")
+                    .append("airplaneType", "\$_id.airplaneType")
+            )
+        )
+
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
         val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()

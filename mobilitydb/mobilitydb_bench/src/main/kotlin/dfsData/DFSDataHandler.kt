@@ -641,6 +641,11 @@ class DFSDataHandler(databaseName: String) {
         statement.executeUpdate("CREATE INDEX idx_flights_traj_gist ON flights USING gist(traj)")
         statement.executeUpdate("CREATE INDEX idx_flights_origin_hash ON flights USING hash(origin);")
         statement.executeUpdate("CREATE INDEX idx_flights_destination_hash ON flights USING hash(destination);")
+
+        statement.executeUpdate("CREATE INDEX idx_flights_flightid ON flights (flightid);")
+
+        //TODO: Index on f.trip
+
         println("Created Indexes for flights.")
 
     }
