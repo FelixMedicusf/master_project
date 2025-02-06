@@ -1,0 +1,222 @@
+benchmark:
+  sut: "MobilityDB"
+  nodes:
+    - "34.76.114.204"
+  threads: 4
+  random_seed: 222
+
+queryConfigs:
+  # Temporal queries (5 functioning, 3 chosen)
+
+  # use
+  - name: countActiveFlightsInPeriod
+    use: False
+    use: False
+    type: temporal
+    sql: >
+      SELECT COUNT(*), :period
+      FROM flights f
+      WHERE f.trip && :period;
+    repetition: 15
+    parameters:
+      - period_long
+  # use
+  - name: locationOfAirplaneAtInstant
+    use: False
+    type: temporal
+    sql: >
+      SELECT f.flightid, valueAtTimeStamp(f.altitude, :instant), ST_asText(valueAtTimeStamp(f.trip, :instant)) AS location, :instant
+      FROM flights f
+      WHERE attime(f.trip, :instant) IS NOT NULL;
+    repetition: 15
+    parameters:
+      - instant
+
+  # use
+  - name: airportUtilizationInPeriod
+    use: False
+    type: temporal
+    sql: >
+      WITH departures AS (
+      SELECT f.origin AS airport, COUNT(DISTINCT f.flightid) AS departure_count
+      FROM flights f
+      WHERE f.trip && :period_medium
+      GROUP BY f.origin),
+      arrivals AS (
+      SELECT f.destination AS airport, COUNT(DISTINCT f.flightid) AS arrival_count
+      FROM flights f
+      WHERE f.trip && :period_medium
+      GROUP BY f.destination)
+      SELECT
+      COALESCE(d.airport, a.airport) AS airport,
+      COALESCE(d.departure_count, 0) AS departures,
+      COALESCE(a.arrival_count, 0) AS arrivals,
+      COALESCE(d.departure_count, 0) + COALESCE(a.arrival_count, 0) AS traffic_count
+      FROM departures d FULL JOIN arrivals a ON d.airport = a.airport
+      ORDER BY traffic_count DESC, departures DESC, arrivals DESC;
+    repetition: 15
+    parameters:
+      - period_medium
+
+  # Spatial queries (5 functioning, 3 chosen)
+
+  # use
+  - name: countFlightsInCounties
+    use: False
+    type: spatial
+    sql: >
+      SELECT k.name, COUNT(*) as flight_count
+      FROM counties k
+      JOIN flights f
+      ON f.traj && k.geom
+      WHERE k.name = :county AND st_intersects(f.traj, k.geom)
+      GROUP BY k.name;
+    repetition: 15
+    parameters:
+      - county
+  # use
+  - name: flightsCloseToMainCitiesLowAltitude
+    use: False
+    type: spatial
+    sql: >
+      SELECT p.flightid, p.altitude, p.airplanetype, p.timestamp
+      FROM flightpoints p
+      JOIN cities c
+      ON ST_DWithin(p.geom, c.geom, :radius)  
+      WHERE p.altitude <= :low_altitude
+      AND c.population >= 200000;
+    repetition: 15
+    parameters:
+      - low_altitude
+      - radius
+
+  # use
+  - name: flightClosestToPoint
+    use: True
+    type: spatial
+    sql: >
+      SELECT f.flightid, f.airplaneType, f.origin, f.destination,
+      f.traj <-> ST_GeogFromText('SRID=4326;:point') AS min_distance
+      FROM flights f
+      WHERE f.traj <-> ST_GeogFromText('SRID=4326;:point') < :distance
+      ORDER BY min_distance ASC;
+    repetition: 15
+    parameters:
+      - point
+      - distance
+
+
+  # spatiotemporal queries (6 (7) functioning, 6 chosen)
+  # use
+  - name: flightsInCountyInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT f.flightid, f.track
+      FROM flights f, counties k
+      WHERE k.name = :county AND f.trip && stbox(k.geom, :period_medium) AND eintersects(attime(f.trip, :period_medium), k.geom);
+    repetition: 15
+    parameters:
+      - period_short
+      - county
+
+  #use
+  - name: countFlightsAtInstantInDistricts
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT b.name, COUNT (*)
+      FROM flights f, districts b
+      WHERE f.trip && stbox(b.geom, :instant) AND eintersects(attime(f.trip, :instant), b.geom)
+      GROUP BY b.name;
+    repetition: 15
+    parameters:
+      - instant
+
+  # use
+  - name: inCityRadiusInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT f.flightId, f.track, f.airplanetype, f.origin, f.destination
+      FROM cities AS c
+      JOIN flights AS f
+      ON eDwithin(attime(f.trip, :period_short), c.geom, :radius)
+      WHERE c.name = :city AND f.trip && :period_short;
+    repetition: 15
+    parameters:
+      - period_medium
+      - city
+      - radius
+
+  # use
+  - name: flightDurationInMunicipalityLowAltitudeInPeriod
+    use: False
+    type: spatiotemporal
+    sql: >
+      SELECT g.name, f.flightid, f.track, f.origin, f.destination, f.airplanetype,
+      duration(whenTrue(attime(f.altitude, :period_medium) #< :low_altitude
+      & tintersects(attime(tgeompoint(f.trip), :period_medium), geometry(g.geom))))
+      AS totalTimeBelowAltitude
+      FROM municipalities g
+      JOIN flights f
+      ON f.trip && stbox(g.geom, :period_medium)
+      WHERE g.name = :municipality AND duration(whenTrue(attime(f.altitude, :period_medium) #< :low_altitude
+      & tintersects(attime(tgeompoint(f.trip), :period_medium), geometry(g.geom)))) IS NOT NULL;
+    repetition: 15
+    parameters:
+      - period_medium
+      - municipality
+      - low_altitude
+
+  # use
+  - name: averageHourlyFlightsDuringDayInMunicipality
+    use: False
+    type: spatiotemporal
+    sql: >
+      WITH hours AS (
+      SELECT
+      generate_series(
+      DATE :day::timestamp,
+      DATE :day + INTERVAL '1 day' - INTERVAL '1 second',
+      INTERVAL '1 hour'
+      ) AS start_time)
+      SELECT
+      h.start_time,
+      COUNT(f.flightid) AS active_flights
+      FROM hours h
+      JOIN municipalities g ON g.name = :municipality
+      LEFT JOIN flights f
+      ON eintersects(attime(f.trip, span(h.start_time, h.start_time + INTERVAL '1 hour' - INTERVAL '1 second')), g.geom)
+      WHERE f.trip && stbox(g.geom, span(h.start_time, h.start_time + INTERVAL '1 hour' - INTERVAL '1 second'))
+      GROUP BY h.start_time
+      ORDER BY h.start_time;
+    repetition: 15
+    parameters:
+      - day
+      - municipality
+
+  # use
+  - name: flightsWithLocalOriginDestinationInPeriodInCounty
+    use: False
+    type: spatiotemporal
+    sql: >
+      WITH relevant_airports AS (
+      SELECT a.icao as icao
+      FROM airports a
+      JOIN cities c ON a.city = c.name
+      )
+      SELECT f.flightid, f.airplanetype, f.origin AS origin_airport, a1.City AS origin_city, f.destination AS destination_airport,
+      a2.City AS destination_city
+      FROM flights f
+      JOIN counties k ON k.name = :county
+      LEFT JOIN airports a1 ON f.origin = a1.icao
+      LEFT JOIN airports a2 ON f.destination = a2.icao
+      WHERE
+      (f.origin IN (SELECT icao FROM relevant_airports) OR f.destination IN (SELECT icao FROM relevant_airports))
+      AND f.trip && stbox(k.geom, :period_short)
+      AND eintersects(attime(f.trip, :period_short), k.geom);
+    repetition: 15
+    parameters:
+      - period_short
+      - county

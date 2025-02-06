@@ -114,14 +114,20 @@ class BenchThread(
                 task.paramValues.forEach { value -> mongoParameters.add(value) }
 
                 val currentFunction = invokeFunctionByName(task.queryName)
-                printStream.println("$i: ${task.queryName} with params: $parameterValues")
+
+//                if(task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
+//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint"){
+                    printStream.println("$i: ${task.queryName} with params: $parameterValues")
+//                }
+
                 val response = mongoParameters.let { params -> currentFunction.call(this, *params.toTypedArray()) }
                 val endTime = Instant.now().toEpochMilli()
 
-
-                if(task.queryName.contains("altitude") || task.queryName.contains("Altitude")){
+//                if (task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
+//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint"
+//                ) {
                     printStream.println(formatMongoResponse(response.fourth))
-                }
+//                }
 
 
                 synchronized(log) {
@@ -1008,7 +1014,6 @@ class BenchThread(
                 .append("distanceField", "dist.calculated")
                 .append("maxDistance", maxDistance)
                 .append("key", "trajectory")
-                .append("includeLocs", "dist.location")
                 .append("spherical", true)
             ),
             Document("\$project", Document()
@@ -1016,7 +1021,6 @@ class BenchThread(
                 .append("originAirport", 1)
                 .append("destinationAirport", 1)
                 .append("calculatedDistance", "\$dist.calculated")
-                .append("location", "\$dist.location")
                 .append("flightId", 1)
                 .append("trip", 1)
                 .append("_id", 0)
@@ -1235,22 +1239,24 @@ class BenchThread(
                     )
                     .append(
                         "pipeline", listOf(
-                            Document(
-                                "\$match", Document(
-                                    "\$expr", Document("\$eq", listOf("\$timestamp", "\$\$f1_timestamp"))
-                                )
-                            ),
-                            // Match stage 2: Match based on the location condition
-                            Document(
-                                "\$match", Document(
-                                    "location", Document(
-                                        "\$geoWithin", Document(
-                                            "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
+                            "\$match", Document(
+                                "\$and", listOf(
+                                    Document(
+                                        "\$match", Document(
+                                            "\$expr", Document("\$eq", listOf("\$timestamp", "\$\$f1_timestamp"))
                                         )
-                                    )
+                                    ),
+                                    Document(
+                                        "location", Document(
+                                            "\$geoWithin", Document(
+                                                "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
+                                            )
+                                        )
+                                    ),
                                 )
                             ),
-                            Document("\$match", Document("\$expr", Document("\$lt", listOf("\$metadata.flightId", "\$\$f1_flightId"))))
+                            Document("\$sort", Document("flightId", 1)),
+                            Document("\$match", Document("\$expr", Document("\$lt", listOf("\$metadata.flightId", "\$\$f1_flightId")))),
                         )
                     )
                     .append("as", "joinedFlights")
@@ -1262,7 +1268,8 @@ class BenchThread(
                 "\$project", Document()
                     .append("f1_flightId", "\$metadata.flightId")
                     .append("f2_flightId", "\$joinedFlights.metadata.flightId")
-                    .append("timestamp", "\$timestamp")
+                    .append("f1_track", "\$metadata.track")
+                    .append("f2_track", "\$joinedFlight.metadata.track")
             ),
             // Step 6: Group results to ensure distinct pairs
             Document(
@@ -1270,16 +1277,20 @@ class BenchThread(
                     .append("_id", Document()
                         .append("f1_flightId", "\$f1_flightId")
                         .append("f2_flightId", "\$f2_flightId")
-                        .append("timestamp", "\$timestamp")
+                        .append("f1_track", "\$f1_track")
+                        .append("f2_track", "\$f2_track")
                     )
             ),
             // Step 7: Sort the results
             Document(
                 "\$sort", Document()
                     .append("f1_flightId", 1)
+                    .append("f1_track", 1)
                     .append("f2_flightId", 1)
-                    .append("timestamp", 1)
-            )
+                    .append("f2_track", 1)
+            ),
+            Document("\$limit", 10)
+
         )
 
 
@@ -1618,7 +1629,7 @@ class BenchThread(
                                     )),
                                     Document("prev_altitude", "\$\$this.altitude").append("prev_timestamp", "\$\$this.timestamp")
                                         .append("total", Document("\$add", listOf(
-                                            "\$\$value.total",
+                                            "\$\$value.total", //1000L
                                                 Document(
                                                     "\$subtract", listOf(
                                                         Document("\$toLong", "\$\$this.timestamp"),
@@ -1656,7 +1667,6 @@ class BenchThread(
 
     }
 
-
     fun flightsInMunicipalityLowAltitudeInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1686,8 +1696,6 @@ class BenchThread(
             val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
             polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
         }[0]
-
-
 
         val secondPipeline = listOf(
             Document(
@@ -1752,9 +1760,8 @@ class BenchThread(
         val municipalityCollection = staticCollections[2]
         val flightPointsTsCollection = dynamicCollections[1]
 
-//        val startDate: Date = dateFormat.parse("$day 00:00:00")
-//        val endDate: Date = dateFormat.parse("$day 23:59:59")
-        val day: Date = dateFormat.parse("$day 00:00:00")
+        val startDate: Date = dateFormat.parse("$day 00:00:00")
+        val endDate: Date = dateFormat.parse("$day 23:59:59")
 
         val firstPipeline = listOf(
             Document("\$match", Document("name", countyName)),
@@ -1772,21 +1779,13 @@ class BenchThread(
         }[0]
 
         val secondPipeline = listOf(
-            Document("\$match", Document(
-                "timestamp", Document()
-                    .append("\$gte", Document(
-                        "\$dateAdd", Document()
-                            .append("startDate", day)
-                            .append("unit", "hour")
-                            .append("amount", 0)
-                    ))
-                    .append("\$lt", Document(
-                        "\$dateAdd", Document()
-                            .append("startDate", day)
-                            .append("unit", "day")
-                            .append("amount", 1)
-                    ))
-            )),
+            Document(
+                "\$match", Document(
+                    "timestamp", Document()
+                        .append("\$gte", startDate) // Start of the period
+                        .append("\$lte", endDate) // End of the period
+                )
+            ),
             Document(
                 "\$match", Document(
                     "location", Document(
@@ -1832,93 +1831,6 @@ class BenchThread(
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
 
     }
-
-
-    // doesnt work easily (very complex to implement)
-    fun crossedCountiesInPeriodWithDestination(
-        staticCollections: List<MongoCollection<Document>>,
-        dynamicCollections: List<MongoCollection<Document>>,
-        period: List<String>,
-        ): Quadrupel<Long, Long, Long, List<Document>>{
-
-
-        val countiesCollection = staticCollections[3]
-        val flightPointsCollection = dynamicCollections[0]
-        val destinationAirport = "EDDK"
-
-        val startDate: Date = dateFormat.parse(period[0])
-        val endDate: Date = dateFormat.parse(period[1])
-
-        val firstPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "\$and", listOf(
-                            Document("destinationAirport", destinationAirport),
-                            Document(
-                                "timestamp", Document()
-                                    .append("\$gte", startDate) // Start of the period
-                                    .append("\$lte", endDate) // End of the period
-                            ),
-                        ),
-
-                    )
-                ),
-            Document("\$project", Document("location", 1).append("_id", 0))
-        )
-
-        val queryTimeStartFirstQuery = Instant.now().toEpochMilli()
-        val pointsDocuments = flightPointsCollection.aggregate(firstPipeline).toList()
-        val queryEndTimeFirstQuery = Instant.now().toEpochMilli()
-
-
-//        if (firstResponse.isNotEmpty()) {
-//            val coordinatesList = firstResponse.map { document ->
-//                val coordinates = document["coordinates"] as List<*>
-//                // Safely cast the elements to Double
-//                listOf(
-//                    (coordinates[0] as Number).toDouble(), // Longitude
-//                    (coordinates[1] as Number).toDouble()  // Latitude
-//                )
-//            }
-//        }
-
-
-
-        val secondPipeline = listOf(
-            Document(
-                "\$match", Document(
-                    "\$or", pointsDocuments.map { pointDocument ->
-                        Document(
-                            "polygon", Document(
-                                "\$geoIntersects", Document(
-                                    "\$geometry", pointDocument["location"]
-                                )
-                            )
-                        )
-                    }
-                )
-            ),
-            Document(
-                "\$project", Document(
-                    "_id", 0
-                ).append(
-                    "name", 1
-                )
-            )
-        )
-
-        val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-
-        var secondResponse = emptyList<Document>()
-
-        if(pointsDocuments.isNotEmpty()) {
-            secondResponse = countiesCollection.aggregate(secondPipeline).toList()
-        }
-
-        return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
-
-    }
-
 
     fun flightsWithLocalOriginDestinationInPeriodInCounty(
         staticCollections: List<MongoCollection<Document>>,
@@ -2031,7 +1943,7 @@ class BenchThread(
             // Stage 4: Project final fields
             Document("\$project", Document()
                 .append("_id", 0)
-                .append("flightId", "\$filteredFlightTrips.flightId")
+                .append("flightId", "\$filteredFlightTrips._id.flightId")
                 .append("originAirport", "\$filteredFlightTrips.originAirport")
                 .append("destinationAirport", "\$filteredFlightTrips.destinationAirport")
                 .append("originCity", "\$cityNameOrigin.City")

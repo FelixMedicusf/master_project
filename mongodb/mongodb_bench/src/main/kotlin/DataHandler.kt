@@ -39,6 +39,7 @@ class DataHandler(databaseName: String) {
     private var database: MongoDatabase
     private var adminDatabase: MongoDatabase
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    private var distributed = false
 
     private var regions = listOf("municipalities", "counties", "districts")
 
@@ -84,9 +85,13 @@ class DataHandler(databaseName: String) {
                 )
                 .build())
 
+
         database = conn.getDatabase(databaseName)
         adminDatabase = conn.getDatabase("admin")
         listCollections(database)
+        distributed = conf.benchmarkSettings.nodes.size > 1
+
+        println("Database is distributed: $distributed")
 
     }
 
@@ -103,23 +108,30 @@ class DataHandler(databaseName: String) {
         val airportsCollection = database.getCollection("airports")
 
         // Flightpoints index creation
-        flightPointsCollection.createIndex(Document("flightId", "hashed"))
+        if (distributed){
+            flightPointsCollection.createIndex(Document("flightId", "hashed"))
+
+        }
         flightPointsCollection.createIndex(Document("flightId", 1))
         //flightPointsCollection.createIndex(Document("timestamp", 1))
 
-
-        adminDatabase.runCommand(
-            Document("shardCollection", "${database.name}.flightpoints")
-                .append("key", Document("flightId", "hashed"))
-        )
-
+        if(distributed){
+            adminDatabase.runCommand(
+                Document("shardCollection", "${database.name}.flightpoints")
+                    .append("key", Document("flightId", "hashed"))
+            )
         println("Created hashed index on 'flightId' for collection flightpoints and sharded on that index.")
+        }
 
-        println("Wait for rebalancing of documents in flightpoints collection.")
-        Thread.sleep(90_000)
 
-        val disableBalancerCommand = Document("balancerStop", 1)
-        adminDatabase.runCommand(disableBalancerCommand)
+        if(distributed){
+            println("Wait for rebalancing of documents in flightpoints collection.")
+            Thread.sleep(90_000)
+
+            val disableBalancerCommand = Document("balancerStop", 1)
+            adminDatabase.runCommand(disableBalancerCommand)
+        }
+
 
         println("Updating flightpoints collection (creating timestamps and GeoJson) ... ")
 
@@ -171,9 +183,12 @@ class DataHandler(databaseName: String) {
             updateJobs.joinAll()
         }
 
-        val enableBalancerCommand = Document("balancerStart", 1)
-        adminDatabase.runCommand(enableBalancerCommand)
-        Thread.sleep(30_000)
+        if(distributed) {
+            val enableBalancerCommand = Document("balancerStart", 1)
+            adminDatabase.runCommand(enableBalancerCommand)
+            Thread.sleep(30_000)
+        }
+
 
         //flightPointsCollection.createIndex(Document("timestamp", 1))
         flightPointsCollection.createIndex(Document("location","2dsphere"))
@@ -325,11 +340,14 @@ class DataHandler(databaseName: String) {
 
         if (collectionName == "flighttrips"){
             collection.createIndex(Document(columnName, "hashed"))
-            adminDatabase.runCommand(
-                Document("shardCollection", "$databaseName.$collectionName")
-                    .append("key", Document(columnName, "hashed"))
-            )
-            println("Collection '$collectionName' sharded on column '$columnName'.")
+            if(distributed){
+                adminDatabase.runCommand(
+                    Document("shardCollection", "$databaseName.$collectionName")
+                        .append("key", Document(columnName, "hashed"))
+                )
+                println("Collection '$collectionName' sharded on column '$columnName'.")
+            }
+
         }
         else {
             println("Creating indexes for $collectionName.")
@@ -530,51 +548,52 @@ class DataHandler(databaseName: String) {
         database.createCollection(flightPointsTsCollection.namespace.collectionName, createOptions)
         println("Collection '${flightPointsTsCollection.namespace.collectionName}' created with time-series settings.")
 
-        val shardingCommand =
-            Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
-                .append("key", Document("timestamp", 1))
+        if (distributed) {
+            val shardingCommand =
+                Document("shardCollection", "${database.name}.${flightPointsTsCollection.namespace.collectionName}")
+                    .append("key", Document("timestamp", 1))
 
-        adminDatabase.runCommand(shardingCommand)
+            adminDatabase.runCommand(shardingCommand)
 
-        val june1 = Instant.parse("2023-05-12T00:00:00Z")
-        val september1 = Instant.parse("2023-09-01T00:00:00Z")
+            val june1 = Instant.parse("2023-05-12T00:00:00Z")
+            val september1 = Instant.parse("2023-09-01T00:00:00Z")
 
-        val splitRanges = listOf(
-            Document("split", "${database.name}.system.buckets.flightpoints_ts")
-                .append("middle", Document("control.min.timestamp", june1)), // MinKey -> June 1
+            val splitRanges = listOf(
+                Document("split", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("middle", Document("control.min.timestamp", june1)), // MinKey -> June 1
 
-            Document("split", "${database.name}.system.buckets.flightpoints_ts")
-                .append("middle", Document("control.min.timestamp", september1))  // June 1 -> September 1
-        )
+                Document("split", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("middle", Document("control.min.timestamp", september1))  // June 1 -> September 1
+            )
 
-        splitRanges.forEach { splitCommand ->
-            adminDatabase.runCommand(splitCommand)
+            splitRanges.forEach { splitCommand ->
+                adminDatabase.runCommand(splitCommand)
+            }
+
+            val april1 = Instant.parse("2023-04-01T00:00:00Z")
+            val july1 = Instant.parse("2023-07-01T00:00:00Z")
+            val october1 = Instant.parse("2023-10-01T00:00:00Z")
+
+            val moveChunkCommands = listOf(
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", april1)) // MinKey -> June 1
+                    .append("to", "shard1ReplSet"),
+
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", july1)) // June 1 -> September 1
+                    .append("to", "shard2ReplSet"),
+
+                Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
+                    .append("find", Document("control.min.timestamp", october1)) // September 1 -> MaxKey
+                    .append("to", "shard3ReplSet")
+            )
+
+            moveChunkCommands.forEach { moveChunkCommand ->
+                adminDatabase.runCommand(moveChunkCommand)
+            }
+
+            println("Sharded ${flightPointsTsCollection.namespace.collectionName} on timestamp and created chunks for shards.")
         }
-
-        val april1 = Instant.parse("2023-04-01T00:00:00Z")
-        val july1 = Instant.parse("2023-07-01T00:00:00Z")
-        val october1 = Instant.parse("2023-10-01T00:00:00Z")
-
-        val moveChunkCommands = listOf(
-            Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
-                .append("find", Document("control.min.timestamp", april1)) // MinKey -> June 1
-                .append("to", "shard1ReplSet"),
-
-            Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
-                .append("find", Document("control.min.timestamp", july1)) // June 1 -> September 1
-                .append("to", "shard2ReplSet"),
-
-            Document("moveChunk", "${database.name}.system.buckets.flightpoints_ts")
-                .append("find", Document("control.min.timestamp", october1)) // September 1 -> MaxKey
-                .append("to", "shard3ReplSet")
-        )
-
-        moveChunkCommands.forEach { moveChunkCommand ->
-            adminDatabase.runCommand(moveChunkCommand)
-        }
-
-        println("Sharded ${flightPointsTsCollection.namespace.collectionName} on timestamp and created chunks for shards.")
-
         val coroutineNumber = flightIdThresholds.size - 1
 
         runBlocking {
@@ -868,11 +887,11 @@ class DataHandler(databaseName: String) {
         flightPointsTsCollection.createIndex(compoundIndex, indexOptions)
         println("Created compound index on timestamp, location!")
 
-        flightPointsTsCollection.createIndex(
-            Document("metadata.flightId", 1).append("metadata.track", 1),
-            indexOptions
-        )
-        println("Created compound index on metadata.flightid, metadata.track!")
+//        flightPointsTsCollection.createIndex(
+//            Document("metadata.flightId", 1).append("metadata.track", 1),
+//            indexOptions
+//        )
+//        println("Created compound index on metadata.flightid, metadata.track!")
 
     }
 }
@@ -883,9 +902,9 @@ fun main() {
 
     val separators = listOf(0, 700642631, 710076001, 718926541, 728177911, 736845861, 743346091, 754447851, 760302441, 773383481, 774441640)
     val handler = DataHandler("aviation_data")
-//    handler.updateDatabaseCollections()
-//    handler.insertRegionalData()
-//    handler.shardCollections()
+    handler.updateDatabaseCollections()
+    handler.insertRegionalData()
+    handler.shardCollections()
     handler.createFlightTrips()
 //    handler.createTrajectories(separators)
 //    handler.flightPointsMigration(separators)

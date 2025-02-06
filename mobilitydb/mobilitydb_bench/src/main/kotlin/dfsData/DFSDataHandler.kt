@@ -60,7 +60,8 @@ class DFSDataHandler(databaseName: String) {
         statement.queryTimeout = 1500
 
         distributed = conf.benchmarkSettings.nodes.size > 1
-        //distributed = true
+
+        println("Distributed: $distributed")
 
 
     }
@@ -291,10 +292,26 @@ class DFSDataHandler(databaseName: String) {
 //       );""".trimIndent())
 //        }
 
+//
+//        (0..<seps.size-1).map { index ->
+//            val flightIdLowerBound = seps[index]
+//            val flightIdUpperBound = seps[index + 1]
 
-        (0..<seps.size-1).map { index ->
-            val flightIdLowerBound = seps[index]
-            val flightIdUpperBound = seps[index + 1]
+        if (distributed){
+//        statement.executeUpdate("CLUSTER flights USING idx_flights_trip_gist;")
+//        println("Clustered flights by gist index.")
+//            statement.executeUpdate("ALTER TABLE flights ADD COLUMN shard_key BIGINT;")
+//            statement.executeUpdate("CREATE SEQUENCE flights_shard_seq;")
+//            statement.executeUpdate("UPDATE flights SET shard_key = nextval('flights_shard_seq');")
+//
+//            statement.executeQuery(
+//                "SELECT create_distributed_table('flights', 'shard_key');"
+//
+//            )
+//            println("Distributed Table flights with flightid as sharding key.")
+            statement.executeQuery(
+                "SELECT create_distributed_table('flights', 'flightid');")
+        }
 
             val query =
                 """
@@ -317,31 +334,46 @@ class DFSDataHandler(databaseName: String) {
                     array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp)
                     FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'step'
                 )
-            FROM interpolatedflightpoints as ifp WHERE ifp.flightid > $flightIdLowerBound AND ifp.flightid <= $flightIdUpperBound 
+            FROM interpolatedflightpoints WHERE flightid < 736845861
             GROUP BY flightId, track, airplaneType, origin, destination;
         """.trimIndent()
 
             statement.executeUpdate(query)
-            println("Inserted flights successfully for $flightIdLowerBound < flightId <= $flightIdUpperBound.")
-        }
+
+        val secondQuery =
+            """
+            INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
+            SELECT 
+                flightId,
+                airplaneType,
+                origin,
+                destination,
+                track,
+                tfloatSeq(
+                    array_agg(tfloat(altitude, timestamp) ORDER BY timestamp) 
+                    FILTER (WHERE altitude IS NOT NULL), 'step'
+                ),
+                tgeogpointseq(
+                    array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp) 
+                    FILTER (WHERE track IS NOT NULL), 'step'
+                ), 
+                tgeogpointseq(
+                    array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp)
+                    FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'step'
+                )
+            FROM interpolatedflightpoints WHERE flightid >= 736845861
+            GROUP BY flightId, track, airplaneType, origin, destination;
+        """.trimIndent()
+
+        statement.executeUpdate(secondQuery)
+//            println("Inserted flights successfully for $flightIdLowerBound < flightId <= $flightIdUpperBound.")
+//        }
 
         println("Dropping table interpolatedlflightpoints.")
         statement.executeUpdate("DROP TABLE interpolatedflightpoints CASCADE")
 
         statement.executeUpdate("CREATE INDEX idx_flights_trip_gist ON flights USING GIST(trip);")
-        if (distributed){
-        statement.executeUpdate("CLUSTER flights USING idx_flights_trip_gist;")
-        println("Clustered flights by gist index.")
-            statement.executeUpdate("ALTER TABLE flights ADD COLUMN shard_key BIGINT;")
-            statement.executeUpdate("CREATE SEQUENCE flights_shard_seq;")
-            statement.executeUpdate("UPDATE flights SET shard_key = nextval('flights_shard_seq');")
 
-            statement.executeQuery(
-                "SELECT create_distributed_table('flights', 'shard_key');"
-
-            )
-            println("Distributed Table flights with flightid as sharding key.")
-        }
 
 
         try {
@@ -475,32 +507,16 @@ class DFSDataHandler(databaseName: String) {
     private fun insertRegionalData(region: String) {
         try {
             println("Processing regional data for $region.")
-//            statement.executeUpdate(
-//                """
-//                CREATE TEMP TABLE temp_stage_$region (
-//                    row_number SERIAL PRIMARY KEY,
-//                    name VARCHAR(255),
-//                    latitude DOUBLE PRECISION,
-//                    longitude DOUBLE PRECISION
-//                );
-//                """.trimIndent()
-//            )
-//            statement.executeUpdate(
-//                """
-//                COPY temp_stage_$region(name, latitude, longitude)
-//                FROM '/tmp/regData/$region.csv' WITH (FORMAT csv, HEADER true);
-//            """.trimIndent()
-//            )
 
             statement.executeUpdate("""
                 CREATE TABLE $region (
                 id SERIAL PRIMARY KEY, 
                 name VARCHAR(255) NOT NULL, 
-                geom GEOMETRY(POLYGON, 4326)
+                geom geography(POLYGON, 4326)
                 )
             """.trimIndent())
 
-            val csvFile = "/$region-wkt.csv"  // Ensure the file is placed in `resources/`
+            val csvFile = "/$region-wkt.csv"
             val inputStream = object {}.javaClass.getResourceAsStream(csvFile)
                 ?: throw IllegalArgumentException("File $csvFile not found!")
 
@@ -509,26 +525,11 @@ class DFSDataHandler(databaseName: String) {
 
             val sql = "INSERT INTO $region (name, geom) VALUES (?, ST_GeomFromText(?, 4326))"
 
-
-
-//            statement.executeUpdate(
-//                """
-//                CREATE TEMP TABLE temp_$region (
-//                    row_number SERIAL PRIMARY KEY,
-//                    name VARCHAR(255),
-//                    latitude DOUBLE PRECISION,
-//                    longitude DOUBLE PRECISION
-//                );
-//            """.trimIndent()
-//            )
-
-
             connection.autoCommit = false
             val statement: PreparedStatement = connection.prepareStatement(sql)
 
             for (line in lines) {
-                val parts = line.split(";") // CSV is separated by ";"
-                if (parts.size < 2) continue
+                val parts = line.split(";")
 
                 val name = parts[0].trim()
                 val wkt = parts[1].trim()
@@ -545,31 +546,6 @@ class DFSDataHandler(databaseName: String) {
 
             connection.autoCommit = true
 
-
-//            statement.executeUpdate(
-//                """
-//                INSERT INTO temp_$region (name, latitude, longitude)
-//                SELECT name, latitude, longitude
-//                FROM (
-//                    SELECT
-//                        name, latitude, longitude,
-//                        ROW_NUMBER() OVER (PARTITION BY name ORDER BY row_number) AS row_num,
-//                        COUNT(*) OVER (PARTITION BY name) AS total_rows  -- Partitioning ensures total count per region
-//                    FROM temp_stage_$region
-//                ) t
-//                WHERE row_num = 1 OR row_num % 30 = 0 OR row_num = total_rows;
-//            """.trimIndent()
-//            )
-//
-//            statement.executeUpdate(
-//                """
-//                CREATE TABLE $region (
-//                    name VARCHAR(255),
-//                    Geom geography(Polygon, 4326) NOT NULL
-//                );
-//                """.trimIndent()
-//            )
-
             if (distributed) {
                 try {
                     statement.executeQuery(
@@ -582,33 +558,10 @@ class DFSDataHandler(databaseName: String) {
                 }
             }
 
-            try {
-                statement.executeUpdate("""
-                        INSERT INTO $region (name, Geom)
-                        SELECT
-                            name,
-                            ST_MakePolygon(
-                                ST_GeomFromText(
-                                    'LINESTRING(' || 
-                                    string_agg(latitude || ' ' || longitude, ', ' ORDER BY row_number) || 
-                                    ')'
-                                )
-                            )::geography(Polygon, 4326)
-                        FROM temp_$region
-                        GROUP BY name;
-                        """.trimIndent()
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
-                exitProcess(1)
-            }
 
             println("Inserted data for $region.")
-
-            statement.executeUpdate("DROP TABLE temp_stage_$region;")
-            statement.executeUpdate("DROP TABLE temp_$region;")
-
             println("Processed region data for $region.")
+
         } catch (e: Exception) {
             println("Error processing region data for $region.")
             e.printStackTrace()
@@ -642,7 +595,6 @@ class DFSDataHandler(databaseName: String) {
         statement.executeUpdate("CREATE INDEX idx_flights_origin_hash ON flights USING hash(origin);")
         statement.executeUpdate("CREATE INDEX idx_flights_destination_hash ON flights USING hash(destination);")
 
-        statement.executeUpdate("CREATE INDEX idx_flights_flightid ON flights (flightid);")
 
         //TODO: Index on f.trip
 

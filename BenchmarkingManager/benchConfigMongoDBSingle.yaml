@@ -1,0 +1,113 @@
+benchmark:
+  sut: "MongoDB"
+  nodes:
+    - "34.140.69.186"
+  threads: 4
+  random_seed: 222
+
+queryConfigs:
+
+  # Temporal queries
+  # use
+  - name: countActiveFlightsInPeriod
+    use: False
+    type: temporal
+    repetition: 15
+    parameters:
+      - period_long
+  # use
+  - name: locationOfAirplaneAtInstant
+    use: False
+    type: temporal
+    repetition: 15
+    parameters:
+      - instant
+  # use
+  - name: airportUtilizationInPeriod
+    use: False
+    type: temporal
+    repetition: 15
+    parameters:
+      - period_medium
+
+  # Spatial queries
+  # use
+  - name: countFlightsInCounties
+    use: False
+    type: spatial
+    repetition: 15
+    parameters:
+      - county
+
+  # use
+  - name: flightsCloseToMainCitiesLowAltitude
+    use: False
+    type: spatial
+    repetition: 15
+    parameters:
+      - low_altitude
+      - radius
+
+  # use
+  - name: flightClosestToPoint
+    use: True
+    type: spatial
+    repetition: 15
+    parameters:
+      - point
+      - distance
+
+  # spatiotemporal queries
+  - name: flightsInCountyInPeriod
+    use: False
+    type: spatiotemporal
+    repetition: 15
+    parameters:
+      - period_short
+      - county
+
+  # use
+  - name: countFlightsAtInstantInDistricts
+    use: False
+    type: spatiotemporal
+    repetition: 15
+    parameters:
+      - instant
+
+  # use
+  - name: inCityRadiusInPeriod
+    use: False
+    type: spatiotemporal
+    repetition: 15
+    parameters:
+      - period_medium
+      - city
+      - radius
+
+  # use
+  - name: flightDurationInMunicipalityLowAltitudeInPeriod
+    use: False
+    type: spatial-temporal
+    repetition: 15
+    parameters:
+      - period_medium
+      - municipality
+      - low_altitude
+
+  # use
+  - name: averageHourlyFlightsDuringDayInMunicipality
+    use: False
+    type: spatiotemporal
+    repetition: 15
+    parameters:
+      - day
+      - municipality
+
+  # use
+  - name: flightsWithLocalOriginDestinationInPeriodInCounty
+    use: False
+    type: spatiotemporal
+    repetition: 15
+    parameters:
+      - period_short
+      - county

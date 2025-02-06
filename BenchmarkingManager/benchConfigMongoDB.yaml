@@ -1,15 +1,13 @@
 benchmark:
   sut: "MongoDB"
   nodes:
-    - "35.241.223.82"
-    - "34.78.41.234"
-    - "34.140.154.34"
-  threads: 32
+    - "34.76.114.204"
+  threads: 16
   random_seed: 444
 
 queryConfigs:
 
-  # Temporal queries (5 functioning queries, 3 chosen)
+  # Temporal queries
   # use
   - name: countActiveFlightsInPeriod
     use: True
@@ -32,7 +30,7 @@ queryConfigs:
     parameters:
       - period_medium
 
-  # Spatial queries (5 functioning, 3 chosen)
+  # Spatial queries
   # use
   - name: countFlightsInCounties
     use: True
@@ -59,7 +57,7 @@ queryConfigs:
       - point
       - distance
 
-  # spatiotemporal queries (6 (7) functioning queries)
+  # spatiotemporal queries
   - name: flightsInCountyInPeriod
     use: True
     type: spatiotemporal
@@ -67,15 +65,6 @@ queryConfigs:
     parameters:
       - period_short
       - county
-
-  # join query (use in single setup)
-  - name: pairOfFlightsInMunicipalityInPeriod
-    use: False
-    type: spatiotemporal
-    repetition: 50
-    parameters:
-      - period_short
-      - municipality
 
   # use
   - name: countFlightsAtInstantInDistricts
@@ -131,8 +120,6 @@ queryConfigs:
     parameters:
       - period_medium
       - county
-
-
 
 
   # currently not in use

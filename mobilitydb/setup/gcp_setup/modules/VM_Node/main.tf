@@ -13,7 +13,7 @@ resource "google_compute_instance" "mobilitydb" {
   boot_disk {
     initialize_params {
       image="ubuntu-os-pro-cloud/ubuntu-pro-2204-lts"
-      size  = 250
+      size  = 480
       type = "pd-ssd"
     }
   }

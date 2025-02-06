@@ -37,7 +37,7 @@ const val USER = "felix"
 const val PASSWORD = "master"
 const val DATABASE = "aviation_data"
 var benchmarkExecutorService: ExecutorService? = null
-val separators = listOf(0, 681642631, 701642631, 710076001, 718926541, 728177911, 736845861, 745346091, 755447851, 765304441, 772385481, 774441640)
+val separators = listOf(0, 701642631, 710076001, 718926541, 728177911, 736845861, 745346091, 755447851, 765304441, 772385481, 774441640)
 
 class BenchmarkExecutor(private val configPath: String, private val logsPath: String) {
 
@@ -75,7 +75,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        warmUpSut(nodes, 50, warmUpRandom)
+        //warmUpSut(nodes, 50, warmUpRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -151,9 +151,9 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 "county" -> getRandomPlace(counties, "name", random)
                 "district" -> getRandomPlace(districts, "name", random)
                 "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
-                "radius" -> (random.nextDouble(0.25, 0.5) * 10)/6378.1
-                "low_altitude" -> (random.nextInt(5, 60) * 10)
-                "distance" -> (random.nextInt(5, 30) * 10)
+                "radius" -> (random.nextDouble(0.25, 0.5) * 10)/(1000*6378)
+                "low_altitude" -> (random.nextInt(50, 150) * 10)
+                "distance" -> (random.nextInt(5, 15) * 10)
                 else -> ""
 
             }
@@ -378,8 +378,8 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 } else timestamp1
             }
             2 -> {
-                // Between 2 days and 30 days
-                val secondsToShift = random.nextLong(172800, 2592001)
+                // Between 2 days and 15 days
+                val secondsToShift = random.nextLong(172800, 1296001)
                 val tentativeEnd = if (random.nextBoolean()) {
                     timestamp1.plusSeconds(secondsToShift)
                 } else {
@@ -394,8 +394,8 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 } else timestamp1
             }
             3 -> {
-                // Between 1 and 12 months
-                val secondsToShift = random.nextLong(259200, 31536001)
+                // Between 15 days and 12 months
+                val secondsToShift = random.nextLong(1296000, 31536001)
                 val tentativeEnd = if (random.nextBoolean()) {
                     timestamp1.plusSeconds(secondsToShift)
                 } else {

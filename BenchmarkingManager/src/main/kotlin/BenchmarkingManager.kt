@@ -139,18 +139,18 @@ fun main() {
 
 
 
-    val configPathMongoDB = "benchConfigMongoDB.yaml"
-    val configPathMobilityDB = "benchConfigMobilityDB.yaml"
+    val configPathMongoDB = "benchConfigMongoDBSingle.yaml"
+    val configPathMobilityDB = "benchConfigMobilityDBSingle.yaml"
 
     //val benchmarkingClientHost = "35.187.55.236"
-    val benchmarkingClientHost = "104.199.59.45"
+    val benchmarkingClientHost = "localhost"
     val databaseClientAddress = "$benchmarkingClientHost:8080"
 
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)
 
-//    println("\n1. Uploading configuration...")
-//    client.uploadConfig(configPathMongoDB)
+    println("\n1. Uploading configuration...")
+    client.uploadConfig(configPathMobilityDB)
 
 //    handler.updateDatabaseCollections() --> 0 index
 //    handler.insertRegionalData() --> 1 index
@@ -162,7 +162,7 @@ fun main() {
 //    handler.createTimeSeriesCollectionIndexes() -- 7 index
 
     // must be of size 8
-//    val executionPattern = listOf(0, 0, 0, 0, 1, 1, 1, 1)
+//    val executionPattern = listOf(1, 1, 1, 1, 1, 1, 1, 1)
 //    client.triggerDataHandler(executionPattern)
 
 
@@ -171,14 +171,14 @@ fun main() {
 //    println("\n2. Triggering DataHandler operations...")
 //    client.triggerDataHandler()
 //
-//    client.startBenchmark()
+    client.startBenchmark()
 //
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()
 //
-    println("\n5. Retrieving logs...")
-    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
+//    println("\n5. Retrieving logs...")
+//    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
 
 
 }

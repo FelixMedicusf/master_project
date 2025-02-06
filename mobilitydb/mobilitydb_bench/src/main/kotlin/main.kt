@@ -30,6 +30,7 @@ const val DATABASE = "aviation_data"
 const val USER = "felix"
 const val PASSWORD = "master"
 var benchmarkExecutorService: ExecutorService? = null
+val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
 class BenchmarkExecutor(
     private val configPath: String,
@@ -63,12 +64,12 @@ class BenchmarkExecutor(
         println("Using random seed: $mainSeed")
         println("Using $threadCount threads.")
 
-        val allQueries = prepareQueryTasks(config, mainSeed)
+        val allQueries = prepareQueryTasks(config, mainRandom)
         val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        warmUpSut(nodes[0], mainRandom = mainRandom)
+        //warmUpSut(nodes[0], 50, mainRandom = mainRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
@@ -90,17 +91,16 @@ class BenchmarkExecutor(
         val benchEnd = Instant.now().toEpochMilli()
 
         mergeLogFilesAndCleanUp("sql_response_log_combined.txt", "sql_response_log_.*\\.txt")
-        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut)
+        saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut, mainSeed)
     }
 
-    private fun warmUpSut(mobilityDBIp: String, mainRandom: Random){
+    private fun warmUpSut(mobilityDBIp: String, repetitions: Int = 50, mainRandom: Random){
         val connection = getConnection(
             "jdbc:postgresql://$mobilityDBIp/$DATABASE", USER, PASSWORD
         )
 
         val statement = connection.createStatement()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val repetitions = 50
         var i = 0
 
 
@@ -162,20 +162,14 @@ class BenchmarkExecutor(
         }
     }
 
-    private fun prepareQueryTasks(config: BenchmarkConfiguration, seed: Long): MutableList<QueryTask> {
-        val random = Random(seed)
+
+    private fun prepareQueryTasks(config: BenchmarkConfiguration, random: Random): MutableList<QueryTask> {
         val allQueries = mutableListOf<QueryTask>()
         for (queryConfig in config.queryConfigs) {
             if (queryConfig.use) {
-                if (queryConfig.parameterSets != null) {
-
-                    for(paramSet in queryConfig.parameterSets) {
-                        allQueries.add(
-                            QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql, paramSet.parameters)
-                        )
-                    }
-                } else {
-                        allQueries.add(QueryTask(queryConfig.name, queryConfig.type, queryConfig.sql))
+                repeat(queryConfig.repetition){
+                    val parsedSqlAndValues = formatSQLStatement(queryConfig.sql, queryConfig.parameters, random)
+                    allQueries.add(QueryTask(queryConfig.name, queryConfig.type, parsedSqlAndValues.first, parsedSqlAndValues.second))
                 }
             }
         }
@@ -191,73 +185,92 @@ class BenchmarkExecutor(
         return seeds
     }
 
-    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String) {
+    private fun saveExecutionLogs(threadSeeds: List<Long>, executionLogs: List<QueryExecutionLog>, benchStart: Long, benchEnd: Long, nodeNumber: Int, sut: String, mainSeed: Long) {
 
         val file = File(logsPath)
-        file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size},"  + " #nodes: $nodeNumber, queries executed: ${executionLogs.size}." + "\n")
+        file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size},"  + " #nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
         file.appendText("threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
 
-    fun <T> splitQueue(queue: ConcurrentLinkedQueue<T>, parts: Int): List<ConcurrentLinkedQueue<T>> {
-        require(parts > 0) { "Number of parts must be greater than 0." }
 
-        // Calculate the size of each part
-        val totalSize = queue.size
-        val partSize = totalSize / parts
-        val remainder = totalSize % parts
+    private fun formatSQLStatement(sql: String, params: List<String>, random: Random): Pair<String, List<String>> {
+        var parsedSql = sql
+        var values = mutableListOf<String>()
 
-        val subQueues = mutableListOf<ConcurrentLinkedQueue<T>>()
+        for (param in params){
+            val replacement = when (param) {
+                "period_short" -> generateRandomTimeSpan(random, formatter, year=2023, mode=1)
+                "period_medium" -> generateRandomTimeSpan(random, formatter, year=2023, mode=2)
+                "period_long" -> generateRandomTimeSpan(random, formatter, year=2023, mode=3)
+                "period" -> generateRandomTimeSpan(random, formatter, year=2023)
+                "instant" -> generateRandomTimestamp(random, formatter)
+                "day" -> getRandomDay(random, year = 2023)
+                "city" -> getRandomPlace(cities, "name", random)
+                "municipality" -> getRandomPlace(municipalities, "name", random)
+                "county" -> getRandomPlace(counties, "name", random)
+                "district" -> getRandomPlace(districts, "name", random)
+                "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
+                "radius" -> ((random.nextDouble(0.25, 0.5) * 10)).toString(); // /6378.1
+                "low_altitude" -> (random.nextInt(50, 150) * 10).toString();
+                "distance" -> (random.nextInt(5, 15) * 10).toString() // in meter in MongoDB
+                else -> ""
 
-        for (i in 0 until parts) {
-            val currentPart = ConcurrentLinkedQueue<T>()
-
-            // Add `partSize` elements to the current queue
-            repeat(partSize + if (i < remainder) 1 else 0) { // Distribute the remainder evenly
-                val element = queue.poll()
-                if (element != null) {
-                    currentPart.add(element)
-                }
             }
 
-            subQueues.add(currentPart)
-        }
+            if (replacement != null){
+                parsedSql = parsedSql.replace(":$param", replacement)
+                values.add(replacement)
 
-        return subQueues
-    }
-
-    fun mergeLogFilesAndCleanUp(outputFileName: String, logFilePattern: String) {
-        val outputFile = File(outputFileName)
-
-        // Delete the output file if it already exists
-        if (outputFile.exists()) {
-            outputFile.delete()
-        }
-
-        // Find all thread-specific log files matching the pattern
-        val logFiles = File(".").listFiles { _, name ->
-            name.matches(Regex(logFilePattern))
-        } ?: emptyArray()
-
-        // Merge content into the output file
-        outputFile.bufferedWriter().use { writer ->
-            for (logFile in logFiles) {
-                writer.appendLine("=== Content from ${logFile.name} ===")
-                logFile.forEachLine { line ->
-                    writer.appendLine(line)
-                }
-                writer.appendLine() // Add a blank line between files
             }
+
         }
+        return Pair(parsedSql, values)
+    }
 
-        // Delete the individual thread log files
-        logFiles.forEach { it.delete() }
+    private fun getRandomPoint(random: Random, rectangle: List<List<Double>>):String {
+        val upperLeftLon = rectangle[0][0]
+        val upperLeftLat = rectangle[0][1]
+        val bottomRightLon = rectangle[1][0]
+        val bottomRightLat = rectangle[1][1]
 
-        println("Merged ${logFiles.size} log files into ${outputFile.absolutePath}. Deleted thread-specific log files.")
+        val randomLon = upperLeftLon + random.nextDouble() * (bottomRightLon - upperLeftLon)
+
+        val randomLat = bottomRightLat + random.nextDouble() * (upperLeftLat - bottomRightLat)
+
+        // Return the random point
+        return "POINT($randomLon $randomLat)"
+    }
+
+    private fun getRandomDay(random: Random, year: Int): String {
+
+        val startDate = LocalDate.of(year, 1, 1)
+        val endDate = LocalDate.of(year, 12, 31)
+
+        val daysInYear = endDate.toEpochDay() - startDate.toEpochDay() + 1
+
+        val randomDay = startDate.plusDays(random.nextLong(0, daysInYear))
+
+        return "'${randomDay}'"
     }
 
 
+    private fun generateRandomTimestamp(random: Random, formatter: DateTimeFormatter): String {
+        val year = 2023
+        val dayOfYear = random.nextInt(1, 366) // Days in the year 2023
+        val hour = random.nextInt(0, 24)
+        val minute = random.nextInt(0, 60)
+        val second = random.nextInt(0, 60)
+
+        // Use LocalDate.ofYearDay to get the date and then add the time
+        val date = LocalDate.ofYearDay(year, dayOfYear)
+        val timestamp = LocalDateTime.of(date, java.time.LocalTime.of(hour, minute, second))
+
+        return "timestamptz'${timestamp.format(formatter)}'"
+    }
+
+    // Function to generate a random time span (period) within 2023
     private fun generateRandomTimeSpan(random: Random, formatter: DateTimeFormatter, year: Int, mode: Int = 0): String {
 
         // Generate pseudo random timestamps based on the mode
@@ -331,6 +344,7 @@ class BenchmarkExecutor(
                 LocalDateTime.of(date2, java.time.LocalTime.of(randomHour, randomMinute, randomSecond))
             }
         }
+
         val (start, end) = if (timestamp1.isBefore(endDate)) {
             timestamp1 to endDate
         } else {
@@ -339,6 +353,38 @@ class BenchmarkExecutor(
 
         return "tstzspan'[${start.format(formatter)}, ${end.format(formatter)}]'"
     }
+
+
+    fun mergeLogFilesAndCleanUp(outputFileName: String, logFilePattern: String) {
+        val outputFile = File(outputFileName)
+
+        // Delete the output file if it already exists
+        if (outputFile.exists()) {
+            outputFile.delete()
+        }
+
+        // Find all thread-specific log files matching the pattern
+        val logFiles = File(".").listFiles { _, name ->
+            name.matches(Regex(logFilePattern))
+        } ?: emptyArray()
+
+        // Merge content into the output file
+        outputFile.bufferedWriter().use { writer ->
+            for (logFile in logFiles) {
+                writer.appendLine("=== Content from ${logFile.name} ===")
+                logFile.forEachLine { line ->
+                    writer.appendLine(line)
+                }
+                writer.appendLine() // Add a blank line between files
+            }
+        }
+
+        // Delete the individual thread log files
+        logFiles.forEach { it.delete() }
+
+        println("Merged ${logFiles.size} log files into ${outputFile.absolutePath}. Deleted thread-specific log files.")
+    }
+
 }
 
 

@@ -6,8 +6,8 @@ data class QueryConfiguration(
     val type: String, // type of the query (temporal, spatial, or spatiotemporal)
     val sql: String, // the SQL statement to perform
     val repetition: Int, // how often each query with each parameter is executed
-    @JsonProperty("parameter_sets")
-    val parameterSets: List<QueryParameterSet>? = null // list of parameter sets with their values
+    @JsonProperty("parameters")
+    val parameters: List<String> // list of parameter sets with their values
 )
 
 data class QueryParameterSet(
