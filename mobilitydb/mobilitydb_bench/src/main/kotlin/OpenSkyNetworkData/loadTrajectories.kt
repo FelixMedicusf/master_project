@@ -67,11 +67,11 @@ fun buildTrajectoryData () {
 
     try {
         val addTrajColumn = """
-            ALTER TABLE flights ADD COLUMN Traj geometry;
+            ALTER TABLE flights_old ADD COLUMN Traj geometry;
         """.trimIndent()
 
         val createTrajs = """
-            UPDATE flights SET Traj = trajectory(trip);
+            UPDATE flights_old SET Traj = trajectory(trip);
         """.trimIndent()
 
         println("Create column for trajectories in flights table.")
@@ -85,7 +85,7 @@ fun buildTrajectoryData () {
 
     try{
         val countFlightTrips = """
-            SELECT COUNT(*) FROM flights;
+            SELECT COUNT(*) FROM flights_old;
         """.trimIndent()
 
         val resultSet = statement.executeQuery(countFlightTrips)

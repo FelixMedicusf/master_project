@@ -555,7 +555,7 @@ class DataHandler(databaseName: String) {
 
             adminDatabase.runCommand(shardingCommand)
 
-            val june1 = Instant.parse("2023-05-12T00:00:00Z")
+            val june1 = Instant.parse("2023-05-20T00:00:00Z")
             val september1 = Instant.parse("2023-09-01T00:00:00Z")
 
             val splitRanges = listOf(

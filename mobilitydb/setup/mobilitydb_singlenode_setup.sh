@@ -8,19 +8,19 @@ pg_pass_file="$HOME/.pgpass"
 
 CONFIG="
 # Memory settings
-shared_buffers = '12GB'
-work_mem = '248MB'
+shared_buffers = '8GB'
+work_mem = '500MB'
 maintenance_work_mem = '2048MB'
 effective_cache_size = '24GB'
 
 # Parallel processing
 max_parallel_workers_per_gather = 4
-max_worker_processes = 16
-max_parallel_workers = 16
+max_worker_processes = 8
+max_parallel_workers = 8
 max_parallel_maintenance_workers = 4
 
 # I/O settings
-effective_io_concurrency = 300
+effective_io_concurrency = 200
 
 # WAL settings
 archive_mode = off
@@ -31,8 +31,8 @@ min_wal_size = '2GB'
 autovacuum = on
 autovacuum_max_workers = 3
 autovacuum_naptime = '1min'
-autovacuum_vacuum_threshold = 50
-autovacuum_analyze_threshold = 50
+autovacuum_vacuum_threshold = 5000
+autovacuum_analyze_threshold = 5000
 
 "
 

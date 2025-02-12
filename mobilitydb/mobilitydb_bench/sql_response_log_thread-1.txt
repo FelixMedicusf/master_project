@@ -1,3 +1,0 @@
-thread-1 started executing at 2025-02-06T13:04:18.140392300Z with 15 queries.
-1: flightClosestToPoint with params: [POINT(6.5276266858243694 51.66714701279181), 160]. SELECT f.flightid, f.airplaneType, f.origin, f.destination, f.traj <-> ST_GeogFromText('SRID=4326;POINT(6.5276266858243694 51.66714701279181)') AS min_distance FROM flights f WHERE f.traj <-> ST_GeogFromText('SRID=4326;POINT(6.5276266858243694 51.66714701279181)') < 160 AND eintersects(f.trip, ST_BUFFER(ST_GeogFromText('SRID=4326;POINT(6.5276266858243694 51.66714701279181)'), 160)) ORDER BY min_distance ASC;
-

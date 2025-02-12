@@ -137,10 +137,11 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
+    val configPathMongoDBSingle = "benchConfigMongoDBSingle.yaml"
+    val configPathMobilityDBSingle = "benchConfigMobilityDBSingle.yaml"
 
-
-    val configPathMongoDB = "benchConfigMongoDBSingle.yaml"
-    val configPathMobilityDB = "benchConfigMobilityDBSingle.yaml"
+    val configPathMongoDBCluster = "benchConfigMongoDBCluster.yaml"
+    val configPathMobilityDBCluster = "benchConfigMobilityDBCluster.yaml"
 
     //val benchmarkingClientHost = "35.187.55.236"
     val benchmarkingClientHost = "localhost"
@@ -150,7 +151,7 @@ fun main() {
     val client = BenchmarkClient(serverUrl)
 
     println("\n1. Uploading configuration...")
-    client.uploadConfig(configPathMobilityDB)
+    client.uploadConfig(configPathMobilityDBCluster)
 
 //    handler.updateDatabaseCollections() --> 0 index
 //    handler.insertRegionalData() --> 1 index
@@ -161,8 +162,8 @@ fun main() {
 //    handler.flightPointsInterpolation(separators) --> 6 index
 //    handler.createTimeSeriesCollectionIndexes() -- 7 index
 
-    // must be of size 8
-//    val executionPattern = listOf(1, 1, 1, 1, 1, 1, 1, 1)
+//    // must be of size 8
+//    val executionPattern = listOf(0, 0, 0, 0, 1, 1, 1, 1)
 //    client.triggerDataHandler(executionPattern)
 
 
@@ -172,7 +173,7 @@ fun main() {
 //    client.triggerDataHandler()
 //
     client.startBenchmark()
-//
+////
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()

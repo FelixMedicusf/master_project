@@ -1,0 +1,119 @@
+benchmark:
+  sut: "MongoDB"
+  mixed: False
+  nodes:
+    - "34.78.92.98"
+    - "35.205.167.189"
+    - "146.148.118.85"
+  threads: 32
+  test: False
+  random_seed: 1500
+
+queryConfigs:
+
+  # Temporal queries
+  # use
+  - name: countActiveFlightsInPeriod
+    use: False
+    type: temporal
+    repetition: 150
+    parameters:
+      - period_medium
+
+  # use
+  - name: locationOfAirplaneAtInstant
+    use: False
+    type: temporal
+    repetition: 150
+    parameters:
+      - instant
+
+  # use
+  - name: airportUtilizationInPeriod
+    use: False
+    type: temporal
+    repetition: 150
+    parameters:
+      - period_short
+
+  # Spatial queries
+  # use
+  - name: countFlightsInCounties
+    use: False
+    type: spatial
+    repetition: 300
+    parameters:
+      - county
+
+  # use
+  - name: flightsCloseToMainCitiesLowAltitude
+    use: False
+    type: spatial
+    repetition: 300
+    parameters:
+      - low_altitude
+      - radius
+
+  # use
+  - name: flightClosestToPoint
+    use: False
+    type: spatial
+    repetition: 300
+    parameters:
+      - point
+      - distance
+
+  # spatiotemporal queries
+  - name: flightsInCountyInPeriod
+    use: True
+    type: spatiotemporal
+    repetition: 300
+    parameters:
+      - period_medium
+      - county
+
+  # use
+  - name: countFlightsAtInstantInDistricts
+    use: True
+    type: spatiotemporal
+    repetition: 300
+    parameters:
+      - instant
+
+  # use
+  - name: inCityRadiusInPeriod
+    use: True
+    type: spatiotemporal
+    repetition: 300
+    parameters:
+      - period_medium
+      - city
+      - radius
+
+  # use
+  - name: flightDurationInMunicipalityLowAltitudeInPeriod
+    use: True
+    type: spatial-temporal
+    repetition: 300
+    parameters:
+      - period_medium
+      - municipality
+      - low_altitude
+
+  # use
+  - name: averageHourlyFlightsDuringDayInMunicipality
+    use: True
+    type: spatiotemporal
+    repetition: 300
+    parameters:
+      - day
+      - municipality
+
+  # use
+  - name: flightsWithLocalOriginDestinationInPeriodInCounty
+    use: True
+    type: spatiotemporal
+    repetition: 300
+    parameters:
+      - period_short
+      - county

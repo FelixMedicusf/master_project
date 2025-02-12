@@ -24,6 +24,9 @@ variable "names_and_zones"{
   # europe-west1: Belgien
   default = {
     mongodb-node-1 = "europe-west1-b"
+    mongodb-node-2 = "europe-west1-b"
+    mongodb-node-3 = "europe-west1-b"
+
   }
 }
 

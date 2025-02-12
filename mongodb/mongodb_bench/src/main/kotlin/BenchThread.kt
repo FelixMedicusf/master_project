@@ -34,7 +34,7 @@ class BenchThread(
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch,
-    private val givenSeed: Long
+    private val logResponses: Boolean
 ) : Thread(threadName) {
 
     private var mongoDatabase: MongoDatabase
@@ -81,53 +81,50 @@ class BenchThread(
             val flightPointsCollection = mongoDatabase.getCollection("flightpoints")
             val flightPointsTsCollection = mongoDatabase.getCollection("flightpoints_ts")
             val flightTripsCollection = mongoDatabase.getCollection("flighttrips")
-
+            var printStream: PrintStream? = null
             val staticCollections = listOf(citiesCollection, airportsCollection, municipalitiesCollection, countiesCollection, districtsCollection)
             val dynamicCollections = listOf(flightPointsCollection, flightPointsTsCollection, flightTripsCollection)
 
+        if(logResponses){
             val logFile = File("mongo_response_log_${threadName}.txt")
             if (logFile.exists()) {
                 logFile.delete()
             }
             logFile.createNewFile()
-
-            val printStream = PrintStream(logFile)
+            printStream = PrintStream(logFile)
+        }
 
             // Ensure all threads start at the same time
             startLatch.await()
 
-            printStream.println("$threadName started executing at ${Instant.now()}.")
-            println()
-            var i = 1
+        if(logResponses){
+            printStream?.println("$threadName started executing at ${Instant.now()}.")
+        }
 
-            println("$threadName started executing at ${Instant.now()}.")
+        println()
+        var i = 1
+        println("$threadName started executing at ${Instant.now()}.")
 
         try{
             while (true) {
                 val task = queryQueue.poll() ?: break
-
                 val mongoParameters: MutableList<Any> = mutableListOf(staticCollections, dynamicCollections)
 
-                //val params = task.paramSet?.keys?.joinToString(";") ?: ""
                 val parameterValues = task.paramValues.joinToString(";")
-
                 task.paramValues.forEach { value -> mongoParameters.add(value) }
 
                 val currentFunction = invokeFunctionByName(task.queryName)
 
-//                if(task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
-//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint"){
-                    printStream.println("$i: ${task.queryName} with params: $parameterValues")
-//                }
+                if(logResponses){
+                    printStream?.println("$i: ${task.queryName} with params: $parameterValues")
+                }
 
                 val response = mongoParameters.let { params -> currentFunction.call(this, *params.toTypedArray()) }
                 val endTime = Instant.now().toEpochMilli()
 
-//                if (task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
-//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint"
-//                ) {
-                    printStream.println(formatMongoResponse(response.fourth))
-//                }
+                if (logResponses) {
+                    printStream?.println(formatMongoResponse(response.fourth))
+                }
 
 
                 synchronized(log) {
@@ -152,7 +149,10 @@ class BenchThread(
                 i++
             }
 
-            printStream.println("$threadName finished executing at ${Instant.now()}.")
+            if(logResponses){
+                printStream?.println("$threadName finished executing at ${Instant.now()}.")
+            }
+
             println("$threadName finished executing at ${Instant.now()}.")
 
         } catch (e: Exception) {
@@ -751,7 +751,7 @@ class BenchThread(
 
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightTripsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
 
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
@@ -906,7 +906,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightTripsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightTripsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
         println(secondResponse.size)
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
@@ -993,7 +993,7 @@ class BenchThread(
             Document("\$project", Document("_id", 0))
         )
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val response = citiesCollection.aggregate(secondPipeline).toList()
+        val response = citiesCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, response)
 
@@ -1028,7 +1028,7 @@ class BenchThread(
         )
 
         val queryStartTime = Instant.now().toEpochMilli()
-        val response = flightTripsCollection.aggregate(pipeline).toList()
+        val response = flightTripsCollection.aggregate(pipeline).allowDiskUse(true).toList()
 
         return Quadrupel(queryStartTime, 0, 0, response)
     }
@@ -1169,7 +1169,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val response = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        val response = flightPointsTsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, response)
 
@@ -1296,7 +1296,7 @@ class BenchThread(
 
         //println(flightPointsTsCollection.aggregate(secondPipeline).explain(ExplainVerbosity.EXECUTION_STATS))
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
 
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
@@ -1417,8 +1417,9 @@ class BenchThread(
         val coordinates = firstResponse.flatMap { document ->
             val location = document.get("location", Document::class.java)
             val coords = location?.get("coordinates", List::class.java)
-            coords?.map { it as Double } ?: emptyList() // Ensure null-safe mapping
+            coords?.map { (it as Number).toDouble() } ?: emptyList() // Convert all numbers to Double
         }
+
 
         val secondPipeline = listOf(
             Document(
@@ -1461,7 +1462,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
 
@@ -1662,7 +1663,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
 
     }
@@ -1827,7 +1828,7 @@ class BenchThread(
         )
 
         val queryTimeStartSecondQuery = Instant.now().toEpochMilli()
-        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).toList()
+        val secondResponse = flightPointsTsCollection.aggregate(secondPipeline).allowDiskUse(true).toList()
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
 
     }
@@ -1953,7 +1954,7 @@ class BenchThread(
         )
 
         val queryTimeStart = Instant.now().toEpochMilli()
-        val endResult = airportsCollection.aggregate(pipeline).toList()
+        val endResult = airportsCollection.aggregate(pipeline).allowDiskUse(true).toList()
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStart, endResult)
     }

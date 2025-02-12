@@ -60,23 +60,29 @@ class BenchmarkExecutor(
         val nodes = config.benchmarkSettings.nodes
         val sut = config.benchmarkSettings.sut
         val mainSeed = config.benchmarkSettings.randomSeed
+        val mixed = config.benchmarkSettings.mixed
+        val distributed = config.benchmarkSettings.nodes.size > 1
+        val logResponses = config.benchmarkSettings.test
         val mainRandom = Random(mainSeed)
+        val warmUpRandom = Random(12345)
         println("Using random seed: $mainSeed")
         println("Using $threadCount threads.")
+        println("Mixed queries: $mixed")
+        println("Distributed: $distributed")
 
         val allQueries = prepareQueryTasks(config, mainRandom)
         val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        //warmUpSut(nodes[0], 50, mainRandom = mainRandom)
+        warmUpSut(nodes[0], 200, warmUpRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
         for (i in 0..<threadCount) {
             benchThreads.submit(
                 BenchThread(
-                    "thread-$i", nodes[0], threadSafeQueries, executionLogs, startLatch, threadSeeds[i]
+                    "thread-$i", nodes[0], threadSafeQueries, executionLogs, startLatch, logResponses
                 )
             )
 
@@ -90,11 +96,15 @@ class BenchmarkExecutor(
         benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
         val benchEnd = Instant.now().toEpochMilli()
 
-        mergeLogFilesAndCleanUp("sql_response_log_combined.txt", "sql_response_log_.*\\.txt")
+
+        if (logResponses){
+            mergeLogFilesAndCleanUp("sql_response_log_combined.txt", "sql_response_log_.*\\.txt")
+        }
+
         saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut, mainSeed)
     }
 
-    private fun warmUpSut(mobilityDBIp: String, repetitions: Int = 50, mainRandom: Random){
+    private fun warmUpSut(mobilityDBIp: String, repetitions: Int = 50, warmUpRandom: Random){
         val connection = getConnection(
             "jdbc:postgresql://$mobilityDBIp/$DATABASE", USER, PASSWORD
         )
@@ -108,12 +118,12 @@ class BenchmarkExecutor(
         try {
             while (i < repetitions){
 
-                val randomFlightId = mainRandom.nextLong(691877560, 774441640)
-                val randomMunicipality = getRandomPlace(municipalities, "name", mainRandom)
-                val randomCounty = getRandomPlace(counties, "name", mainRandom)
-                val randomDistrict = getRandomPlace(districts, "name", mainRandom)
-                val randomCity = getRandomPlace(cities, "name", mainRandom)
-                val randomTimespan = generateRandomTimeSpan(mainRandom, formatter, 2023, 2)
+                val randomFlightId = warmUpRandom.nextLong(691877560, 774441640)
+                val randomMunicipality = getRandomPlace(municipalities, "name", warmUpRandom)
+                val randomCounty = getRandomPlace(counties, "name", warmUpRandom)
+                val randomDistrict = getRandomPlace(districts, "name", warmUpRandom)
+                val randomCity = getRandomPlace(cities, "name", warmUpRandom)
+                val randomTimespan = generateRandomTimeSpan(warmUpRandom, formatter, 2023, 2)
 
                 statement.executeQuery("SELECT * FROM flights WHERE flightid=$randomFlightId")
                 statement.executeQuery("SELECT * FROM flightpoints WHERE flightid=$randomFlightId")
@@ -122,11 +132,10 @@ class BenchmarkExecutor(
                 statement.executeQuery("SELECT * FROM districts WHERE name=$randomDistrict")
                 statement.executeQuery("SELECT * FROM cities WHERE name=$randomCity")
 
-                statement.executeQuery("SELECT * FROM flights f, counties c WHERE f.trip && stbox(c.geom, $randomTimespan) AND c.name = $randomCounty LIMIT 5")
+                statement.executeQuery("SELECT flightid, track, destination FROM flights f, counties c WHERE f.trip && stbox(c.geom, $randomTimespan) AND c.name = $randomCounty LIMIT 5")
                 statement.executeQuery("SELECT flightid, track FROM flights WHERE trip && $randomTimespan")
-
                 i++
-                println("next index: $i")
+
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -173,7 +182,9 @@ class BenchmarkExecutor(
                 }
             }
         }
-        allQueries.shuffle(random)
+        if(config.benchmarkSettings.mixed){
+            allQueries.shuffle(random)
+        }
         return allQueries
     }
 
@@ -189,7 +200,7 @@ class BenchmarkExecutor(
 
         val file = File(logsPath)
         file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size},"  + " #nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
-        file.appendText("threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords\n")
+        file.appendText("threadName,queryName,queryType,parameterValues,round,executionIndex,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency,fetchedRecords\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
@@ -212,9 +223,9 @@ class BenchmarkExecutor(
                 "county" -> getRandomPlace(counties, "name", random)
                 "district" -> getRandomPlace(districts, "name", random)
                 "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
-                "radius" -> ((random.nextDouble(0.25, 0.5) * 10)).toString(); // /6378.1
+                "radius" -> ((random.nextInt(2, 10) * 10)).toString(); // /6378.1
                 "low_altitude" -> (random.nextInt(50, 150) * 10).toString();
-                "distance" -> (random.nextInt(5, 15) * 10).toString() // in meter in MongoDB
+                "distance" -> (random.nextInt(1, 10)) .toString() // in meter in MongoDB
                 else -> ""
 
             }
@@ -391,7 +402,7 @@ class BenchmarkExecutor(
 fun main() {
     // Path to the config and logs
     val configPath = "benchConf.yaml"
-    val logsPath = "benchmark_execution_logs.txt"
+    val logsPath = "sql_benchmark_execution_logs.txt"
 
     // Start HTTP server
     embeddedServer(Netty, port = 8080) {

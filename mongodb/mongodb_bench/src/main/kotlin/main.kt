@@ -32,7 +32,7 @@ import java.util.concurrent.*
 import kotlin.random.Random
 
 
-val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 const val USER = "felix"
 const val PASSWORD = "master"
 const val DATABASE = "aviation_data"
@@ -66,23 +66,29 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         val nodes = config.benchmarkSettings.nodes
         val mainSeed = config.benchmarkSettings.randomSeed
         val sut = config.benchmarkSettings.sut
+        val mixed = config.benchmarkSettings.mixed
+        val distributed = config.benchmarkSettings.nodes.size > 1
+        val logResponses = config.benchmarkSettings.test
         val mainRandom = Random(mainSeed)
-        val warmUpRandom = Random(4545)
+        val warmUpRandom = Random(12345)
         println("Using random seed: $mainSeed")
+        println("Using $threadCount threads.")
+        println("Mixed queries: $mixed")
+        println("Distributed: $distributed")
 
         val allQueries = prepareQueryTasks(config, mainRandom)
         val executionLogs = Collections.synchronizedList(mutableListOf<QueryExecutionLog>())
         val threadSafeQueries = ConcurrentLinkedQueue(allQueries)
         val startLatch = CountDownLatch(1)
 
-        //warmUpSut(nodes, 50, warmUpRandom)
+        warmUpSut(nodes, 200, warmUpRandom)
 
         val benchThreads = Executors.newFixedThreadPool(threadCount)
         val threadSeeds = generateRandomSeeds(mainRandom, threadCount)
         for (i in 0..<threadCount) {
             benchThreads.submit(
                 BenchThread(
-                    "thread-$i", nodes, threadSafeQueries, executionLogs, startLatch, threadSeeds[i]
+                    "thread-$i", nodes, threadSafeQueries, executionLogs, startLatch, logResponses
                 )
             )
         }
@@ -95,7 +101,9 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         benchThreads.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS)
         val benchEnd = Instant.now().toEpochMilli()
 
-        mergeLogFilesAndCleanUp("mongo_response_log_combined.txt", "mongo_response_log_.*\\.txt")
+        if(logResponses){
+            mergeLogFilesAndCleanUp("mongo_response_log_combined.txt", "mongo_response_log_.*\\.txt")
+        }
         saveExecutionLogs(threadSeeds, executionLogs, benchStart, benchEnd, nodes.size, sut, mainSeed)
         benchmarkExecutorService!!.shutdownNow()
 
@@ -124,7 +132,9 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 }
             }
         }
-        allQueries.shuffle(random)
+        if(config.benchmarkSettings.mixed){
+            allQueries.shuffle(random)
+        }
         return allQueries
     }
 
@@ -151,9 +161,9 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                 "county" -> getRandomPlace(counties, "name", random)
                 "district" -> getRandomPlace(districts, "name", random)
                 "point" -> getRandomPoint(random, listOf(listOf(6.212909, 52.241256), listOf(8.752841, 50.53438)))
-                "radius" -> (random.nextDouble(0.25, 0.5) * 10)/(1000*6378)
+                "radius" -> (random.nextDouble(2.0, 10.0) * 10)/(1000*6378)
                 "low_altitude" -> (random.nextInt(50, 150) * 10)
-                "distance" -> (random.nextInt(5, 15) * 10)
+                "distance" -> (random.nextInt(1, 10))
                 else -> ""
 
             }
@@ -212,7 +222,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
 
         val file = File(logsPath)
         file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size}, " + "#nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
-        file.appendText("threadName, queryName, queryType, parameter, parameterValues, round, executionIndex, startFirstQuery, endFirstQuery, startSecQuery, endSecQuery, latency, fetchedRecords\n")
+        file.appendText("threadName,queryName,queryType,parameterValues,round,executionIndex,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency,fetchedRecords\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
@@ -254,7 +264,6 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
         println("Starting warm Up phase.")
         try {
             while (i < repetitions){
-
                 val randomFlightId = warmUpRandom.nextLong(691877560, 774441640)
                 val randomMunicipality = getRandomPlace(municipalities, "name", warmUpRandom)
                 val randomCounty = getRandomPlace(counties, "name", warmUpRandom)
@@ -306,10 +315,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                         )
                     ),
                     Document("\$limit", 5)),
-
                 )
-
-
                 i++
             }
 

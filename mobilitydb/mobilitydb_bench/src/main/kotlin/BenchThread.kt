@@ -21,7 +21,7 @@ class BenchThread(
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch,
-    private val seed: Long
+    private val logResponses: Boolean
 ) : Thread(threadName) {
 
     init {
@@ -34,46 +34,55 @@ class BenchThread(
     override fun run() {
         var connection: Connection? = null
         var statement: Statement? = null
+        var printStream: PrintStream? = null
 
-        val logFile = File("sql_response_log_${threadName}.txt")
-        if (logFile.exists()) {
-            logFile.delete()
+
+
+        if(logResponses){
+            val logFile = File("sql_response_log_${threadName}.txt")
+            if (logFile.exists()) {
+                logFile.delete()
+            }
+
+            logFile.createNewFile()
+            printStream = PrintStream(logFile)
         }
-        logFile.createNewFile()
 
-        val printStream = PrintStream(logFile)
         try {
-            // File to capture the output
 
 
+            val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/$DATABASE?ApplicationName=bench-$threadName&autoReconnect=true"
             connection = getConnection(
-                "jdbc:postgresql://$mobilityDBIp/$DATABASE", USER, PASSWORD
+                connectionString, USER, PASSWORD
             )
 
             statement = connection.createStatement()
 
             if (threadName == "thread-0"){
                 statement.executeUpdate("SET citus.max_intermediate_result_size TO '12GB';")
-                statement.executeUpdate("SET enable_seqscan = OFF;")
-
             }
-            // Ensure all threads start at the same time
 
+            // Ensure all threads start at the same time
             startLatch.await()
 
-            printStream.println("$threadName started executing at ${Instant.now()} with ${queryQueue.size} queries.")
+            if(logResponses){
+                printStream?.println("$threadName started executing at ${Instant.now()}.")
+            }
+
             println()
             var i = 1
-
             println("$threadName started executing at ${Instant.now()}.")
+
             while (true) {
                 val task = queryQueue.poll() ?: break
 
-//
-//                if(task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
-//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint") {
-                    printStream.println("$i: ${task.queryName} with params: ${task.paramValues}. ${task.parsedSql}")
-//                }
+
+                if(logResponses) {
+                    printStream?.println("$i: ${task.queryName} with params: ${task.paramValues}. ${task.parsedSql}")
+                }
+
+
+
                 val startTime = Instant.now().toEpochMilli()
                 val response = statement.executeQuery(task.parsedSql)
                 val endTime = Instant.now().toEpochMilli()
@@ -82,31 +91,30 @@ class BenchThread(
                 val parameterValues = task.paramValues.joinToString(";") ?: ""
 
 
-//                if(task.queryName.contains("averageHourlyFlightsDuringDayInMunicipality") || task.queryName.contains("flightDurationInMunicipalityLowAltitudeInPeriod") ||
-//                    task.queryName.contains("flightsInMunicipalityLowAltitudeInPeriod") || task.queryName == "flightClosestToPoint") {
+                if(logResponses) {
                     response.use { resultSet ->
                         // Get metadata to print column headers
                         val metaData = resultSet.metaData
                         val columnCount = metaData.columnCount
 
                         // Print column headers
-                        for (i in 1..columnCount) {
-                            printStream.print("${metaData.getColumnName(i)}\t") // Tab-separated for better readability
+                        for (j in 1..columnCount) {
+                            printStream?.print("${metaData.getColumnName(i)}\t") // Tab-separated for better readability
                         }
-                        printStream.println() // Move to the next line after printing column headers
+                        printStream?.println() // Move to the next line after printing column headers
 
                         // Print all rows
                         while (resultSet.next()) {
-                            for (i in 1..columnCount) {
+                            for (j in 1..columnCount) {
                                 val value = resultSet.getString(i) ?: "NULL" // Handle NULL values
-                                printStream.print("$value\t")
+                                printStream?.print("$value\t")
                             }
-                            printStream.println() // Move to the next line after each row
+                            printStream?.println() // Move to the next line after each row
                         }
 
-                        printStream.println() // Add an extra line for separation after the response
+                        printStream?.println() // Add an extra line for separation after the response
                     }
-//                }
+                }
 
 
                 synchronized(log) {
@@ -129,9 +137,16 @@ class BenchThread(
                 }
 
                 i++
+
+                if(i%50==0){
+                    println("$threadName processed $i queries.")
+                }
             }
 
-            printStream.println("$threadName finished executing at ${Instant.now()}.")
+            if(logResponses){
+                printStream?.println("$threadName finished executing at ${Instant.now()}.")
+            }
+
             println("$threadName finished executing at ${Instant.now()}.")
 
         } catch (e: Exception) {

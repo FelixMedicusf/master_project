@@ -52,7 +52,7 @@ class DFSDataHandler(databaseName: String) {
         }
 
         val mobilityDBIp = conf.benchmarkSettings.nodes[0]
-        val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/$databaseName?ApplicationName=MobilityDB-Benchmark&autoReconnect=true"
+        val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/$databaseName?ApplicationName=loading-phase&autoReconnect=true&keepalives=1&keepalives_idle=120&keepalives_interval=30&keepalives_count=15"
 
         connection = DriverManager.getConnection(connectionString, USER, PASSWORD)
         connection.autoCommit = true
@@ -165,7 +165,7 @@ class DFSDataHandler(databaseName: String) {
             )
     """.trimIndent()
         )
-        println("Created Table flightPoints.")
+        println("Created Table interpolatedflightPoints.")
 
         if (distributed) {
             statement.executeQuery(
@@ -242,31 +242,57 @@ class DFSDataHandler(databaseName: String) {
 
     fun createGeographies() {
 
-        statement.executeUpdate("ALTER TABLE flightPoints SET UNLOGGED;")
+//        statement.executeUpdate("ALTER TABLE flightPoints SET UNLOGGED;")
+//
+//        statement.executeUpdate("ALTER TABLE interpolatedFlightPoints SET UNLOGGED;")
 
-        statement.executeUpdate("ALTER TABLE interpolatedFlightPoints SET UNLOGGED;")
+        runBlocking {
+            val updateGeomJobs = (0 until coroutines).map { index1 ->
+                launch(Dispatchers.IO) {
+                    (0 until stepsCoroutine1).map { index2 ->
+                        val flightIdLowerBound = separators[index1][index2]
+                        val flightIdUpperBound = separators[index1][index2 + 1]
 
-
-        var updateGeoms = """
-                UPDATE flightPoints 
-                SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
+                        val updateGeoms = """
+                        UPDATE flightPoints 
+                        SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326) WHERE flightId > $flightIdLowerBound AND flightId <= $flightIdUpperBound;
             """.trimIndent()
-        statement.executeUpdate(updateGeoms)
-        println("Updated Geoms in interpolatedflightpoints table.")
+                        statement.executeUpdate(updateGeoms)
+                        println("Updated Geoms flightpoints table.")
 
-        var updateGeomsInterpolated = """
-                UPDATE interpolatedFlightPoints 
-                SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326);
+                    }
+                }
+            }
+            updateGeomJobs.joinAll()
+        }
+
+        runBlocking {
+            val updateGeomJobsInterpol = (0 until coroutines).map { index1 ->
+                launch(Dispatchers.IO) {
+                    (0 until stepsCoroutine1).map { index2 ->
+                        val flightIdLowerBound = separators[index1][index2]
+                        val flightIdUpperBound = separators[index1][index2 + 1]
+
+                        val updateGeoms = """
+                            UPDATE interpolatedFlightPoints 
+                            SET Geom = ST_SetSRID(ST_MakePoint(longitude, latitude), 4326) WHERE flightId > $flightIdLowerBound AND flightId <= $flightIdUpperBound;
             """.trimIndent()
-        statement.executeUpdate(updateGeomsInterpolated)
-        println("Updated Geoms in flightpoints table.")
+                        statement.executeUpdate(updateGeoms)
+                        println("Updated Geoms in interpolatedflightpoints table.")
+
+                    }
+                }
+            }
+            updateGeomJobsInterpol.joinAll()
+        }
+
     }
 
     fun createFlightTrips() {
 
         statement.executeUpdate(
             """
-            CREATE TABLE IF NOT EXISTS flights (
+            CREATE TABLE IF NOT EXISTS flights(
                 flightId INTEGER,
                 airplaneType TEXT,
                 origin TEXT,
@@ -280,7 +306,6 @@ class DFSDataHandler(databaseName: String) {
         )
         println("Created table flights.")
 
-        statement.executeUpdate("ALTER TABLE flights SET UNLOGGED;")
 
 //        if(distributed){
 //            statement.executeUpdate("SELECT create_distributed_table('flights', 'flightid')")
@@ -310,12 +335,13 @@ class DFSDataHandler(databaseName: String) {
 //            )
 //            println("Distributed Table flights with flightid as sharding key.")
             statement.executeQuery(
-                "SELECT create_distributed_table('flights', 'flightid');")
+                "SELECT create_distributed_table('flights', 'flightid', shard_count:=16);")
+
         }
 
             val query =
                 """
-            INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
+            INSERT INTO flights(flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
             SELECT 
                 flightId,
                 airplaneType,
@@ -342,7 +368,7 @@ class DFSDataHandler(databaseName: String) {
 
         val secondQuery =
             """
-            INSERT INTO flights (flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
+            INSERT INTO flights(flightId, airplaneType, origin, destination, track, altitude, trip, observedtrip)
             SELECT 
                 flightId,
                 airplaneType,
@@ -526,7 +552,7 @@ class DFSDataHandler(databaseName: String) {
             val sql = "INSERT INTO $region (name, geom) VALUES (?, ST_GeomFromText(?, 4326))"
 
             connection.autoCommit = false
-            val statement: PreparedStatement = connection.prepareStatement(sql)
+            var preparedStatement: PreparedStatement = connection.prepareStatement(sql)
 
             for (line in lines) {
                 val parts = line.split(";")
@@ -536,20 +562,22 @@ class DFSDataHandler(databaseName: String) {
 
                 val simplifiedWkt = simplifyPolygonWKT(wkt, .008)
 
-                statement.setString(1, name)
-                statement.setString(2, simplifiedWkt)
-                statement.addBatch()
+                preparedStatement.setString(1, name)
+                preparedStatement.setString(2, simplifiedWkt)
+                preparedStatement.addBatch()
             }
 
-            statement.executeBatch()
+            preparedStatement.executeBatch()
             connection.commit()
 
             connection.autoCommit = true
 
+
             if (distributed) {
                 try {
+                    val sql = "SELECT create_reference_table('$region');"
                     statement.executeQuery(
-                        "SELECT create_reference_table('${region}');"
+                        sql
                     )
                     println("Replicated $region table across all machines.")
                 } catch (e: Exception) {
@@ -570,10 +598,9 @@ class DFSDataHandler(databaseName: String) {
 
     fun createIndexes(){
 
-        statement.executeUpdate("ALTER TABLE flights DROP COLUMN IF EXISTS observedtrip;")
-        createFlightPointsIndex()
+//        createFlightPointsIndex()
         createFlightTripsIndex()
-        createStaticTablesIndexes()
+//        createStaticTablesIndexes()
         println("Finished index creation.")
 
     }
@@ -656,7 +683,7 @@ class DFSDataHandler(databaseName: String) {
     fun createTrajectoryColumn() {
 
         statement.executeUpdate("ALTER TABLE flights ADD COLUMN traj GEOGRAPHY;")
-        statement.executeUpdate("UPDATE flights SET traj = trajectory(observedtrip)")
+        statement.executeUpdate("UPDATE flights SET traj = trajectory(setinterp(observedtrip, 'linear'))")
         statement.executeUpdate("ALTER TABLE flights DROP COLUMN IF EXISTS observedtrip;")
         println("Added and populated traj column in flights table.")
 
