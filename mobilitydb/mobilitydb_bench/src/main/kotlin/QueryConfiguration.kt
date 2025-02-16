@@ -9,7 +9,3 @@ data class QueryConfiguration(
     @JsonProperty("parameters")
     val parameters: List<String> // list of parameter sets with their values
 )
-
-data class QueryParameterSet(
-    val parameters: Map<String, String> // key-value pairs for parameter names and values
-)

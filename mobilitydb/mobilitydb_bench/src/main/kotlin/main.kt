@@ -403,6 +403,7 @@ fun main() {
     // Path to the config and logs
     val configPath = "benchConf.yaml"
     val logsPath = "sql_benchmark_execution_logs.txt"
+    val responsesPath = "sql_response_log_combined.txt"
 
     // Start HTTP server
     embeddedServer(Netty, port = 8080) {
@@ -502,12 +503,20 @@ fun main() {
 
             // Retrieve benchmark logs
             get("/retrieve-logs") {
-                println("Received request for the retrieval of the benchmark logs.")
                 val logFile = File(logsPath)
                 if (logFile.exists()) {
                     call.respondFile(logFile)
                 } else {
                     call.respond(HttpStatusCode.NotFound, "Log file not found.")
+                }
+            }
+
+            get("/retrieve-responses") {
+                val responseFile = File(responsesPath)
+                if (responseFile.exists()) {
+                    call.respondFile(responseFile)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "Response file not found.")
                 }
             }
         }

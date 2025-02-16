@@ -45,9 +45,6 @@ class BenchmarkClient(private val serverUrl: String) {
         }
     }
 
-    /**
-     * Start the benchmark execution
-     */
     fun startBenchmark() = runBlocking {
         try {
             val response: HttpResponse = client.post("$serverUrl/start-benchmark")
@@ -56,48 +53,6 @@ class BenchmarkClient(private val serverUrl: String) {
 
         } catch (e: Exception) {
             println("Error starting benchmark: ${e.message}")
-        }
-    }
-
-    fun callCreateTrajectories() = runBlocking {
-        try {
-            val response: HttpResponse = client.post("$serverUrl/create-trajectories")
-            println("Response: ${response.status}")
-            println("Message: ${response.bodyAsText()}")
-
-        } catch (e: Exception) {
-            println("Error calling createTrajectories: ${e.message}")
-        }
-    }
-    fun callMigrateFlightPoints() = runBlocking {
-        try {
-            val response: HttpResponse = client.post("$serverUrl/migrate-flightpoints")
-
-            println("Response: ${response.status}")
-            println("Message: ${response.bodyAsText()}")
-        } catch (e: Exception) {
-            println("Error calling create-ts-collection: ${e.message}")
-        }
-    }
-
-    fun callInterpolateFlightPoints() = runBlocking {
-        try {
-            val response: HttpResponse = client.post("$serverUrl/interpolate-flightpoints")
-
-            println("Response: ${response.status}")
-            println("Message: ${response.bodyAsText()}")
-        } catch (e: Exception) {
-            println("Error calling create-ts-collection: ${e.message}")
-        }
-    }
-
-    fun stopBenchmark() = runBlocking {
-        try {
-            val response: HttpResponse = client.post("$serverUrl/stop-benchmark")
-            println("Response: ${response.status}")
-            println("Message: ${response.bodyAsText()}")
-        } catch (e: Exception) {
-            println("Error stopping benchmark: ${e.message}")
         }
     }
 
@@ -114,6 +69,22 @@ class BenchmarkClient(private val serverUrl: String) {
             }
         } catch (e: Exception) {
             println("Error retrieving logs: ${e.message}")
+        }
+    }
+
+    fun retrieveResponses(destinationPath: String) = runBlocking {
+        try {
+            val response: HttpResponse = client.get("$serverUrl/retrieve-responses")
+            if (response.status == HttpStatusCode.OK) {
+                val logFile = File(destinationPath)
+                logFile.writeBytes(response.readBytes())
+                println("Query responses successfully saved to $destinationPath")
+            } else {
+                println("Error retrieving responses: ${response.status}")
+                println("Message: ${response.bodyAsText()}")
+            }
+        } catch (e: Exception) {
+            println("Error retrieving responses: ${e.message}")
         }
     }
 
@@ -137,13 +108,26 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
+    val distributed = true
+    val mongodb = false
+    val loadPhase = true
+    val runPhase = false
+    val benchmarkConducted = false
+    val test = false
+
     val configPathMongoDBSingle = "benchConfigMongoDBSingle.yaml"
     val configPathMobilityDBSingle = "benchConfigMobilityDBSingle.yaml"
 
     val configPathMongoDBCluster = "benchConfigMongoDBCluster.yaml"
     val configPathMobilityDBCluster = "benchConfigMobilityDBCluster.yaml"
 
-    //val benchmarkingClientHost = "35.187.55.236"
+    var path = ""
+    if (mongodb) {
+        if (!distributed) path = configPathMongoDBSingle else path = configPathMongoDBCluster
+    } else {
+        if (!distributed) path = configPathMobilityDBSingle else path = configPathMobilityDBCluster
+    }
+
     val benchmarkingClientHost = "localhost"
     val databaseClientAddress = "$benchmarkingClientHost:8080"
 
@@ -151,36 +135,45 @@ fun main() {
     val client = BenchmarkClient(serverUrl)
 
     println("\n1. Uploading configuration...")
-    client.uploadConfig(configPathMobilityDBCluster)
+    client.uploadConfig(path)
 
-//    handler.updateDatabaseCollections() --> 0 index
-//    handler.insertRegionalData() --> 1 index
-//    handler.shardCollections() --> 2 index
-//    handler.createFlightTrips() --> 3 index
-//    handler.createTrajectories(separators) --> 4 index
-//    handler.flightPointsMigration(separators) --> 5 index
-//    handler.flightPointsInterpolation(separators) --> 6 index
-//    handler.createTimeSeriesCollectionIndexes() -- 7 index
+    /*
+    for MongoDB (execution pattern):
+    handler.updateDatabaseCollections() --> 0 index
+    handler.insertRegionalData() --> 1 index
+    handler.shardCollections() --> 2 index
+    handler.createFlightTrips() --> 3 index
+    handler.createTrajectories(separators) --> 4 index
+    handler.flightPointsMigration(separators) --> 5 index
+    handler.flightPointsInterpolation(separators) --> 6 index
+    handler.createTimeSeriesCollectionIndexes() -- 7 index
 
-//    // must be of size 8
-//    val executionPattern = listOf(0, 0, 0, 0, 1, 1, 1, 1)
-//    client.triggerDataHandler(executionPattern)
+     */
+
+    // must be of size 8
+    val executionPattern = listOf(0, 0, 0, 0, 1, 1, 1, 1)
+
+    if (mongodb && loadPhase) {
+        println("\n2. Triggering DataHandler operations for MongoDB...")
+        client.triggerDataHandler(executionPattern)
+    }
 
 
-//    client.callMigrateFlightPoints()
-//    client.callInterpolateFlightPoints()
-//    println("\n2. Triggering DataHandler operations...")
-//    client.triggerDataHandler()
-//
-    client.startBenchmark()
-////
+    if(runPhase){
+        client.startBenchmark()
+    }
 
 //    println("\n4. Stopping benchmark...")
 //    client.stopBenchmark()
-//
-//    println("\n5. Retrieving logs...")
-//    client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
 
+    if (benchmarkConducted){
+        println("\n5. Retrieving logs...")
+        client.retrieveLogs("src/main/resources/benchmark_execution_logs.txt") // Replace with the actual destination path
+        if(test){
+            client.retrieveResponses("src/test/resources/query_responses.txt")
+
+        }
+    }
 
 }
 

@@ -3,33 +3,25 @@ data class QueryExecutionLog(
     val queryName: String,
     val queryType: String,
     val paramValues: String,
-    val round: Int,
-    val executionIndex: Int,
-    val startTime: Long,
-    val endTime: Long,
-    val startTimeSecond: Long?,
-    val endTimeSecond: Long?,
+    val startTimeFirst: Long,
+    val endTimeFirst: Long,
+    val startTimeSecond: Long,
+    val endTimeSecond: Long,
     val latency: Long,
-    val records: Int
 ) {
 
-
     override fun toString(): String {
-
 
         return listOf(
             threadName,
             queryName,
             queryType,
             paramValues,
-            round,
-            executionIndex,
-            startTime,
-            endTime,
+            startTimeFirst,
+            endTimeFirst,
             startTimeSecond,
             endTimeSecond,
             latency,
-            records
         ).joinToString(",")
     }
 }

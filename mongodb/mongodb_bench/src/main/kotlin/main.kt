@@ -455,6 +455,7 @@ fun main() {
     // Path to the config and logs
     val configPath = "benchConf.yaml"
     val logsPath = "mongo_benchmark_execution_logs.txt"
+    val responsesPath = "mongo_response_log_combined.txt"
 
     // Start HTTP server
     embeddedServer(Netty, port = 8080) {
@@ -476,89 +477,11 @@ fun main() {
 
         routing {
 
-            println("Starting Benchmarking Server v1.3")
+            println("Starting Benchmarking Server v1.0")
             // Maximum memory the JVM can use (heap size limit)
             val runtime = Runtime.getRuntime()
             val maxMemory = runtime.maxMemory() / (1024 * 1024)
-            println("Max Memory (heap limit): ${maxMemory} MB")
-
-
-
-            post("/create-trajectories") {
-                try {
-                    val handler = DataHandler(DATABASE)
-
-                    try {
-                        handler.createTrajectories(separators)
-                        println("Trajectories created.")
-                        call.respond(HttpStatusCode.OK, "Created trajectories.")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        println("Error during creation of trajectories: ${e.message}")
-                        call.respond(
-                            HttpStatusCode.InternalServerError,
-                            "Error during trajectories creation: ${e.message}"
-                        )
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    call.respond(
-                        HttpStatusCode.BadRequest,
-                        "Invalid input for create-trajectories: ${e.message}"
-                    )
-                }
-            }
-
-            post("/migrate-flightpoints") {
-                try {
-                    val handler = DataHandler(DATABASE)
-
-                    try {
-                        handler.flightPointsMigration(separators)
-                        println("Migrated flightpoints to time series collection.")
-                        call.respond(HttpStatusCode.OK, "Migrated Flightpoints.")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        println("Error during creation of time series data: ${e.message}")
-                        call.respond(
-                            HttpStatusCode.InternalServerError,
-                            "Error during migration of flightpoints to time series collection: ${e.message}"
-                        )
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    call.respond(
-                        HttpStatusCode.BadRequest,
-                        "Invalid input for migrate-flightpoints: ${e.message}"
-                    )
-                }
-            }
-
-            post("/interpolate-flightpoints") {
-                try {
-                    val handler = DataHandler(DATABASE)
-
-                    try {
-                        handler.flightPointsInterpolation(separators)
-                        println("Interpolated flight points in time series collection.")
-                        call.respond(HttpStatusCode.OK, "Interpolated flightpoints.")
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        println("Error during interpolation of flightpoints: ${e.message}")
-                        call.respond(
-                            HttpStatusCode.InternalServerError,
-                            "Error during interpolation of flightpoints: ${e.message}"
-                        )
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    call.respond(
-                        HttpStatusCode.BadRequest,
-                        "Invalid input for interpolate-flightpoints: ${e.message}"
-                    )
-                }
-            }
-
+            println("Max Memory (heap limit): $maxMemory MB")
 
             post("/data-handler") {
                 try {
@@ -662,7 +585,6 @@ fun main() {
 
             // Retrieve benchmark logs
             get("/retrieve-logs") {
-                println("Received request for the retrieval of the benchmark logs.")
                 val logFile = File(logsPath)
                 if (logFile.exists()) {
                     call.respondFile(logFile)
@@ -670,29 +592,15 @@ fun main() {
                     call.respond(HttpStatusCode.NotFound, "Log file not found.")
                 }
             }
+
+            get("/retrieve-responses") {
+                val responseFile = File(responsesPath)
+                if (responseFile.exists()) {
+                    call.respondFile(responseFile)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "Response file not found.")
+                }
+            }
         }
     }.start(wait = true)
-}
-
-
-fun parseCSV(filePath: String, requiredColumns: Set<String>): List<Map<String, String>> {
-    val rows = mutableSetOf<Map<String, String>>()
-    val lines = File(filePath).readLines()
-
-    if (lines.isNotEmpty()) {
-        val header = lines.first().split(",")
-
-        val indicesToKeep = header.withIndex()
-            .filter { it.value in requiredColumns }
-            .map { it.index }
-
-        rows.addAll(
-            lines.drop(1).map { line ->
-                val values = line.split(",")
-                indicesToKeep.associate { header[it] to values[it] }
-            }.distinct()
-        )
-    }
-
-    return rows.toList()
 }

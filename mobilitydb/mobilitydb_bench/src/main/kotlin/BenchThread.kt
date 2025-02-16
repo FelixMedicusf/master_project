@@ -37,7 +37,6 @@ class BenchThread(
         var printStream: PrintStream? = null
 
 
-
         if(logResponses){
             val logFile = File("sql_response_log_${threadName}.txt")
             if (logFile.exists()) {
@@ -49,7 +48,6 @@ class BenchThread(
         }
 
         try {
-
 
             val connectionString = "jdbc:postgresql://$mobilityDBIp:5432/$DATABASE?ApplicationName=bench-$threadName&autoReconnect=true"
             connection = getConnection(
@@ -124,14 +122,11 @@ class BenchThread(
                             queryName = task.queryName,
                             queryType = task.type,
                             paramValues = parameterValues.replace(",", "/"),
-                            round = 0,
-                            executionIndex = 0,
-                            startTime = startTime,
-                            endTime = endTime,
+                            startTimeFirst = startTime,
+                            endTimeFirst = endTime,
                             startTimeSecond = 0,
                             endTimeSecond = 0,
                             latency = (endTime - startTime),
-                            records = -1
                         )
                     )
                 }
@@ -169,47 +164,6 @@ class BenchThread(
             }
         }
 
-    }
-
-    private fun replaceParams(sql: String, paramSet: Map<String, String>): String {
-        var parsedsql = sql
-
-
-        for ((key, value) in paramSet) {
-            parsedsql = parsedsql.replace(":${key}", value)
-        }
-        return parsedsql
-    }
-
-
-
-    private fun printSQLResponse(resultSet: ResultSet) {
-        try {
-
-            val metaData = resultSet.metaData
-            val columnCount = metaData.columnCount
-
-            // Print column names
-            for (i in 1..columnCount) {
-                print("${metaData.getColumnName(i)}\t")
-            }
-            println()
-
-
-            while (resultSet.next()) {
-                for (i in 1..columnCount) {
-                    print("${resultSet.getString(i)}\t")
-                }
-                println()
-            }
-
-
-            println()
-
-        } catch (e: Exception) {
-            println("Error while processing ResultSet: ${e.message}")
-            e.printStackTrace()
-        }
     }
 
     private fun parseCSV(filePath: String, requiredColumns: Set<String>): List<Map<String, String>> {

@@ -2,11 +2,11 @@ benchmark:
   sut: "MobilityDB"
   mixed: False
   nodes:
-    - "35.187.32.191"
+    - "35.187.32.1912"
     - "35.187.179.60"
     - "34.38.175.215"
   threads: 8
-  test: false
+  test: False
   random_seed: 1500
 
 queryConfigs:

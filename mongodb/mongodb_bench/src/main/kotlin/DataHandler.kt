@@ -883,15 +883,9 @@ class DataHandler(databaseName: String) {
             Indexes.geo2dsphere("location"), // Geospatial index
         )
 
-
         flightPointsTsCollection.createIndex(compoundIndex, indexOptions)
         println("Created compound index on timestamp, location!")
 
-//        flightPointsTsCollection.createIndex(
-//            Document("metadata.flightId", 1).append("metadata.track", 1),
-//            indexOptions
-//        )
-//        println("Created compound index on metadata.flightid, metadata.track!")
 
     }
 }
@@ -906,10 +900,10 @@ fun main() {
     handler.insertRegionalData()
     handler.shardCollections()
     handler.createFlightTrips()
-//    handler.createTrajectories(separators)
-//    handler.flightPointsMigration(separators)
-//    handler.flightPointsInterpolation(separators)
-//    handler.createTimeSeriesCollectionIndexes()
+    handler.createTrajectories(separators)
+    handler.flightPointsMigration(separators)
+    handler.flightPointsInterpolation(separators)
+    handler.createTimeSeriesCollectionIndexes()
 
 }
 

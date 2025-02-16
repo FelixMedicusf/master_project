@@ -134,14 +134,11 @@ class BenchThread(
                                 queryName = task.queryName,
                                 queryType = task.type,
                                 paramValues = parameterValues.replace(",", "/"),
-                                round = 0,
-                                executionIndex = 0,
-                                startTime = response.first,
-                                endTime = response.second,
+                                startTimeFirst = response.first,
+                                endTimeFirst = response.second,
                                 startTimeSecond = response.third,
                                 endTimeSecond = endTime,
-                                latency = (endTime - response.first),
-                                records = response.fourth.size
+                                latency = (endTime - response.first)
                             )
                         )
                     }
@@ -164,8 +161,6 @@ class BenchThread(
         }
     }
 
-
-
     private fun formatMongoResponse(response: Any?): String {
         // Configure Jackson ObjectMapper for pretty JSON formatting
         val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
@@ -187,24 +182,6 @@ class BenchThread(
         return stringBuilder.toString()
     }
 
-    private fun printMongoResponse(response: Any?) {
-        // Configure Jackson ObjectMapper for pretty JSON formatting
-        val mapper = ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT)
-
-        var castedResponse  = response as List<Document>
-        println("MongoDB Response:")
-        castedResponse.forEach { document ->
-            try {
-                // Convert the Document to a JSON string and print it
-                val jsonString = mapper.writeValueAsString(document.toMap())
-                println(jsonString)
-            } catch (e: Exception) {
-                println("Error formatting document: ${document.toJson()}")
-            }
-        }
-    }
-
-
     private fun invokeFunctionByName(functionName: String): KFunction<Quadrupel<Long, Long, Long, List<Document>>> {
         val benchThreadClass = this::class
 
@@ -222,20 +199,7 @@ class BenchThread(
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // being used in the benchmark
     fun countActiveFlightsInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -272,6 +236,7 @@ class BenchThread(
 
     }
 
+    // not being used in the benchmark
     fun locationOfAirplaneAtInstant(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -454,6 +419,7 @@ class BenchThread(
         return Quadrupel(queryTimeStart, 0, 0, flightPointsTsCollection.aggregate(pipeline).allowDiskUse(true).toList())
     }
 
+    // being used in the benchmark
     fun averageHourlyFlightsDuringDay(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -500,6 +466,7 @@ class BenchThread(
         return Quadrupel(queryTimeStart, 0, 0, flightPointsTsCollection.aggregate(pipeline).toList())
     }
 
+    // being used in the benchmark
     fun flightsWithLocalOriginDestinationInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -583,6 +550,7 @@ class BenchThread(
         return Quadrupel(queryTimeStart, 0, 0, airportsCollection.aggregate(pipeline).toList())
     }
 
+    // being used in the benchmark
     fun airportUtilizationInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -659,6 +627,7 @@ class BenchThread(
 
 
     // spatial queries
+    // not being used in the benchmark
     fun flightsInCityRadius(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -714,6 +683,7 @@ class BenchThread(
 
     }
 
+    // not being used in the benchmark
     fun flightsIntersectingMunicipalities(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -758,6 +728,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmarks
     fun countFlightsInCounties(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -808,6 +779,7 @@ class BenchThread(
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
 
+    // being used in the benchmark (query on initial flightpoints)
     fun flightsCloseToMainCitiesLowAltitude(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -863,6 +835,7 @@ class BenchThread(
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
 
+    // not being used in the benchmarks
     fun flightsOnlyInOneDistrict(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -914,6 +887,7 @@ class BenchThread(
 
     }
 
+    // not being used in the benchmark
     fun countiesLandingsDepartures(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -999,6 +973,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmark
     fun flightClosestToPoint(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1034,8 +1009,8 @@ class BenchThread(
     }
 
 
-
     // spatiotemporal queries
+    // being used in the benchmark
     fun flightsInCountyInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1175,6 +1150,7 @@ class BenchThread(
 
     }
 
+    // not being used in the benchmark
     fun pairOfFlightsInMunicipalityInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1302,6 +1278,7 @@ class BenchThread(
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
 
+    // being used in the benchmark
     fun countFlightsAtInstantInDistricts(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1390,6 +1367,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmark
     fun inCityRadiusInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1466,6 +1444,7 @@ class BenchThread(
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStartSecondQuery, secondResponse)
     }
 
+    // not being used in the benchmark
     // takes very long to execute as filtering based on time or space is not possible before calculating distances of each pair of flightpoints
 // only way is to create smaller subset collection of flightpoints (but would also take long as check needs to happen only on docs with same timestamp)
     fun closePairOfPlanes(
@@ -1534,6 +1513,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmark
     fun flightDurationInMunicipalityLowAltitudeInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1560,8 +1540,8 @@ class BenchThread(
         //println(firstResponse)
         val name = firstResponse.get(0).getString("name")
         val polygonCoordinates = firstResponse.mapNotNull { document ->
-            val polygon = document.get("polygon", Document::class.java) // Get 'polygon' sub-document
-            polygon?.get("coordinates", List::class.java) // Get 'coordinates' as a List
+            val polygon = document.get("polygon", Document::class.java)
+            polygon?.get("coordinates", List::class.java)
         }[0]
 
 
@@ -1668,6 +1648,7 @@ class BenchThread(
 
     }
 
+    // not being used in the benchmark
     fun flightsInMunicipalityLowAltitudeInPeriod(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1751,6 +1732,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmark
     fun averageHourlyFlightsDuringDayInMunicipality(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1833,6 +1815,7 @@ class BenchThread(
 
     }
 
+    // being used in the benchmark
     fun flightsWithLocalOriginDestinationInPeriodInCounty(
         staticCollections: List<MongoCollection<Document>>,
         dynamicCollections: List<MongoCollection<Document>>,
@@ -1958,7 +1941,6 @@ class BenchThread(
 
         return Quadrupel(queryTimeStartFirstQuery, queryEndTimeFirstQuery, queryTimeStart, endResult)
     }
-
 
 }
 
