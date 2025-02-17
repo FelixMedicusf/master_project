@@ -132,7 +132,7 @@ class BenchmarkExecutor(
                 statement.executeQuery("SELECT * FROM cities WHERE name=$randomCity")
 
                 statement.executeQuery("SELECT flightid, track, destination FROM flights f, counties c WHERE f.trip && stbox(c.geom, $randomTimespan) AND c.name = $randomCounty LIMIT 5")
-                statement.executeQuery("SELECT flightid, track FROM flights WHERE trip && $randomTimespan")
+                statement.executeQuery("SELECT flightid, track FROM flights WHERE trip && $randomTimespan LIMIT 50")
                 i++
 
             }
@@ -199,7 +199,7 @@ class BenchmarkExecutor(
 
         val file = File(logsPath)
         file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size},"  + " #nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
-        file.appendText("threadName,queryName,queryType,parameterValues,round,executionIndex,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency,fetchedRecords\n")
+        file.appendText("threadName,queryName,queryType,parameterValues,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }

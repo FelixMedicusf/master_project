@@ -108,11 +108,11 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
-    val distributed = true
+    val distributed = false
     val mongodb = false
-    val loadPhase = true
+    val loadPhase = false
     val runPhase = false
-    val benchmarkConducted = false
+    val benchmarkConducted = true
     val test = false
 
     val configPathMongoDBSingle = "benchConfigMongoDBSingle.yaml"
@@ -122,19 +122,19 @@ fun main() {
     val configPathMobilityDBCluster = "benchConfigMobilityDBCluster.yaml"
 
     var path = ""
-    if (mongodb) {
-        if (!distributed) path = configPathMongoDBSingle else path = configPathMongoDBCluster
+    path = if (mongodb) {
+        if (!distributed) configPathMongoDBSingle else configPathMongoDBCluster
     } else {
-        if (!distributed) path = configPathMobilityDBSingle else path = configPathMobilityDBCluster
+        if (!distributed) configPathMobilityDBSingle else configPathMobilityDBCluster
     }
 
-    val benchmarkingClientHost = "localhost"
+    val benchmarkingClientHost = "34.140.191.156"
     val databaseClientAddress = "$benchmarkingClientHost:8080"
 
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)
 
-    println("\n1. Uploading configuration...")
+    println("\n1. Uploading configuration $path")
     client.uploadConfig(path)
 
     /*

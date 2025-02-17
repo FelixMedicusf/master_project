@@ -45,8 +45,10 @@ startup-script = <<SCRIPT
   curl -L -o $JAR_DEST_MONGODB $JAR_URL_MONGODB
   curl -L -o $JAR_DEST_MOBILITYDB $JAR_URL_MOBILITYDB
 
-  sudo chmod 777 -R $JAR_DEST_MONGODB
-  sudo chmod 777 -R $JAR_DEST_MOBILITYDB
+  chmod 777 -R $JAR_DEST_MONGODB
+  chmod 777 -R $JAR_DEST_MOBILITYDB
+  chmod 777 /opt/
+
 
   # Ensure the JAR file is executable
   chmod +x $JAR_DEST_MONGODB

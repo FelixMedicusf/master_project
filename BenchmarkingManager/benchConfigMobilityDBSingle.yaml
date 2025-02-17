@@ -1,11 +1,11 @@
 benchmark:
   sut: "MobilityDB"
-  mixed: False
+  mixed: True
   nodes:
-    - "35.205.105.94"
+    - "34.76.57.194"
   threads: 16
   test: False
-  random_seed: 1500
+  random_seed: 1200
 
 queryConfigs:
 
@@ -62,7 +62,7 @@ queryConfigs:
   # Spatial queries
   # use
   - name: countFlightsInCounties
-    use: False
+    use: True
     type: spatial
     sql: >
       SELECT k.name, COUNT(*) as flight_count
@@ -76,7 +76,7 @@ queryConfigs:
       - county
   # use
   - name: flightsCloseToMainCitiesLowAltitude
-    use: False
+    use: True
     type: spatial
     sql: >
       SELECT p.flightid, p.altitude, p.airplanetype, p.timestamp
@@ -92,7 +92,7 @@ queryConfigs:
 
   # use
   - name: flightClosestToPoint
-    use: False
+    use: True
     type: spatial
     sql: >
       SELECT f.flightid, f.airplaneType, f.origin, f.destination,
@@ -108,7 +108,7 @@ queryConfigs:
   # spatiotemporal queries
   # use
   - name: flightsInCountyInPeriod
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       SELECT f.flightid, f.track
@@ -121,7 +121,7 @@ queryConfigs:
 
   #use
   - name: countFlightsAtInstantInDistricts
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       SELECT b.name, COUNT (*)
@@ -134,7 +134,7 @@ queryConfigs:
 
   # use
   - name: inCityRadiusInPeriod
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       SELECT f.flightId, f.track, f.airplanetype, f.origin, f.destination
@@ -150,7 +150,7 @@ queryConfigs:
 
   # use
   - name: flightDurationInMunicipalityLowAltitudeInPeriod
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       SELECT g.name, f.flightid, f.track, f.origin, f.destination, f.airplanetype,
@@ -170,7 +170,7 @@ queryConfigs:
 
   # use
   - name: averageHourlyFlightsDuringDayInMunicipality
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       WITH hours AS (
@@ -192,7 +192,7 @@ queryConfigs:
 
   # use
   - name: flightsWithLocalOriginDestinationInPeriodInCounty
-    use: False
+    use: True
     type: spatiotemporal
     sql: >
       WITH relevant_airports AS (
