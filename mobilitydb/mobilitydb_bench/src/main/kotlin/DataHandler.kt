@@ -1,8 +1,3 @@
-package dfsData
-
-import BenchmarkConfiguration
-import PASSWORD
-import USER
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.KotlinFeature
@@ -21,7 +16,6 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
 import java.sql.Statement
-import kotlin.system.exitProcess
 
 
 class DFSDataHandler(databaseName: String) {
@@ -73,7 +67,6 @@ class DFSDataHandler(databaseName: String) {
         718926541,
         728177911,
         736845861,
-        743346091,
         754447851,
         760302441,
         773383481,
@@ -169,7 +162,7 @@ class DFSDataHandler(databaseName: String) {
 
         if (distributed) {
             statement.executeQuery(
-                "SELECT create_distributed_table('interpolatedflightpoints', 'timestamp');"
+                "SELECT create_distributed_table('interpolatedflightpoints', 'timestamp', shard_count:=16);"
             )
             println("Distributed Table interpolatedFlightPoints with timestamp as sharding key.")
         }
@@ -242,10 +235,6 @@ class DFSDataHandler(databaseName: String) {
 
     fun createGeographies() {
 
-//        statement.executeUpdate("ALTER TABLE flightPoints SET UNLOGGED;")
-//
-//        statement.executeUpdate("ALTER TABLE interpolatedFlightPoints SET UNLOGGED;")
-
         runBlocking {
             val updateGeomJobs = (0 until coroutines).map { index1 ->
                 launch(Dispatchers.IO) {
@@ -306,34 +295,8 @@ class DFSDataHandler(databaseName: String) {
         )
         println("Created table flights.")
 
-
-//        if(distributed){
-//            statement.executeUpdate("SELECT create_distributed_table('flights', 'flightid')")
-//            statement.executeUpdate("""SELECT create_time_partitions(
-//               table_name         := 'flights',
-//               partition_interval := '1 month',
-//                start_from := timestamp'2023-01-01 00:00:00',
-//               end_at             := timestamp'2023-01-01 00:00:00' + '12 months'
-//       );""".trimIndent())
-//        }
-
-//
-//        (0..<seps.size-1).map { index ->
-//            val flightIdLowerBound = seps[index]
-//            val flightIdUpperBound = seps[index + 1]
-
         if (distributed){
-//        statement.executeUpdate("CLUSTER flights USING idx_flights_trip_gist;")
-//        println("Clustered flights by gist index.")
-//            statement.executeUpdate("ALTER TABLE flights ADD COLUMN shard_key BIGINT;")
-//            statement.executeUpdate("CREATE SEQUENCE flights_shard_seq;")
-//            statement.executeUpdate("UPDATE flights SET shard_key = nextval('flights_shard_seq');")
-//
-//            statement.executeQuery(
-//                "SELECT create_distributed_table('flights', 'shard_key');"
-//
-//            )
-//            println("Distributed Table flights with flightid as sharding key.")
+
             statement.executeQuery(
                 "SELECT create_distributed_table('flights', 'flightid', shard_count:=16);")
 
@@ -358,7 +321,7 @@ class DFSDataHandler(databaseName: String) {
                 ), 
                 tgeogpointseq(
                     array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp)
-                    FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'step'
+                    FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'linear'
                 )
             FROM interpolatedflightpoints WHERE flightid < 736845861
             GROUP BY flightId, track, airplaneType, origin, destination;
@@ -599,8 +562,8 @@ class DFSDataHandler(databaseName: String) {
     fun createIndexes(){
 
 //        createFlightPointsIndex()
-        createFlightTripsIndex()
-//        createStaticTablesIndexes()
+//        createFlightTripsIndex()
+        createStaticTablesIndexes()
         println("Finished index creation.")
 
     }
@@ -683,7 +646,7 @@ class DFSDataHandler(databaseName: String) {
     fun createTrajectoryColumn() {
 
         statement.executeUpdate("ALTER TABLE flights ADD COLUMN traj GEOGRAPHY;")
-        statement.executeUpdate("UPDATE flights SET traj = trajectory(setinterp(observedtrip, 'linear'))")
+        statement.executeUpdate("UPDATE flights SET traj = trajectory(observedtrip)")
         statement.executeUpdate("ALTER TABLE flights DROP COLUMN IF EXISTS observedtrip;")
         println("Added and populated traj column in flights table.")
 
@@ -693,12 +656,12 @@ class DFSDataHandler(databaseName: String) {
 
 fun main() {
     val handler = DFSDataHandler("aviation_data")
-    handler.processStaticData()
-    handler.insertFlightPoints()
-    handler.interpolateFlightPoints()
-    handler.createGeographies()
-    handler.createFlightTrips()
-    handler.createTrajectoryColumn()
+//    handler.processStaticData()
+//    handler.insertFlightPoints()
+//    handler.interpolateFlightPoints()
+//    handler.createGeographies()
+//    handler.createFlightTrips()
+//    handler.createTrajectoryColumn()
     handler.createIndexes()
 
 }

@@ -32,35 +32,26 @@ startup-script = <<SCRIPT
   #!/bin/bash
   set -e
 
-  # Update package lists and install Java
   sudo apt update
   sudo apt install -y openjdk-11-jdk curl
 
-  # Define the URL for the JAR file and the destination
-  JAR_URL="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mongodb/mongodb_bench/mongodb_bench.main.jar"
-  # JAR_URL="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mongodb/"
+  JAR_URL_MONGODB="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mongodb/mongodb_bench/mongodbBenchmarkingApplication.jar"
+  JAR_URL_MOBILITYDB="https://raw.githubusercontent.com/FelixMedicusf/master_project/main/mobilitydb/mobilitydb_bench/mobilitydbBenchmarkingApplication.jar"
 
-  JAR_DEST="/opt/benchmarkingClient.jar"
 
-  # Download the JAR file
-  echo "Downloading JAR file from $JAR_URL..."
-  curl -L -o $JAR_DEST $JAR_URL
+  JAR_DEST_MONGODB="/opt/mongodbBenchmarkingApplication.jar"
+  JAR_DEST_MOBILITYDB="/opt/mobilitydbBenchmarkingApplication.jar"
 
-  # Verify if the JAR file was downloaded successfully
-  if [ ! -f "$JAR_DEST" ]; then
-      echo "Failed to download the JAR file from $JAR_URL."
-      exit 1
-  fi
+  curl -L -o $JAR_DEST_MONGODB $JAR_URL_MONGODB
+  curl -L -o $JAR_DEST_MOBILITYDB $JAR_URL_MOBILITYDB
 
-  sudo chmod 777 -R $JAR_DEST
+  sudo chmod 777 -R $JAR_DEST_MONGODB
+  sudo chmod 777 -R $JAR_DEST_MOBILITYDB
+
   # Ensure the JAR file is executable
-  chmod +x $JAR_DEST
+  chmod +x $JAR_DEST_MONGODB
+  chmod +x $JAR_DEST_MOBILITYDB
 
-  # Start the JAR file
-  # echo "Starting JAR file..."
-  # nohup java -jar $JAR_DEST > /var/log/your-application.log 2>&1 &
-
-  echo "Application started successfully."
   SCRIPT
   }
 }

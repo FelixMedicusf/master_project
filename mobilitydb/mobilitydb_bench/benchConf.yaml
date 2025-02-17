@@ -2,9 +2,7 @@ benchmark:
   sut: "MobilityDB"
   mixed: False
   nodes:
-    - "35.187.32.1912"
-    - "35.187.179.60"
-    - "34.38.175.215"
+    - "34.76.57.194"
   threads: 8
   test: False
   random_seed: 1500
@@ -51,9 +49,7 @@ queryConfigs:
       FROM flights f
       WHERE f.trip && :period_short
       GROUP BY f.destination)
-      SELECT
-      COALESCE(d.airport, a.airport) AS airport,
-      COALESCE(d.departure_count, 0) AS departures,
+      SELECT COALESCE(d.airport, a.airport) AS airport, COALESCE(d.departure_count, 0) AS departures,
       COALESCE(a.arrival_count, 0) AS arrivals,
       COALESCE(d.departure_count, 0) + COALESCE(a.arrival_count, 0) AS traffic_count
       FROM departures d FULL JOIN arrivals a ON d.airport = a.airport
