@@ -900,10 +900,10 @@ fun main() {
     handler.insertRegionalData()
     handler.shardCollections()
     handler.createFlightTrips()
-    handler.createTrajectories(separators)
-    handler.flightPointsMigration(separators)
-    handler.flightPointsInterpolation(separators)
-    handler.createTimeSeriesCollectionIndexes()
+//    handler.createTrajectories(separators)
+//    handler.flightPointsMigration(separators)
+//    handler.flightPointsInterpolation(separators)
+//    handler.createTimeSeriesCollectionIndexes()
 
 }
 

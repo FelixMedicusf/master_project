@@ -561,8 +561,8 @@ class DFSDataHandler(databaseName: String) {
 
     fun createIndexes(){
 
-//        createFlightPointsIndex()
-//        createFlightTripsIndex()
+        createFlightPointsIndex()
+        createFlightTripsIndex()
         createStaticTablesIndexes()
         println("Finished index creation.")
 

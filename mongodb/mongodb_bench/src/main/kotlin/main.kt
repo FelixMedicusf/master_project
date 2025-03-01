@@ -222,7 +222,7 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
 
         val file = File(logsPath)
         file.writeText("start: ${Date(benchStart)}, end: ${Date(benchEnd)}, duration (s): ${(benchEnd - benchStart)/1000}. " + "SUT: $sut, " + "#threads: ${threadSeeds.size}, " + "#nodes: $nodeNumber, queries executed: ${executionLogs.size}. Seed: $mainSeed" + "\n")
-        file.appendText("threadName,queryName,queryType,parameterValues,round,executionIndex,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency,fetchedRecords\n")
+        file.appendText("threadName,queryName,queryType,parameterValues,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency\n")
         file.appendText(executionLogs.joinToString(separator = "\n"))
         println("Execution logs have been written to $logsPath")
     }
@@ -288,7 +288,10 @@ class BenchmarkExecutor(private val configPath: String, private val logsPath: St
                         "\$group", Document()
                             .append(
                                 "_id", Document()
-                                    .append("flightId", "\$metadata.flightId").append("track","\$metadata.track")))))
+                                    .append("flightId", "\$metadata.flightId").append("track","\$metadata.track"))),
+                    Document("\$limit", 5))
+
+                    )
 
 
                 val firstPipeline = listOf(

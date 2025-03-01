@@ -108,8 +108,8 @@ class BenchmarkClient(private val serverUrl: String) {
 
 fun main() {
 
-    val distributed = false
-    val mongodb = false
+    val distributed = true
+    val mongodb = true
     val loadPhase = false
     val runPhase = false
     val benchmarkConducted = true
@@ -121,6 +121,9 @@ fun main() {
     val configPathMongoDBCluster = "benchConfigMongoDBCluster.yaml"
     val configPathMobilityDBCluster = "benchConfigMobilityDBCluster.yaml"
 
+    val benchmarkingClientHost = "35.195.109.151"
+    val databaseClientAddress = "$benchmarkingClientHost:8080"
+
     var path = ""
     path = if (mongodb) {
         if (!distributed) configPathMongoDBSingle else configPathMongoDBCluster
@@ -128,8 +131,7 @@ fun main() {
         if (!distributed) configPathMobilityDBSingle else configPathMobilityDBCluster
     }
 
-    val benchmarkingClientHost = "34.140.191.156"
-    val databaseClientAddress = "$benchmarkingClientHost:8080"
+
 
     val serverUrl = "http://$databaseClientAddress"
     val client = BenchmarkClient(serverUrl)

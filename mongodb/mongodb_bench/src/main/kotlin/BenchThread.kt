@@ -30,7 +30,7 @@ import java.time.ZoneOffset
 
 class BenchThread(
     private val threadName: String,
-    private val mongodbIps: List<String>,
+    mongodbIps: List<String>,
     private val queryQueue: ConcurrentLinkedQueue<QueryTask>,
     private val log: MutableList<QueryExecutionLog>,
     private val startLatch: CountDownLatch,
@@ -1039,66 +1039,6 @@ class BenchThread(
             polygon?.get("coordinates", List::class.java)
         }[0]
 
-//        var secondPipeline = listOf(
-//            Document(
-//                "\$match", Document(
-//                    "\$and", listOf(
-//                        Document(
-//                            "location", Document(
-//                                "\$geoWithin", Document(
-//                                    "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-//                                )
-//                            )
-//                        ),
-//                        Document(
-//                            "timestamp", Document(
-//                                "\$gte", startDate
-//                            ).append(
-//                                "\$lte", endDate
-//                            )
-//                        )
-//                    )
-//                )
-//            ),
-//            Document("\$group", Document("_id", "\$flightId"))
-//        )
-
-//        val secondPipeline = listOf(
-//            Document(
-//                "\$match", Document(
-//                    "timestamp", Document()
-//                        .append("\$gte", startDate) // Start of the period
-//                        .append("\$lte", endDate) // End of the period
-//                )
-//            ),
-//            Document(
-//                "\$match", Document(
-//                    "location", Document(
-//                        "\$geoWithin", Document(
-//                            "\$geometry", Document("type", "Polygon").append("coordinates", polygonCoordinates)
-//                        )
-//                    )
-//                )
-//            ),
-//            Document(
-//                "\$group", Document(
-//                    "_id", Document(
-//                        "flightId", "\$metadata.flightId"
-//                    ).append(
-//                        "track", "\$metadata.track"
-//                    )
-//                )
-//            ),
-//            Document(
-//                "\$project", Document(
-//                    "flightId", "\$_id.flightId"
-//                ).append(
-//                    "track", "\$_id.track"
-//                ).append(
-//                    "_id", 0
-//                )
-//            )
-//        )
         val secondPipeline = listOf(
             Document(
                 "\$match", Document(
