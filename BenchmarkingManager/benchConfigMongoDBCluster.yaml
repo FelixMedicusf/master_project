@@ -2,9 +2,9 @@ benchmark:
   sut: "MongoDB"
   mixed: False
   nodes:
-    - "34.140.245.107"
-    - "34.79.15.25"
-    - "104.199.105.235"
+    - "34.78.68.202"
+    - "34.79.183.230"
+    - "35.241.162.212"
   threads: 32
   test: False
   random_seed: 1500
@@ -39,7 +39,7 @@ queryConfigs:
   # Spatial queries
   # use
   - name: countFlightsInCounties
-    use: False
+    use: True
     type: spatial
     repetition: 300
     parameters:
@@ -47,7 +47,7 @@ queryConfigs:
 
   # use
   - name: flightsCloseToMainCitiesLowAltitude
-    use: False
+    use: True
     type: spatial
     repetition: 300
     parameters:
@@ -56,7 +56,7 @@ queryConfigs:
 
   # use
   - name: flightClosestToPoint
-    use: False
+    use: True
     type: spatial
     repetition: 300
     parameters:
@@ -65,7 +65,7 @@ queryConfigs:
 
   # spatiotemporal queries
   - name: flightsInCountyInPeriod
-    use: True
+    use: False
     type: spatiotemporal
     repetition: 300
     parameters:
@@ -74,7 +74,7 @@ queryConfigs:
 
   # use
   - name: countFlightsAtInstantInDistricts
-    use: True
+    use: False
     type: spatiotemporal
     repetition: 300
     parameters:
@@ -82,7 +82,7 @@ queryConfigs:
 
   # use
   - name: inCityRadiusInPeriod
-    use: True
+    use: False
     type: spatiotemporal
     repetition: 300
     parameters:
@@ -92,7 +92,7 @@ queryConfigs:
 
   # use
   - name: flightDurationInMunicipalityLowAltitudeInPeriod
-    use: True
+    use: False
     type: spatial-temporal
     repetition: 300
     parameters:
@@ -102,7 +102,7 @@ queryConfigs:
 
   # use
   - name: averageHourlyFlightsDuringDayInMunicipality
-    use: True
+    use: False
     type: spatiotemporal
     repetition: 300
     parameters:
@@ -111,7 +111,7 @@ queryConfigs:
 
   # use
   - name: flightsWithLocalOriginDestinationInPeriodInCounty
-    use: True
+    use: False
     type: spatiotemporal
     repetition: 300
     parameters:

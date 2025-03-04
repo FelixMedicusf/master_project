@@ -355,8 +355,6 @@ class DFSDataHandler(databaseName: String) {
         """.trimIndent()
 
         statement.executeUpdate(secondQuery)
-//            println("Inserted flights successfully for $flightIdLowerBound < flightId <= $flightIdUpperBound.")
-//        }
 
         println("Dropping table interpolatedlflightpoints.")
         statement.executeUpdate("DROP TABLE interpolatedflightpoints CASCADE")
@@ -661,7 +659,7 @@ fun main() {
 //    handler.interpolateFlightPoints()
 //    handler.createGeographies()
 //    handler.createFlightTrips()
-//    handler.createTrajectoryColumn()
+    handler.createTrajectoryColumn()
     handler.createIndexes()
 
 }

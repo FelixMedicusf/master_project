@@ -896,14 +896,14 @@ fun main() {
 
     val separators = listOf(0, 700642631, 710076001, 718926541, 728177911, 736845861, 743346091, 754447851, 760302441, 773383481, 774441640)
     val handler = DataHandler("aviation_data")
-    handler.updateDatabaseCollections()
-    handler.insertRegionalData()
-    handler.shardCollections()
-    handler.createFlightTrips()
+//    handler.updateDatabaseCollections()
+//    handler.insertRegionalData()
+//    handler.shardCollections()
+//    handler.createFlightTrips()
 //    handler.createTrajectories(separators)
 //    handler.flightPointsMigration(separators)
 //    handler.flightPointsInterpolation(separators)
-//    handler.createTimeSeriesCollectionIndexes()
+    handler.createTimeSeriesCollectionIndexes()
 
 }
 
