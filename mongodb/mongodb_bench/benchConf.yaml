@@ -2,9 +2,7 @@ benchmark:
   sut: "MongoDB"
   mixed: False
   nodes:
-    - "34.140.148.231"
-    - "34.79.183.230"
-    - "35.241.162.212"
+    - "23.251.129.202"
   threads: 32
   test: False
   random_seed: 1500

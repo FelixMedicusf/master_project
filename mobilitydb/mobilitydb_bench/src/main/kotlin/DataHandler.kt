@@ -654,12 +654,12 @@ class DFSDataHandler(databaseName: String) {
 
 fun main() {
     val handler = DFSDataHandler("aviation_data")
-//    handler.processStaticData()
-//    handler.insertFlightPoints()
-//    handler.interpolateFlightPoints()
+    handler.processStaticData()
+    handler.insertFlightPoints()
+    handler.interpolateFlightPoints()
 //    handler.createGeographies()
 //    handler.createFlightTrips()
-    handler.createTrajectoryColumn()
-    handler.createIndexes()
+//    handler.createTrajectoryColumn()
+//    handler.createIndexes()
 
 }

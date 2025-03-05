@@ -1,34 +1,32 @@
 benchmark:
   sut: "MongoDB"
-  mixed: False
+  mixed: True
   nodes:
-    - "34.78.92.98"
-    - "35.205.167.189"
-    - "146.148.118.85"
+    - "23.251.129.202"
   threads: 16
   test: False
-  random_seed: 1500
+  random_seed: 1200
 
 queryConfigs:
 
   # Temporal queries
   # use
   - name: countActiveFlightsInPeriod
-    use: False
+    use: True
     type: temporal
     repetition: 20
     parameters:
       - period_medium
   # use
   - name: locationOfAirplaneAtInstant
-    use: False
+    use: True
     type: temporal
     repetition: 20
     parameters:
       - instant
   # use
   - name: airportUtilizationInPeriod
-    use: False
+    use: True
     type: temporal
     repetition: 20
     parameters:
@@ -39,7 +37,7 @@ queryConfigs:
   - name: countFlightsInCounties
     use: True
     type: spatial
-    repetition: 100
+    repetition: 20
     parameters:
       - county
 
@@ -47,7 +45,7 @@ queryConfigs:
   - name: flightsCloseToMainCitiesLowAltitude
     use: True
     type: spatial
-    repetition: 100
+    repetition: 20
     parameters:
       - low_altitude
       - radius
@@ -56,33 +54,33 @@ queryConfigs:
   - name: flightClosestToPoint
     use: True
     type: spatial
-    repetition: 100
+    repetition: 20
     parameters:
       - point
       - distance
 
   # spatiotemporal queries
   - name: flightsInCountyInPeriod
-    use: False
+    use: True
     type: spatiotemporal
-    repetition: 100
+    repetition: 20
     parameters:
       - period_medium
       - county
 
   # use
   - name: countFlightsAtInstantInDistricts
-    use: False
+    use: True
     type: spatiotemporal
-    repetition: 100
+    repetition: 20
     parameters:
       - instant
 
   # use
   - name: inCityRadiusInPeriod
-    use: False
+    use: True
     type: spatiotemporal
-    repetition: 100
+    repetition: 20
     parameters:
       - period_medium
       - city
@@ -90,9 +88,9 @@ queryConfigs:
 
   # use
   - name: flightDurationInMunicipalityLowAltitudeInPeriod
-    use: False
+    use: True
     type: spatial-temporal
-    repetition: 100
+    repetition: 20
     parameters:
       - period_medium
       - municipality
@@ -100,18 +98,18 @@ queryConfigs:
 
   # use
   - name: averageHourlyFlightsDuringDayInMunicipality
-    use: False
+    use: True
     type: spatiotemporal
-    repetition: 100
+    repetition: 20
     parameters:
       - day
       - municipality
 
   # use
   - name: flightsWithLocalOriginDestinationInPeriodInCounty
-    use: False
+    use: True
     type: spatiotemporal
-    repetition: 100
+    repetition: 20
     parameters:
       - period_short
       - county
