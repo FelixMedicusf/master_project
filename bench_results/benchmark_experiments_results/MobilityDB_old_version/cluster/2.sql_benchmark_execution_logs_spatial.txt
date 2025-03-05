@@ -1,0 +1,902 @@
+start: Tue Mar 04 19:15:11 CET 2025, end: Tue Mar 04 20:21:47 CET 2025, duration (s): 3996. SUT: MobilityDB, #threads: 8, #nodes: 3, queries executed: 900. Seed: 1500
+threadName,queryName,queryType,parameterValues,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency
+thread-1,countFlightsInCounties,spatial,'Krs Oberhausen',1741112113423,1741112176942,0,0,63519
+thread-4,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741112113424,1741112187033,0,0,73609
+thread-0,countFlightsInCounties,spatial,'Krs Leverkusen',1741112113446,1741112203712,0,0,90266
+thread-2,countFlightsInCounties,spatial,'Krs Duisburg',1741112113423,1741112204833,0,0,91410
+thread-6,countFlightsInCounties,spatial,'Krs Viersen',1741112113422,1741112210957,0,0,97535
+thread-7,countFlightsInCounties,spatial,'Krs Solingen',1741112113422,1741112216011,0,0,102589
+thread-5,countFlightsInCounties,spatial,'Krs Recklinghausen',1741112113425,1741112229588,0,0,116163
+thread-3,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741112113423,1741112248494,0,0,135071
+thread-4,countFlightsInCounties,spatial,'Krs Guetersloh',1741112187034,1741112258243,0,0,71209
+thread-1,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741112176944,1741112274349,0,0,97405
+thread-1,countFlightsInCounties,spatial,'Krs Minden-Luebbecke',1741112274349,1741112286378,0,0,12029
+thread-0,countFlightsInCounties,spatial,'Krs Duesseldorf',1741112203712,1741112312441,0,0,108729
+thread-3,countFlightsInCounties,spatial,'Krs Euskirchen',1741112248494,1741112328522,0,0,80028
+thread-7,countFlightsInCounties,spatial,'Krs Coesfeld',1741112216011,1741112336294,0,0,120283
+thread-6,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741112210957,1741112338258,0,0,127301
+thread-2,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741112204833,1741112343996,0,0,139163
+thread-5,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741112229588,1741112357886,0,0,128298
+thread-4,countFlightsInCounties,spatial,'Krs Heinsberg',1741112258243,1741112367870,0,0,109627
+thread-2,countFlightsInCounties,spatial,'Krs Bielefeld',1741112343996,1741112384005,0,0,40009
+thread-7,countFlightsInCounties,spatial,'Krs Herne',1741112336294,1741112391667,0,0,55373
+thread-6,countFlightsInCounties,spatial,'Krs Oberhausen',1741112338259,1741112401132,0,0,62873
+thread-1,countFlightsInCounties,spatial,'Krs Coesfeld',1741112286378,1741112407271,0,0,120893
+thread-3,countFlightsInCounties,spatial,'Krs Mettmann',1741112328522,1741112433599,0,0,105077
+thread-2,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741112384005,1741112450490,0,0,66485
+thread-0,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1741112312441,1741112462757,0,0,150316
+thread-4,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741112367870,1741112463311,0,0,95441
+thread-6,countFlightsInCounties,spatial,'Krs Lippe',1741112401132,1741112466935,0,0,65803
+thread-5,countFlightsInCounties,spatial,'Krs Rhein-Kreis Neuss',1741112357886,1741112478472,0,0,120586
+thread-7,countFlightsInCounties,spatial,'Krs Hagen',1741112391667,1741112487871,0,0,96204
+thread-0,countFlightsInCounties,spatial,'Krs Guetersloh',1741112462757,1741112534483,0,0,71726
+thread-3,countFlightsInCounties,spatial,'Krs Mettmann',1741112433599,1741112536021,0,0,102422
+thread-1,countFlightsInCounties,spatial,'Krs Wesel',1741112407271,1741112546833,0,0,139562
+thread-5,countFlightsInCounties,spatial,'Krs Bochum',1741112478472,1741112550164,0,0,71692
+thread-2,countFlightsInCounties,spatial,'Krs Mettmann',1741112450490,1741112553347,0,0,102857
+thread-7,countFlightsInCounties,spatial,'Krs Solingen',1741112487871,1741112591496,0,0,103625
+thread-4,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741112463311,1741112612507,0,0,149196
+thread-6,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741112466935,1741112615984,0,0,149049
+thread-3,countFlightsInCounties,spatial,'Krs Moenchengladbach',1741112536021,1741112616574,0,0,80553
+thread-2,countFlightsInCounties,spatial,'Krs Euskirchen',1741112553347,1741112623723,0,0,70376
+thread-1,countFlightsInCounties,spatial,'Krs Essen',1741112546833,1741112626978,0,0,80145
+thread-5,countFlightsInCounties,spatial,'Krs Steinfurt',1741112550164,1741112640517,0,0,90353
+thread-0,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741112534483,1741112677625,0,0,143142
+thread-7,countFlightsInCounties,spatial,'Krs Recklinghausen',1741112591496,1741112707943,0,0,116447
+thread-5,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741112640517,1741112713703,0,0,73186
+thread-4,countFlightsInCounties,spatial,'Krs Heinsberg',1741112612507,1741112724661,0,0,112154
+thread-3,countFlightsInCounties,spatial,'Krs Coesfeld',1741112616574,1741112735944,0,0,119370
+thread-2,countFlightsInCounties,spatial,'Krs Heinsberg',1741112623723,1741112736211,0,0,112488
+thread-6,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741112615984,1741112746216,0,0,130232
+thread-2,countFlightsInCounties,spatial,'Krs Minden-Luebbecke',1741112736211,1741112748187,0,0,11976
+thread-1,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741112626978,1741112759343,0,0,132365
+thread-6,countFlightsInCounties,spatial,'Krs Herford',1741112746216,1741112760670,0,0,14454
+thread-0,countFlightsInCounties,spatial,'Krs Hagen',1741112677625,1741112774880,0,0,97255
+thread-6,countFlightsInCounties,spatial,'Krs Bonn',1741112760670,1741112798172,0,0,37502
+thread-7,countFlightsInCounties,spatial,'Krs Unna',1741112707943,1741112805459,0,0,97516
+thread-5,countFlightsInCounties,spatial,'Krs Duesseldorf',1741112713703,1741112821507,0,0,107804
+thread-3,countFlightsInCounties,spatial,'Krs Viersen',1741112735944,1741112832356,0,0,96412
+thread-2,countFlightsInCounties,spatial,'Krs Soest',1741112748187,1741112839460,0,0,91273
+thread-4,countFlightsInCounties,spatial,'Krs Wuppertal',1741112724661,1741112844860,0,0,120199
+thread-1,countFlightsInCounties,spatial,'Krs Viersen',1741112759343,1741112854689,0,0,95346
+thread-7,countFlightsInCounties,spatial,'Krs Kleve',1741112805459,1741112882524,0,0,77065
+thread-0,countFlightsInCounties,spatial,'Krs Borken',1741112774880,1741112883779,0,0,108899
+thread-3,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741112832356,1741112900239,0,0,67883
+thread-5,countFlightsInCounties,spatial,'Krs Remscheid',1741112821507,1741112906216,0,0,84709
+thread-2,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741112839460,1741112906637,0,0,67177
+thread-4,countFlightsInCounties,spatial,'Krs Bochum',1741112844860,1741112916042,0,0,71182
+thread-6,countFlightsInCounties,spatial,'Krs Koeln',1741112798173,1741112928646,0,0,130473
+thread-7,countFlightsInCounties,spatial,'Krs Euskirchen',1741112882524,1741112951376,0,0,68852
+thread-1,countFlightsInCounties,spatial,'Krs Mettmann',1741112854689,1741112960341,0,0,105652
+thread-4,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741112916042,1741112990050,0,0,74008
+thread-5,countFlightsInCounties,spatial,'Krs Steinfurt',1741112906216,1741112993652,0,0,87436
+thread-0,countFlightsInCounties,spatial,'Krs Wuppertal',1741112883779,1741113005040,0,0,121261
+thread-2,countFlightsInCounties,spatial,'Krs Coesfeld',1741112906637,1741113027184,0,0,120547
+thread-1,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741112960341,1741113027900,0,0,67559
+thread-3,countFlightsInCounties,spatial,'Krs Koeln',1741112900239,1741113029653,0,0,129414
+thread-6,countFlightsInCounties,spatial,'Krs Mettmann',1741112928647,1741113033381,0,0,104734
+thread-7,countFlightsInCounties,spatial,'Krs Heinsberg',1741112951376,1741113063278,0,0,111902
+thread-5,countFlightsInCounties,spatial,'Krs Dortmund',1741112993652,1741113082349,0,0,88697
+thread-1,countFlightsInCounties,spatial,'Krs Herne',1741113027900,1741113083378,0,0,55478
+thread-0,countFlightsInCounties,spatial,'Krs Dortmund',1741113005040,1741113093322,0,0,88282
+thread-2,countFlightsInCounties,spatial,'Krs Dortmund',1741113027184,1741113116783,0,0,89599
+thread-4,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741112990050,1741113124466,0,0,134416
+thread-1,countFlightsInCounties,spatial,'Krs Muenster',1741113083378,1741113146801,0,0,63423
+thread-7,countFlightsInCounties,spatial,'Krs Duisburg',1741113063278,1741113153148,0,0,89870
+thread-3,countFlightsInCounties,spatial,'Krs Dueren',1741113029653,1741113157441,0,0,127788
+thread-5,countFlightsInCounties,spatial,'Krs Steinfurt',1741113082349,1741113170923,0,0,88574
+thread-0,countFlightsInCounties,spatial,'Krs Leverkusen',1741113093322,1741113181891,0,0,88569
+thread-6,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741113033381,1741113184192,0,0,150811
+thread-2,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741113116783,1741113188877,0,0,72094
+thread-7,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741113153148,1741113220808,0,0,67660
+thread-2,countFlightsInCounties,spatial,'Krs Bonn',1741113188877,1741113225698,0,0,36821
+thread-5,countFlightsInCounties,spatial,'Krs Oberhausen',1741113170923,1741113233938,0,0,63015
+thread-4,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113124466,1741113273152,0,0,148686
+thread-3,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741113157441,1741113286440,0,0,128999
+thread-7,countFlightsInCounties,spatial,'Krs Bochum',1741113220808,1741113292571,0,0,71763
+thread-1,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741113146801,1741113297753,0,0,150952
+thread-6,countFlightsInCounties,spatial,'Krs Coesfeld',1741113184192,1741113306803,0,0,122611
+thread-0,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741113181891,1741113323052,0,0,141161
+thread-2,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741113225699,1741113323509,0,0,97810
+thread-5,countFlightsInCounties,spatial,'Krs Solingen',1741113233938,1741113336258,0,0,102320
+thread-1,countFlightsInCounties,spatial,'Krs Hoexter',1741113297753,1741113344677,0,0,46924
+thread-4,countFlightsInCounties,spatial,'Krs Moenchengladbach',1741113273152,1741113351142,0,0,77990
+thread-0,countFlightsInCounties,spatial,'Krs Bochum',1741113323052,1741113394932,0,0,71880
+thread-3,countFlightsInCounties,spatial,'Krs Koeln',1741113286440,1741113415934,0,0,129494
+thread-1,countFlightsInCounties,spatial,'Krs Warendorf',1741113344677,1741113421370,0,0,76693
+thread-5,countFlightsInCounties,spatial,'Krs Olpe',1741113336258,1741113428559,0,0,92301
+thread-7,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741113292571,1741113433345,0,0,140774
+thread-6,countFlightsInCounties,spatial,'Krs Dueren',1741113306803,1741113433792,0,0,126989
+thread-7,countFlightsInCounties,spatial,'Krs Herford',1741113433345,1741113448763,0,0,15418
+thread-0,countFlightsInCounties,spatial,'Krs Lippe',1741113394932,1741113461985,0,0,67053
+thread-4,countFlightsInCounties,spatial,'Krs Recklinghausen',1741113351142,1741113465636,0,0,114494
+thread-2,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113323509,1741113471923,0,0,148414
+thread-6,countFlightsInCounties,spatial,'Krs Bielefeld',1741113433792,1741113473228,0,0,39436
+thread-7,countFlightsInCounties,spatial,'Krs Bonn',1741113448763,1741113485183,0,0,36420
+thread-5,countFlightsInCounties,spatial,'Krs Moenchengladbach',1741113428559,1741113506814,0,0,78255
+thread-4,countFlightsInCounties,spatial,'Krs Guetersloh',1741113465637,1741113537803,0,0,72166
+thread-3,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741113415934,1741113549902,0,0,133968
+thread-1,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741113421370,1741113550279,0,0,128909
+thread-5,countFlightsInCounties,spatial,'Krs Herne',1741113506814,1741113562667,0,0,55853
+thread-0,countFlightsInCounties,spatial,'Krs Mettmann',1741113461985,1741113566419,0,0,104434
+thread-7,countFlightsInCounties,spatial,'Krs Unna',1741113485183,1741113582870,0,0,97687
+thread-2,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1741113471923,1741113607218,0,0,135295
+thread-6,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741113473228,1741113624147,0,0,150919
+thread-5,countFlightsInCounties,spatial,'Krs Euskirchen',1741113562667,1741113633651,0,0,70984
+thread-4,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741113537803,1741113635840,0,0,98037
+thread-0,countFlightsInCounties,spatial,'Krs Krefeld',1741113566419,1741113637944,0,0,71525
+thread-7,countFlightsInCounties,spatial,'Krs Mettmann',1741113582870,1741113688539,0,0,105669
+thread-3,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113549902,1741113696919,0,0,147017
+thread-1,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741113550279,1741113700843,0,0,150564
+thread-2,countFlightsInCounties,spatial,'Krs Heinsberg',1741113607218,1741113718958,0,0,111740
+thread-4,countFlightsInCounties,spatial,'Krs Olpe',1741113635840,1741113727725,0,0,91885
+thread-0,countFlightsInCounties,spatial,'Krs Olpe',1741113637944,1741113729907,0,0,91963
+thread-5,countFlightsInCounties,spatial,'Krs Hagen',1741113633651,1741113733086,0,0,99435
+thread-6,countFlightsInCounties,spatial,'Krs Dueren',1741113624147,1741113751572,0,0,127425
+thread-7,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741113688540,1741113755970,0,0,67430
+thread-3,countFlightsInCounties,spatial,'Krs Lippe',1741113696919,1741113764215,0,0,67296
+thread-2,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741113718958,1741113793669,0,0,74711
+thread-4,countFlightsInCounties,spatial,'Krs Krefeld',1741113727725,1741113799296,0,0,71571
+thread-1,countFlightsInCounties,spatial,'Krs Borken',1741113700843,1741113811291,0,0,110448
+thread-0,countFlightsInCounties,spatial,'Krs Steinfurt',1741113729907,1741113817073,0,0,87166
+thread-7,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741113755970,1741113824242,0,0,68272
+thread-6,countFlightsInCounties,spatial,'Krs Kleve',1741113751572,1741113827982,0,0,76410
+thread-5,countFlightsInCounties,spatial,'Krs Unna',1741113733086,1741113831130,0,0,98044
+thread-4,countFlightsInCounties,spatial,'Krs Bochum',1741113799296,1741113870478,0,0,71182
+thread-2,countFlightsInCounties,spatial,'Krs Hagen',1741113793669,1741113891567,0,0,97898
+thread-3,countFlightsInCounties,spatial,'Krs Koeln',1741113764215,1741113893044,0,0,128829
+thread-2,countFlightsInCounties,spatial,'Krs Minden-Luebbecke',1741113891567,1741113903543,0,0,11976
+thread-6,countFlightsInCounties,spatial,'Krs Hagen',1741113827982,1741113928126,0,0,100144
+thread-5,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741113831130,1741113929256,0,0,98126
+thread-1,countFlightsInCounties,spatial,'Krs Ennepe-Ruhr-Kreis',1741113811291,1741113944587,0,0,133296
+thread-7,countFlightsInCounties,spatial,'Krs Koeln',1741113824242,1741113955019,0,0,130777
+thread-0,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113817073,1741113964772,0,0,147699
+thread-4,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741113870478,1741113968517,0,0,98039
+thread-5,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741113929256,1741114004194,0,0,74938
+thread-3,countFlightsInCounties,spatial,'Krs Rhein-Kreis Neuss',1741113893044,1741114017615,0,0,124571
+thread-1,countFlightsInCounties,spatial,'Krs Hamm',1741113944587,1741114020039,0,0,75452
+thread-7,countFlightsInCounties,spatial,'Krs Leverkusen',1741113955019,1741114043931,0,0,88912
+thread-2,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113903543,1741114051787,0,0,148244
+thread-6,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741113928126,1741114056365,0,0,128239
+thread-4,countFlightsInCounties,spatial,'Krs Steinfurt',1741113968517,1741114057078,0,0,88561
+thread-5,countFlightsInCounties,spatial,'Krs Lippe',1741114004194,1741114071605,0,0,67411
+thread-1,countFlightsInCounties,spatial,'Krs Warendorf',1741114020039,1741114096104,0,0,76065
+thread-3,countFlightsInCounties,spatial,'Krs Dortmund',1741114017615,1741114104956,0,0,87341
+thread-0,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741113964772,1741114113942,0,0,149170
+thread-6,countFlightsInCounties,spatial,'Krs Warendorf',1741114056365,1741114132240,0,0,75875
+thread-3,countFlightsInCounties,spatial,'Krs Krefeld',1741114104956,1741114176139,0,0,71183
+thread-2,countFlightsInCounties,spatial,'Krs Koeln',1741114051787,1741114181673,0,0,129886
+thread-7,countFlightsInCounties,spatial,'Krs Wesel',1741114043931,1741114184832,0,0,140901
+thread-5,countFlightsInCounties,spatial,'Krs Coesfeld',1741114071605,1741114192422,0,0,120817
+thread-1,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741114096104,1741114194127,0,0,98023
+thread-0,countFlightsInCounties,spatial,'Krs Remscheid',1741114113942,1741114198014,0,0,84072
+thread-4,countFlightsInCounties,spatial,'Krs Wesel',1741114057078,1741114199532,0,0,142454
+thread-6,countFlightsInCounties,spatial,'Krs Wuppertal',1741114132240,1741114252426,0,0,120186
+thread-1,countFlightsInCounties,spatial,'Krs Lippe',1741114194127,1741114262596,0,0,68469
+thread-5,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741114192422,1741114265066,0,0,72644
+thread-0,countFlightsInCounties,spatial,'Krs Hamm',1741114198014,1741114275767,0,0,77753
+thread-7,countFlightsInCounties,spatial,'Krs Solingen',1741114184832,1741114287744,0,0,102912
+thread-2,countFlightsInCounties,spatial,'Krs Borken',1741114181673,1741114291289,0,0,109616
+thread-2,countFlightsInCounties,spatial,'Krs Herford',1741114291289,1741114306370,0,0,15081
+thread-4,countFlightsInCounties,spatial,'Krs Duesseldorf',1741114199532,1741114309131,0,0,109599
+thread-3,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741114176139,1741114325810,0,0,149671
+thread-1,countFlightsInCounties,spatial,'Krs Paderborn',1741114262596,1741114339467,0,0,76871
+thread-2,countFlightsInCounties,spatial,'Krs Herne',1741114306370,1741114362586,0,0,56216
+thread-7,countFlightsInCounties,spatial,'Krs Paderborn',1741114287744,1741114364695,0,0,76951
+thread-6,countFlightsInCounties,spatial,'Krs Dueren',1741114252426,1741114378583,0,0,126157
+thread-0,countFlightsInCounties,spatial,'Krs Solingen',1741114275767,1741114379095,0,0,103328
+thread-5,countFlightsInCounties,spatial,'Krs Recklinghausen',1741114265066,1741114380492,0,0,115426
+thread-6,countFlightsInCounties,spatial,'Krs Minden-Luebbecke',1741114378583,1741114390626,0,0,12043
+thread-4,countFlightsInCounties,spatial,'Krs Borken',1741114309131,1741114419225,0,0,110094
+thread-1,countFlightsInCounties,spatial,'Krs Wuppertal',1741114339467,1741114460762,0,0,121295
+thread-5,countFlightsInCounties,spatial,'Krs Remscheid',1741114380492,1741114465507,0,0,85015
+thread-3,countFlightsInCounties,spatial,'Krs Wesel',1741114325810,1741114467456,0,0,141646
+thread-5,countFlightsInCounties,spatial,'Krs Minden-Luebbecke',1741114465507,1741114477425,0,0,11918
+thread-2,countFlightsInCounties,spatial,'Krs Recklinghausen',1741114362586,1741114477765,0,0,115179
+thread-6,countFlightsInCounties,spatial,'Krs Soest',1741114390626,1741114481947,0,0,91321
+thread-4,countFlightsInCounties,spatial,'Krs Krefeld',1741114419225,1741114490696,0,0,71471
+thread-7,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1741114364695,1741114499868,0,0,135173
+thread-1,countFlightsInCounties,spatial,'Krs Hoexter',1741114460762,1741114507572,0,0,46810
+thread-0,countFlightsInCounties,spatial,'Krs Dueren',1741114379095,1741114509050,0,0,129955
+thread-3,countFlightsInCounties,spatial,'Krs Warendorf',1741114467456,1741114543563,0,0,76107
+thread-6,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741114481947,1741114549291,0,0,67344
+thread-5,countFlightsInCounties,spatial,'Krs Hamm',1741114477425,1741114552957,0,0,75532
+thread-7,countFlightsInCounties,spatial,'Krs Steinfurt',1741114499868,1741114587814,0,0,87946
+thread-4,countFlightsInCounties,spatial,'Krs Solingen',1741114490697,1741114593535,0,0,102838
+thread-0,countFlightsInCounties,spatial,'Krs Olpe',1741114509050,1741114603113,0,0,94063
+thread-6,countFlightsInCounties,spatial,'Krs Moenchengladbach',1741114549291,1741114628228,0,0,78937
+thread-1,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741114507572,1741114635877,0,0,128305
+thread-2,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741114477765,1741114645197,0,0,167432
+thread-3,countFlightsInCounties,spatial,'Krs Coesfeld',1741114543564,1741114661908,0,0,118344
+thread-4,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741114593535,1741114664882,0,0,71347
+thread-5,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741114552957,1741114691334,0,0,138377
+thread-0,countFlightsInCounties,spatial,'Krs Soest',1741114603113,1741114692746,0,0,89633
+thread-3,countFlightsInCounties,spatial,'Krs Bonn',1741114661908,1741114698962,0,0,37054
+thread-3,countFlightsInCounties,spatial,'Krs Herford',1741114698962,1741114714185,0,0,15223
+thread-2,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741114645197,1741114719831,0,0,74634
+thread-7,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741114587814,1741114734565,0,0,146751
+thread-1,countFlightsInCounties,spatial,'Krs Duesseldorf',1741114635877,1741114743697,0,0,107820
+thread-0,countFlightsInCounties,spatial,'Krs Bottrop',1741114692746,1741114754444,0,0,61698
+thread-6,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741114628228,1741114766848,0,0,138620
+thread-5,countFlightsInCounties,spatial,'Krs Hamm',1741114691334,1741114767912,0,0,76578
+thread-3,countFlightsInCounties,spatial,'Krs Remscheid',1741114714185,1741114799312,0,0,85127
+thread-7,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741114734565,1741114808210,0,0,73645
+thread-4,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741114664882,1741114813429,0,0,148547
+thread-2,countFlightsInCounties,spatial,'Krs Mettmann',1741114719831,1741114825144,0,0,105313
+thread-0,countFlightsInCounties,spatial,'Krs Kleve',1741114754444,1741114830831,0,0,76387
+thread-5,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741114767912,1741114841852,0,0,73940
+thread-1,countFlightsInCounties,spatial,'Krs Borken',1741114743697,1741114853815,0,0,110118
+thread-3,countFlightsInCounties,spatial,'Krs Lippe',1741114799312,1741114866934,0,0,67622
+thread-4,countFlightsInCounties,spatial,'Krs Oberhausen',1741114813429,1741114875926,0,0,62497
+thread-2,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741114825144,1741114899416,0,0,74272
+thread-6,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741114766848,1741114907987,0,0,141139
+thread-0,countFlightsInCounties,spatial,'Krs Soest',1741114830831,1741114921857,0,0,91026
+thread-7,countFlightsInCounties,spatial,'Krs Wuppertal',1741114808210,1741114927639,0,0,119429
+thread-2,countFlightsInCounties,spatial,'Krs Bonn',1741114899416,1741114936385,0,0,36969
+thread-5,countFlightsInCounties,spatial,'Krs Borken',1741114841852,1741114949967,0,0,108115
+thread-1,countFlightsInCounties,spatial,'Krs Viersen',1741114853815,1741114950736,0,0,96921
+thread-4,countFlightsInCounties,spatial,'Krs Leverkusen',1741114875926,1741114965644,0,0,89718
+thread-6,countFlightsInCounties,spatial,'Krs Lippe',1741114907987,1741114976241,0,0,68254
+thread-3,countFlightsInCounties,spatial,'Krs Rheinisch-Bergischer Kreis',1741114866934,1741115007664,0,0,140730
+thread-7,countFlightsInCounties,spatial,'Krs Steinfurt',1741114927639,1741115015230,0,0,87591
+thread-3,countFlightsInCounties,spatial,'Krs Herford',1741115007664,1741115022382,0,0,14718
+thread-1,countFlightsInCounties,spatial,'Krs Paderborn',1741114950736,1741115026963,0,0,76227
+thread-4,countFlightsInCounties,spatial,'Krs Bottrop',1741114965644,1741115027515,0,0,61871
+thread-0,countFlightsInCounties,spatial,'Krs Hochsauerlandkreis',1741114921857,1741115030778,0,0,108921
+thread-6,countFlightsInCounties,spatial,'Krs Oberhausen',1741114976241,1741115038363,0,0,62122
+thread-2,countFlightsInCounties,spatial,'Krs Heinsberg',1741114936385,1741115048643,0,0,112258
+thread-5,countFlightsInCounties,spatial,'Krs Duesseldorf',1741114949967,1741115059704,0,0,109737
+thread-7,countFlightsInCounties,spatial,'Krs Hamm',1741115015230,1741115091143,0,0,75913
+thread-3,countFlightsInCounties,spatial,'Krs Warendorf',1741115022382,1741115097982,0,0,75600
+thread-6,countFlightsInCounties,spatial,'Krs Euskirchen',1741115038363,1741115107140,0,0,68777
+thread-1,countFlightsInCounties,spatial,'Krs Olpe',1741115026963,1741115119556,0,0,92593
+thread-2,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741115048643,1741115122775,0,0,74132
+thread-4,countFlightsInCounties,spatial,'Krs Solingen',1741115027515,1741115129351,0,0,101836
+thread-7,countFlightsInCounties,spatial,'Krs Paderborn',1741115091143,1741115167977,0,0,76834
+thread-5,countFlightsInCounties,spatial,'Krs Borken',1741115059704,1741115169902,0,0,110198
+thread-0,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741115030778,1741115180966,0,0,150188
+thread-3,countFlightsInCounties,spatial,'Krs Leverkusen',1741115097982,1741115186668,0,0,88686
+thread-6,countFlightsInCounties,spatial,'Krs Steinfurt',1741115107140,1741115195614,0,0,88474
+thread-4,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741115129351,1741115202049,0,0,72698
+thread-2,countFlightsInCounties,spatial,'Krs Leverkusen',1741115122775,1741115212407,0,0,89632
+thread-5,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741115169902,1741115238022,0,0,68120
+thread-1,countFlightsInCounties,spatial,'Krs Wuppertal',1741115119556,1741115240231,0,0,120675
+thread-4,countFlightsInCounties,spatial,'Krs Bielefeld',1741115202049,1741115241688,0,0,39639
+thread-7,countFlightsInCounties,spatial,'Krs Olpe',1741115167977,1741115259224,0,0,91247
+thread-6,countFlightsInCounties,spatial,'Krs Krefeld',1741115195614,1741115266312,0,0,70698
+thread-0,countFlightsInCounties,spatial,'Krs Steinfurt',1741115180966,1741115269222,0,0,88256
+thread-3,countFlightsInCounties,spatial,'Krs Olpe',1741115186668,1741115278286,0,0,91618
+thread-2,countFlightsInCounties,spatial,'Krs Bochum',1741115212407,1741115284104,0,0,71697
+thread-5,countFlightsInCounties,spatial,'Krs Leverkusen',1741115238022,1741115328119,0,0,90097
+thread-1,countFlightsInCounties,spatial,'Krs Soest',1741115240231,1741115332567,0,0,92336
+thread-7,countFlightsInCounties,spatial,'Krs Leverkusen',1741115259224,1741115348991,0,0,89767
+thread-2,countFlightsInCounties,spatial,'Krs Essen',1741115284104,1741115362388,0,0,78284
+thread-4,countFlightsInCounties,spatial,'Krs Oberbergischer Kreis',1741115241688,1741115390535,0,0,148847
+thread-0,countFlightsInCounties,spatial,'Krs Rhein-Kreis Neuss',1741115269222,1741115393169,0,0,123947
+thread-6,countFlightsInCounties,spatial,'Krs Rhein-Erft-Kreis',1741115266312,1741115395623,0,0,129311
+thread-5,countFlightsInCounties,spatial,'Krs Euskirchen',1741115328119,1741115396188,0,0,68069
+thread-7,countFlightsInCounties,spatial,'Krs Warendorf',1741115348991,1741115425014,0,0,76023
+thread-3,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1741115278286,1741115428213,0,0,149927
+thread-2,countFlightsInCounties,spatial,'Krs Krefeld',1741115362388,1741115432527,0,0,70139
+thread-1,countFlightsInCounties,spatial,'Krs Heinsberg',1741115332567,1741115444090,0,0,111523
+thread-0,countFlightsInCounties,spatial,'Krs Remscheid',1741115393169,1741115477467,0,0,84298
+thread-4,countFlightsInCounties,spatial,'Krs Duisburg',1741115390535,1741115480185,0,0,89650
+thread-5,countFlightsInCounties,spatial,'Krs Leverkusen',1741115396188,1741115484525,0,0,88337
+thread-6,countFlightsInCounties,spatial,'Krs Unna',1741115395623,1741115493878,0,0,98255
+thread-7,countFlightsInCounties,spatial,'Krs Hochsauerlandkreis',1741115425014,1741115536359,0,0,111345
+thread-1,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741115444090,1741115541469,0,0,97379
+thread-2,countFlightsInCounties,spatial,'Krs Hochsauerlandkreis',1741115432527,1741115542546,0,0,110019
+thread-4,countFlightsInCounties,spatial,'Krs Muelheim a.d. Ruhr',1741115480185,1741115554197,0,0,74012
+thread-5,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1741115484525,1741115556791,0,0,72266
+thread-3,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1741115428213,1741115561710,0,0,133497
+thread-6,countFlightsInCounties,spatial,'Krs Krefeld',1741115493878,1741115564684,0,0,70806
+thread-0,countFlightsInCounties,spatial,'Krs Staedteregion Aachen',1741115477467,1741115574718,0,0,97251
+thread-3,countFlightsInCounties,spatial,'Krs Bielefeld',1741115561710,1741115601797,0,0,40087
+thread-2,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741115542546,1741115610041,0,0,67495
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1300;60,1741115610041,1741115610926,0,0,885
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1260;40,1741115610927,1741115611710,0,0,783
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,880;90,1741115611710,1741115612531,0,0,821
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1270;40,1741115612531,1741115613339,0,0,808
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,530;90,1741115613339,1741115614140,0,0,801
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,960;70,1741115614140,1741115614922,0,0,782
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1150;60,1741115614922,1741115615731,0,0,809
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,710;60,1741115615731,1741115616501,0,0,770
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1450;40,1741115616501,1741115617240,0,0,739
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1120;60,1741115617247,1741115618028,0,0,781
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,960;40,1741115618028,1741115618771,0,0,743
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1030;30,1741115618771,1741115619490,0,0,719
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1030;70,1741115619490,1741115620258,0,0,768
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1430;30,1741115620258,1741115621010,0,0,752
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1000;90,1741115621010,1741115621827,0,0,817
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,530;40,1741115621827,1741115622523,0,0,696
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1030;30,1741115622523,1741115623279,0,0,756
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,990;70,1741115623279,1741115624007,0,0,728
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1420;40,1741115624007,1741115624812,0,0,805
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1050;50,1741115624812,1741115625496,0,0,684
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1410;60,1741115625496,1741115626264,0,0,768
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,550;20,1741115626264,1741115626875,0,0,611
+thread-4,countFlightsInCounties,spatial,'Krs Bochum',1741115554197,1741115627215,0,0,73018
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,770;70,1741115626875,1741115627653,0,0,778
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,850;50,1741115627215,1741115628090,0,0,875
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1120;30,1741115627653,1741115628425,0,0,772
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1010;90,1741115628425,1741115629207,0,0,782
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,930;20,1741115629207,1741115629844,0,0,637
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,550;40,1741115629844,1741115630505,0,0,661
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,980;40,1741115630505,1741115631179,0,0,674
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,520;90,1741115628090,1741115631386,0,0,3296
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,710;30,1741115631179,1741115631928,0,0,749
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,930;80,1741115631386,1741115632161,0,0,775
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,980;20,1741115631928,1741115632717,0,0,789
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,550;40,1741115632161,1741115632944,0,0,783
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,630;60,1741115632717,1741115633465,0,0,748
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,550;60,1741115632944,1741115633692,0,0,748
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1300;60,1741115633465,1741115634260,0,0,795
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1240;50,1741115633692,1741115634487,0,0,795
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1200;20,1741115634260,1741115635012,0,0,752
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1200;60,1741115634487,1741115635298,0,0,811
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1220;60,1741115635012,1741115635756,0,0,744
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1430;50,1741115635298,1741115636082,0,0,784
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1200;60,1741115635756,1741115636519,0,0,763
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1450;90,1741115636082,1741115636919,0,0,837
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,980;20,1741115636519,1741115637154,0,0,635
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,820;80,1741115636919,1741115637673,0,0,754
+thread-5,countFlightsInCounties,spatial,'Krs Essen',1741115556791,1741115637680,0,0,80889
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,980;90,1741115637154,1741115637937,0,0,783
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1230;40,1741115637680,1741115638633,0,0,953
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,630;90,1741115637673,1741115638639,0,0,966
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1180;80,1741115637937,1741115638839,0,0,902
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,870;30,1741115638634,1741115639396,0,0,762
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,550;90,1741115638639,1741115639540,0,0,901
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1400;30,1741115638839,1741115639688,0,0,849
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1030;90,1741115639396,1741115640265,0,0,869
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,990;70,1741115639540,1741115640465,0,0,925
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1330;80,1741115639688,1741115640592,0,0,904
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,860;50,1741115640265,1741115641021,0,0,756
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,830;50,1741115640465,1741115641267,0,0,802
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1450;20,1741115640592,1741115641460,0,0,868
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,760;60,1741115641021,1741115641766,0,0,745
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1140;40,1741115641267,1741115642185,0,0,918
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,570;30,1741115641460,1741115642274,0,0,814
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1390;90,1741115641766,1741115642590,0,0,824
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,710;50,1741115642185,1741115643024,0,0,839
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1270;80,1741115642274,1741115643231,0,0,957
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1420;20,1741115642590,1741115643355,0,0,765
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1370;80,1741115643024,1741115643914,0,0,890
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1200;50,1741115643231,1741115644086,0,0,855
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1420;50,1741115643355,1741115644249,0,0,894
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1050;90,1741115643914,1741115644788,0,0,874
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1030;50,1741115644086,1741115644942,0,0,856
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1170;90,1741115644249,1741115645178,0,0,929
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,840;70,1741115644788,1741115645705,0,0,917
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1200;90,1741115644942,1741115645905,0,0,963
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,990;40,1741115645178,1741115645993,0,0,815
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1100;50,1741115645705,1741115646537,0,0,832
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,560;80,1741115645905,1741115646766,0,0,861
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,700;90,1741115645993,1741115646834,0,0,841
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,700;90,1741115646537,1741115647387,0,0,850
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,700;80,1741115646766,1741115647654,0,0,888
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,940;70,1741115646834,1741115647709,0,0,875
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1100;40,1741115647654,1741115648413,0,0,759
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1470;80,1741115648413,1741115649089,0,0,676
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1330;90,1741115649089,1741115649783,0,0,694
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,520;90,1741115647709,1741115649854,0,0,2145
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,580;70,1741115649783,1741115650523,0,0,740
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1490;70,1741115649854,1741115650643,0,0,789
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,510;90,1741115647387,1741115650981,0,0,3594
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,560;40,1741115650524,1741115651204,0,0,680
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1410;80,1741115650643,1741115651537,0,0,894
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,650;30,1741115650981,1741115651698,0,0,717
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,720;40,1741115651537,1741115652272,0,0,735
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,710;50,1741115651698,1741115652395,0,0,697
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,850;70,1741115652272,1741115652958,0,0,686
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,690;80,1741115652395,1741115653128,0,0,733
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,520;80,1741115651204,1741115653439,0,0,2235
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1030;40,1741115652958,1741115653602,0,0,644
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,690;60,1741115653128,1741115653832,0,0,704
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,810;30,1741115653439,1741115654158,0,0,719
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1340;20,1741115653602,1741115654369,0,0,767
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,960;50,1741115653832,1741115654504,0,0,672
+thread-1,countFlightsInCounties,spatial,'Krs Heinsberg',1741115541469,1741115654562,0,0,113093
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,890;90,1741115654158,1741115654926,0,0,768
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1420;90,1741115654369,1741115655232,0,0,863
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,560;50,1741115654504,1741115655307,0,0,803
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,590;40,1741115654562,1741115655400,0,0,838
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,880;30,1741115654926,1741115655616,0,0,690
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1310;90,1741115655232,1741115656030,0,0,798
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1420;90,1741115655307,1741115656166,0,0,859
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1200;60,1741115655400,1741115656249,0,0,849
+thread-6,countFlightsInCounties,spatial,'Krs Dortmund',1741115564684,1741115656426,0,0,91742
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,850;70,1741115655616,1741115656445,0,0,829
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,890;20,1741115656030,1741115656808,0,0,778
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,800;90,1741115656166,1741115657098,0,0,932
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1250;40,1741115656249,1741115657269,0,0,1020
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,770;30,1741115656426,1741115657327,0,0,901
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,580;90,1741115656445,1741115657436,0,0,991
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1140;30,1741115656808,1741115657623,0,0,815
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1160;50,1741115657099,1741115657984,0,0,885
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1370;50,1741115657327,1741115658236,0,0,909
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,900;90,1741115657269,1741115658342,0,0,1073
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,990;20,1741115657623,1741115658409,0,0,786
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1000;60,1741115657436,1741115658548,0,0,1112
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1330;70,1741115657984,1741115658812,0,0,828
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,600;40,1741115658236,1741115659004,0,0,768
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,690;20,1741115658342,1741115659167,0,0,825
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1480;30,1741115658409,1741115659399,0,0,990
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1240;60,1741115658548,1741115659544,0,0,996
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1170;70,1741115658812,1741115659688,0,0,876
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,580;60,1741115659004,1741115659860,0,0,856
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,910;50,1741115659167,1741115660073,0,0,906
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1390;60,1741115659399,1741115660329,0,0,930
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1460;70,1741115659544,1741115660477,0,0,933
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,690;30,1741115659690,1741115660516,0,0,826
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1400;40,1741115659860,1741115660793,0,0,933
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,720;60,1741115660073,1741115660963,0,0,890
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1480;70,1741115660329,1741115661231,0,0,902
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1260;50,1741115660477,1741115661494,0,0,1017
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,970;80,1741115660516,1741115661497,0,0,981
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,670;20,1741115660793,1741115661589,0,0,796
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1450;60,1741115660963,1741115661937,0,0,974
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1000;90,1741115661231,1741115662134,0,0,903
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,710;30,1741115661497,1741115662374,0,0,877
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,970;50,1741115661494,1741115662378,0,0,884
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1490;60,1741115661589,1741115662548,0,0,959
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1290;60,1741115661937,1741115662848,0,0,911
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,540;60,1741115662134,1741115662935,0,0,801
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1340;50,1741115662374,1741115663275,0,0,901
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1180;60,1741115662378,1741115663316,0,0,938
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1070;40,1741115662548,1741115663441,0,0,893
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,670;90,1741115662848,1741115663811,0,0,963
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1280;50,1741115662935,1741115663844,0,0,909
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,780;20,1741115663275,1741115664090,0,0,815
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1400;80,1741115663316,1741115664201,0,0,885
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,950;20,1741115663441,1741115664333,0,0,892
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1420;70,1741115663844,1741115664676,0,0,832
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1320;60,1741115663811,1741115664702,0,0,891
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1250;90,1741115664201,1741115665134,0,0,933
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,880;20,1741115664333,1741115665280,0,0,947
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,840;20,1741115664676,1741115665371,0,0,695
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1150;70,1741115664702,1741115665580,0,0,878
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,520;40,1741115664090,1741115665808,0,0,1718
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1020;50,1741115665134,1741115665808,0,0,674
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,860;40,1741115665280,1741115665985,0,0,705
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1480;80,1741115665371,1741115666259,0,0,888
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1360;30,1741115665580,1741115666374,0,0,794
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1340;40,1741115665808,1741115666672,0,0,864
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,840;30,1741115665808,1741115666711,0,0,903
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,740;20,1741115665985,1741115666884,0,0,899
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1250;40,1741115666259,1741115667039,0,0,780
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1010;30,1741115666374,1741115667257,0,0,883
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1100;30,1741115666672,1741115667467,0,0,795
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1010;70,1741115666711,1741115667517,0,0,806
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,920;40,1741115667039,1741115667875,0,0,836
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,530;80,1741115667257,1741115668060,0,0,803
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,720;90,1741115667517,1741115668331,0,0,814
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1480;50,1741115667875,1741115668560,0,0,685
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1450;40,1741115668060,1741115668743,0,0,683
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,590;50,1741115668331,1741115668977,0,0,646
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,880;30,1741115668560,1741115669232,0,0,672
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1080;80,1741115668743,1741115669396,0,0,653
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1150;30,1741115668977,1741115669612,0,0,635
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,520;90,1741115666884,1741115669819,0,0,2935
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,600;60,1741115669232,1741115669881,0,0,649
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1350;90,1741115669396,1741115670100,0,0,704
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1450;90,1741115669612,1741115670354,0,0,742
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,510;60,1741115667467,1741115670383,0,0,2916
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1180;40,1741115669819,1741115670579,0,0,760
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1440;40,1741115670100,1741115670902,0,0,802
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,940;20,1741115670383,1741115671071,0,0,688
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,910;90,1741115670354,1741115671106,0,0,752
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1340;60,1741115670579,1741115671388,0,0,809
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1090;50,1741115670902,1741115671576,0,0,674
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,720;70,1741115671106,1741115671844,0,0,738
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1120;30,1741115671388,1741115672042,0,0,654
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,510;30,1741115669881,1741115672166,0,0,2285
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1020;20,1741115671844,1741115672413,0,0,569
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1250;60,1741115672042,1741115672619,0,0,577
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,830;60,1741115672166,1741115672794,0,0,628
+thread-3,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1741115601797,1741115673043,0,0,71246
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1330;50,1741115672413,1741115673046,0,0,633
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1460;30,1741115672619,1741115673205,0,0,586
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1130;30,1741115672794,1741115673459,0,0,665
+thread-7,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1741115536359,1741115673769,0,0,137410
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,630;90,1741115673046,1741115673786,0,0,740
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,590;80,1741115673043,1741115673789,0,0,746
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,680;50,1741115673205,1741115673871,0,0,666
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,520;80,1741115671576,1741115673946,0,0,2370
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1020;20,1741115673459,1741115673975,0,0,516
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,500;80,1741115671071,1741115674103,0,0,3032
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1120;80,1741115673769,1741115674645,0,0,876
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,820;70,1741115673786,1741115674747,0,0,961
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,700;80,1741115673789,1741115674808,0,0,1019
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1260;20,1741115673871,1741115674824,0,0,953
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,570;30,1741115673946,1741115674912,0,0,966
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1330;70,1741115673975,1741115675055,0,0,1080
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,820;90,1741115674103,1741115675122,0,0,1019
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,810;50,1741115674645,1741115675304,0,0,659
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1230;70,1741115674747,1741115675595,0,0,848
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1320;50,1741115674808,1741115675691,0,0,883
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1060;90,1741115674824,1741115675747,0,0,923
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1380;30,1741115674912,1741115675922,0,0,1010
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,950;60,1741115675122,1741115676120,0,0,998
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1440;80,1741115675055,1741115676152,0,0,1097
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1100;90,1741115675304,1741115676288,0,0,984
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,550;40,1741115675595,1741115676490,0,0,895
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,890;40,1741115675747,1741115676630,0,0,883
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1230;60,1741115675691,1741115676633,0,0,942
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1100;30,1741115676120,1741115677117,0,0,997
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,670;90,1741115676152,1741115677228,0,0,1076
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1390;20,1741115676288,1741115677301,0,0,1013
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1160;70,1741115676633,1741115677453,0,0,820
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,940;60,1741115676630,1741115677454,0,0,824
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,590;80,1741115676490,1741115677461,0,0,971
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1340;20,1741115677117,1741115677851,0,0,734
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,520;20,1741115677228,1741115678040,0,0,812
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,970;20,1741115677301,1741115678141,0,0,840
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1270;40,1741115677453,1741115678342,0,0,889
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1130;70,1741115677461,1741115678473,0,0,1012
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,940;80,1741115677454,1741115678535,0,0,1081
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,710;90,1741115677851,1741115678766,0,0,915
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,580;80,1741115678141,1741115679051,0,0,910
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,610;60,1741115678342,1741115679159,0,0,817
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,880;80,1741115678473,1741115679335,0,0,862
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,500;90,1741115675922,1741115679354,0,0,3432
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,630;80,1741115678535,1741115679402,0,0,867
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,660;80,1741115679051,1741115679813,0,0,762
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1470;20,1741115678766,1741115679892,0,0,1126
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,910;80,1741115679159,1741115679978,0,0,819
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1180;40,1741115679335,1741115680189,0,0,854
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,690;30,1741115679402,1741115680200,0,0,798
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1410;50,1741115679354,1741115680254,0,0,900
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,500;30,1741115678040,1741115680295,0,0,2255
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1060;30,1741115679813,1741115680574,0,0,761
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,570;50,1741115679892,1741115680666,0,0,774
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1350;60,1741115679978,1741115680949,0,0,971
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,890;60,1741115680189,1741115681157,0,0,968
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,580;50,1741115680295,1741115681186,0,0,891
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,890;50,1741115680200,1741115681188,0,0,988
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1090;20,1741115680574,1741115681481,0,0,907
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1090;50,1741115680949,1741115681833,0,0,884
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,780;20,1741115681157,1741115681928,0,0,771
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1470;20,1741115681186,1741115681963,0,0,777
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1380;40,1741115681188,1741115682003,0,0,815
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,510;20,1741115680666,1741115682122,0,0,1456
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1240;80,1741115681481,1741115682399,0,0,918
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1010;20,1741115681834,1741115682515,0,0,681
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,790;90,1741115681928,1741115682748,0,0,820
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1290;20,1741115682003,1741115682801,0,0,798
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,940;30,1741115682122,1741115682885,0,0,763
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1020;30,1741115682399,1741115683077,0,0,678
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,510;90,1741115680254,1741115683106,0,0,2852
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1390;60,1741115682748,1741115683409,0,0,661
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1440;30,1741115682515,1741115683491,0,0,976
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1220;80,1741115682802,1741115683504,0,0,702
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,790;20,1741115682885,1741115683634,0,0,749
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,940;20,1741115683077,1741115683832,0,0,755
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1420;40,1741115683106,1741115683865,0,0,759
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,520;90,1741115681963,1741115683960,0,0,1997
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1350;30,1741115683409,1741115684094,0,0,685
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1120;20,1741115683491,1741115684203,0,0,712
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1220;80,1741115683504,1741115684351,0,0,847
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,940;20,1741115683634,1741115684542,0,0,908
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1000;50,1741115683832,1741115684597,0,0,765
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1370;20,1741115683865,1741115684628,0,0,763
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1020;70,1741115683960,1741115684908,0,0,948
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,980;60,1741115684094,1741115684966,0,0,872
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1030;40,1741115684203,1741115685046,0,0,843
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,550;60,1741115684351,1741115685132,0,0,781
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1340;20,1741115684542,1741115685432,0,0,890
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,670;90,1741115684597,1741115685521,0,0,924
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1390;70,1741115684628,1741115685605,0,0,977
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1160;40,1741115684908,1741115685878,0,0,970
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,1470;90,1741115684966,1741115686003,0,0,1037
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,850;90,1741115685046,1741115686014,0,0,968
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1400;70,1741115685132,1741115686071,0,0,939
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,820;40,1741115685521,1741115686305,0,0,784
+thread-4,flightsCloseToMainCitiesLowAltitude,spatial,1370;60,1741115685432,1741115686310,0,0,878
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,890;30,1741115685605,1741115686412,0,0,807
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1020;40,1741115685878,1741115686625,0,0,747
+thread-2,flightsCloseToMainCitiesLowAltitude,spatial,650;70,1741115686003,1741115686917,0,0,914
+thread-3,flightsCloseToMainCitiesLowAltitude,spatial,1210;30,1741115686014,1741115686937,0,0,923
+thread-6,flightsCloseToMainCitiesLowAltitude,spatial,1450;70,1741115686072,1741115686961,0,0,889
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1100;20,1741115686305,1741115687077,0,0,772
+thread-1,flightClosestToPoint,spatial,POINT(8.535969293690409 52.13138781914984);2,1741115686412,1741115688592,0,0,2180
+thread-5,flightClosestToPoint,spatial,POINT(8.335960512747823 50.8208031068149);1,1741115686625,1741115690319,0,0,3694
+thread-1,flightClosestToPoint,spatial,POINT(8.713521727623736 50.99095704049058);2,1741115688593,1741115692271,0,0,3678
+thread-6,flightClosestToPoint,spatial,POINT(8.421506061344289 52.03095211697274);5,1741115686961,1741115693602,0,0,6641
+thread-5,flightClosestToPoint,spatial,POINT(8.639206567523699 52.03850116714918);2,1741115690319,1741115694019,0,0,3700
+thread-0,countFlightsInCounties,spatial,'Krs Coesfeld',1741115574718,1741115694873,0,0,120155
+thread-2,flightClosestToPoint,spatial,POINT(8.430384362224794 51.94577143428898);2,1741115686917,1741115696486,0,0,9569
+thread-1,flightClosestToPoint,spatial,POINT(6.977061516907361 50.58623229637057);9,1741115692271,1741115696871,0,0,4600
+thread-3,flightClosestToPoint,spatial,POINT(7.847655187052155 50.97602348755993);2,1741115686937,1741115697585,0,0,10648
+thread-4,flightClosestToPoint,spatial,POINT(7.9591298135504625 51.71962421031233);3,1741115686310,1741115700302,0,0,13992
+thread-0,flightClosestToPoint,spatial,POINT(8.724519039495457 51.443446475411164);7,1741115694873,1741115701462,0,0,6589
+thread-3,flightClosestToPoint,spatial,POINT(6.413178182606809 50.640798709131666);6,1741115697585,1741115703597,0,0,6012
+thread-1,flightClosestToPoint,spatial,POINT(7.522898395991001 52.13276157176543);4,1741115696871,1741115703930,0,0,7059
+thread-1,flightClosestToPoint,spatial,POINT(8.399976291618714 52.20008478458794);1,1741115703930,1741115705542,0,0,1612
+thread-5,flightClosestToPoint,spatial,POINT(7.900675374014794 50.9874244753701);2,1741115694019,1741115705638,0,0,11619
+thread-7,flightClosestToPoint,spatial,POINT(7.2176184589794135 51.028191251396585);2,1741115687077,1741115708456,0,0,21379
+thread-5,flightClosestToPoint,spatial,POINT(6.808432194908847 50.551077880443366);1,1741115705638,1741115711941,0,0,6303
+thread-6,flightClosestToPoint,spatial,POINT(7.02496315340536 51.46064515807316);7,1741115693602,1741115712349,0,0,18747
+thread-3,flightClosestToPoint,spatial,POINT(8.47962440416795 51.95816033106402);3,1741115703597,1741115712501,0,0,8904
+thread-4,flightClosestToPoint,spatial,POINT(7.3815332371769635 52.01535318442576);2,1741115700303,1741115713219,0,0,12916
+thread-0,flightClosestToPoint,spatial,POINT(8.120441006708166 51.06565232718739);6,1741115701462,1741115714310,0,0,12848
+thread-1,flightClosestToPoint,spatial,POINT(7.055484438902967 50.784869667235114);1,1741115705542,1741115715133,0,0,9591
+thread-3,flightClosestToPoint,spatial,POINT(8.312158666584386 50.76780737390267);7,1741115712501,1741115715668,0,0,3167
+thread-6,flightClosestToPoint,spatial,POINT(6.488493844053023 50.590898226297625);3,1741115712349,1741115717615,0,0,5266
+thread-2,flightClosestToPoint,spatial,POINT(7.377265377912776 51.211235380862675);1,1741115696486,1741115718608,0,0,22122
+thread-6,flightClosestToPoint,spatial,POINT(6.483314343025913 52.24042620322918);6,1741115717615,1741115719146,0,0,1531
+thread-1,flightClosestToPoint,spatial,POINT(7.83452113385013 50.79150203026615);1,1741115715133,1741115719985,0,0,4852
+thread-7,flightClosestToPoint,spatial,POINT(7.309943025207165 51.773656658435584);8,1741115708456,1741115723865,0,0,15409
+thread-3,flightClosestToPoint,spatial,POINT(8.606160989996495 51.59727878920736);4,1741115715668,1741115725894,0,0,10226
+thread-2,flightClosestToPoint,spatial,POINT(8.637400186173641 51.52427196149945);7,1741115718608,1741115726066,0,0,7458
+thread-1,flightClosestToPoint,spatial,POINT(6.677380340227672 50.78806826564105);9,1741115719985,1741115729980,0,0,9995
+thread-5,flightClosestToPoint,spatial,POINT(7.316444562244728 50.96037471577923);6,1741115711941,1741115729997,0,0,18056
+thread-2,flightClosestToPoint,spatial,POINT(7.182532268663557 50.610419158946804);6,1741115726066,1741115730245,0,0,4179
+thread-4,flightClosestToPoint,spatial,POINT(7.671781546377235 51.013354993001876);9,1741115713219,1741115731912,0,0,18693
+thread-5,flightClosestToPoint,spatial,POINT(8.13104289678694 50.557399204683705);6,1741115729997,1741115732014,0,0,2017
+thread-5,flightClosestToPoint,spatial,POINT(6.459907095831482 52.06123113653784);9,1741115732014,1741115734815,0,0,2801
+thread-3,flightClosestToPoint,spatial,POINT(8.031285674328801 50.969713085723996);2,1741115725894,1741115736434,0,0,10540
+thread-0,flightClosestToPoint,spatial,POINT(7.089268124926543 51.31541552527903);6,1741115714310,1741115736502,0,0,22192
+thread-7,flightClosestToPoint,spatial,POINT(6.416276818794921 51.27690362847692);1,1741115723865,1741115740027,0,0,16162
+thread-2,flightClosestToPoint,spatial,POINT(8.381460614992672 51.951005745952656);5,1741115730245,1741115740249,0,0,10004
+thread-7,flightClosestToPoint,spatial,POINT(8.444298572140005 50.69957283636914);8,1741115740027,1741115742368,0,0,2341
+thread-4,flightClosestToPoint,spatial,POINT(8.421708956306526 51.87641193730322);5,1741115731912,1741115742492,0,0,10580
+thread-6,flightClosestToPoint,spatial,POINT(7.060649050767892 51.1185473228602);3,1741115719146,1741115742552,0,0,23406
+thread-2,flightClosestToPoint,spatial,POINT(6.333958685223753 50.637731168531985);3,1741115740249,1741115744521,0,0,4272
+thread-7,flightClosestToPoint,spatial,POINT(8.404756760399327 50.8225369348091);9,1741115742368,1741115745969,0,0,3601
+thread-2,flightClosestToPoint,spatial,POINT(8.54972401766718 50.563057005470796);1,1741115744521,1741115746042,0,0,1521
+thread-4,flightClosestToPoint,spatial,POINT(7.858644584715204 52.165431464319724);4,1741115742492,1741115746301,0,0,3809
+thread-2,flightClosestToPoint,spatial,POINT(8.004054331625866 52.166252711801285);6,1741115746042,1741115748205,0,0,2163
+thread-1,flightClosestToPoint,spatial,POINT(7.087853192708331 51.53611310127326);8,1741115729980,1741115748753,0,0,18773
+thread-5,flightClosestToPoint,spatial,POINT(6.904992310901914 51.73750456332016);1,1741115734815,1741115750134,0,0,15319
+thread-0,flightClosestToPoint,spatial,POINT(7.882241391135289 51.76883013511433);2,1741115736502,1741115751237,0,0,14735
+thread-6,flightClosestToPoint,spatial,POINT(7.9874989148175635 50.98432758739394);5,1741115742552,1741115753766,0,0,11214
+thread-4,flightClosestToPoint,spatial,POINT(6.371621358141241 51.62733180742805);4,1741115746301,1741115755763,0,0,9462
+thread-3,flightClosestToPoint,spatial,POINT(6.643027916468766 51.22946395451782);5,1741115736434,1741115758306,0,0,21872
+thread-0,flightClosestToPoint,spatial,POINT(8.359576906232997 51.858533765763525);4,1741115751237,1741115762574,0,0,11337
+thread-7,flightClosestToPoint,spatial,POINT(7.766342950749359 51.301192441622916);1,1741115745969,1741115765257,0,0,19288
+thread-5,flightClosestToPoint,spatial,POINT(6.484777409274139 51.33527261088504);6,1741115750134,1741115766130,0,0,15996
+thread-1,flightClosestToPoint,spatial,POINT(7.335657694600201 51.73482637014122);7,1741115748753,1741115766173,0,0,17420
+thread-0,flightClosestToPoint,spatial,POINT(8.473835497822629 52.05837871334516);3,1741115762574,1741115766294,0,0,3720
+thread-2,flightClosestToPoint,spatial,POINT(7.108574825343888 51.505593380499334);3,1741115748205,1741115767174,0,0,18969
+thread-5,flightClosestToPoint,spatial,POINT(7.76251858766274 52.23001595152871);9,1741115766131,1741115768625,0,0,2494
+thread-3,flightClosestToPoint,spatial,POINT(8.472360957870418 51.40677796848504);5,1741115758306,1741115768707,0,0,10401
+thread-1,flightClosestToPoint,spatial,POINT(7.420829687772066 50.68149843959381);9,1741115766173,1741115770370,0,0,4197
+thread-5,flightClosestToPoint,spatial,POINT(8.08015195041183 50.722797091403386);1,1741115768625,1741115771715,0,0,3090
+thread-6,flightClosestToPoint,spatial,POINT(7.710712456685075 51.58719835556841);9,1741115753766,1741115772033,0,0,18267
+thread-3,flightClosestToPoint,spatial,POINT(8.659221818125735 50.94084193167911);7,1741115768708,1741115772211,0,0,3503
+thread-7,flightClosestToPoint,spatial,POINT(6.370731643155253 50.85562059010328);2,1741115765257,1741115773105,0,0,7848
+thread-1,flightClosestToPoint,spatial,POINT(6.48772529268964 51.90993090879249);4,1741115770370,1741115774187,0,0,3817
+thread-4,flightClosestToPoint,spatial,POINT(7.313346884757782 51.032171602162414);1,1741115755763,1741115776490,0,0,20727
+thread-1,flightClosestToPoint,spatial,POINT(7.844341564938963 50.53992761175536);8,1741115774187,1741115776689,0,0,2502
+thread-2,flightClosestToPoint,spatial,POINT(8.331004324970772 51.04637363117965);2,1741115767174,1741115776722,0,0,9548
+thread-7,flightClosestToPoint,spatial,POINT(6.845416892421467 52.0877322901164);8,1741115773105,1741115777778,0,0,4673
+thread-0,flightClosestToPoint,spatial,POINT(7.373090604499437 51.99673470412828);9,1741115766294,1741115779646,0,0,13352
+thread-3,flightClosestToPoint,spatial,POINT(8.47280269918938 51.87271034166569);2,1741115772211,1741115782774,0,0,10563
+thread-4,flightClosestToPoint,spatial,POINT(7.4020747559364715 52.06479269606074);8,1741115776490,1741115786655,0,0,10165
+thread-1,flightClosestToPoint,spatial,POINT(8.430318396953277 51.584325386479755);9,1741115776689,1741115787601,0,0,10912
+thread-6,flightClosestToPoint,spatial,POINT(6.854904405453936 51.450455684934795);5,1741115772033,1741115788704,0,0,16671
+thread-3,flightClosestToPoint,spatial,POINT(6.739220121699212 51.80436725510353);9,1741115782774,1741115791895,0,0,9121
+thread-5,flightClosestToPoint,spatial,POINT(7.7221148677810785 51.24814312529566);8,1741115771715,1741115792531,0,0,20816
+thread-7,flightClosestToPoint,spatial,POINT(6.301575892891959 51.265991300415834);8,1741115777778,1741115792725,0,0,14947
+thread-3,flightClosestToPoint,spatial,POINT(7.6464327088310196 50.542355540664474);9,1741115791895,1741115795200,0,0,3305
+thread-0,flightClosestToPoint,spatial,POINT(7.817756443175876 51.64725710622661);4,1741115779646,1741115796683,0,0,17037
+thread-2,flightClosestToPoint,spatial,POINT(6.971124902908287 51.278340242836464);5,1741115776722,1741115798279,0,0,21557
+thread-7,flightClosestToPoint,spatial,POINT(8.019220841682259 50.910883390629095);3,1741115792725,1741115800597,0,0,7872
+thread-2,flightClosestToPoint,spatial,POINT(7.975730253233072 50.59547270634052);6,1741115798279,1741115800681,0,0,2402
+thread-0,flightClosestToPoint,spatial,POINT(6.607180677833306 51.95850299617243);9,1741115796683,1741115801261,0,0,4578
+thread-3,flightClosestToPoint,spatial,POINT(8.536197000862025 51.10924428561066);8,1741115795200,1741115801272,0,0,6072
+thread-4,flightClosestToPoint,spatial,POINT(6.45866014938352 51.01097977827423);2,1741115786655,1741115802020,0,0,15365
+thread-5,flightClosestToPoint,spatial,POINT(6.366928250924387 51.589160475653294);8,1741115792531,1741115802378,0,0,9847
+thread-6,flightClosestToPoint,spatial,POINT(7.334541908754029 51.90962466605819);5,1741115788704,1741115802770,0,0,14066
+thread-1,flightClosestToPoint,spatial,POINT(6.364516216928154 51.24550906959091);3,1741115787601,1741115803794,0,0,16193
+thread-1,flightClosestToPoint,spatial,POINT(6.577721093293638 52.042445228382874);8,1741115803794,1741115807969,0,0,4175
+thread-0,flightClosestToPoint,spatial,POINT(7.8803648267450255 50.90961853378826);8,1741115801261,1741115808661,0,0,7400
+thread-0,flightClosestToPoint,spatial,POINT(8.3794522963375 50.676225498034874);7,1741115808661,1741115811048,0,0,2387
+thread-7,flightClosestToPoint,spatial,POINT(8.012466223255904 51.89060494231497);2,1741115800597,1741115812855,0,0,12258
+thread-0,flightClosestToPoint,spatial,POINT(8.450249436308404 50.74471151124566);8,1741115811048,1741115814003,0,0,2955
+thread-3,flightClosestToPoint,spatial,POINT(8.213485128411808 51.688932820550754);4,1741115801272,1741115814852,0,0,13580
+thread-1,flightClosestToPoint,spatial,POINT(6.826086884111625 51.89331932882314);7,1741115807969,1741115816599,0,0,8630
+thread-5,flightClosestToPoint,spatial,POINT(8.042881212038843 51.13416658042977);1,1741115802378,1741115817017,0,0,14639
+thread-0,flightClosestToPoint,spatial,POINT(8.562852776460756 50.91473436742728);6,1741115814003,1741115817465,0,0,3462
+thread-3,flightClosestToPoint,spatial,POINT(7.401095245847707 52.19103179902427);5,1741115814852,1741115818460,0,0,3608
+thread-6,flightClosestToPoint,spatial,POINT(7.2564809416211995 50.91690059596837);6,1741115802770,1741115818687,0,0,15917
+thread-2,flightClosestToPoint,spatial,POINT(7.47796394057146 51.012210896756145);2,1741115800681,1741115821256,0,0,20575
+thread-4,flightClosestToPoint,spatial,POINT(7.1099883887033135 51.29906308180028);3,1741115802020,1741115823906,0,0,21886
+thread-0,flightClosestToPoint,spatial,POINT(8.12698655939051 50.89600090706934);3,1741115817465,1741115824623,0,0,7158
+thread-7,flightClosestToPoint,spatial,POINT(8.363190562491972 51.22852068792351);9,1741115812855,1741115825333,0,0,12478
+thread-0,flightClosestToPoint,spatial,POINT(6.6227390536469075 52.20860439607008);4,1741115824624,1741115826520,0,0,1896
+thread-5,flightClosestToPoint,spatial,POINT(8.622077464125312 51.779524915287);8,1741115817017,1741115827754,0,0,10737
+thread-1,flightClosestToPoint,spatial,POINT(7.077849476509574 50.83263015114878);5,1741115816599,1741115828196,0,0,11597
+thread-5,flightClosestToPoint,spatial,POINT(6.6872430060710455 52.22027098720223);5,1741115827754,1741115829677,0,0,1923
+thread-6,flightClosestToPoint,spatial,POINT(8.461273710814153 51.649297662946104);7,1741115818687,1741115830706,0,0,12019
+thread-7,flightClosestToPoint,spatial,POINT(6.225315554317339 51.794897122155376);8,1741115825333,1741115831533,0,0,6200
+thread-6,flightClosestToPoint,spatial,POINT(8.553846489465458 50.79088557883326);2,1741115830707,1741115833473,0,0,2766
+thread-5,flightClosestToPoint,spatial,POINT(6.284716182196616 50.65026323607754);3,1741115829677,1741115833694,0,0,4017
+thread-3,flightClosestToPoint,spatial,POINT(7.567503596288951 51.580172988201845);9,1741115818460,1741115837648,0,0,19188
+thread-5,flightClosestToPoint,spatial,POINT(6.232898534108578 51.71433206055022);8,1741115833694,1741115841395,0,0,7701
+thread-2,flightClosestToPoint,spatial,POINT(6.71807427592411 51.09756142745632);7,1741115821256,1741115841705,0,0,20449
+thread-0,flightClosestToPoint,spatial,POINT(6.6763325218176 51.31980056411941);7,1741115826520,1741115844222,0,0,17702
+thread-7,flightClosestToPoint,spatial,POINT(6.86420867919685 50.864066697066896);8,1741115831533,1741115845151,0,0,13618
+thread-4,flightClosestToPoint,spatial,POINT(7.034646287292593 51.23271427299489);4,1741115823906,1741115846749,0,0,22843
+thread-1,flightClosestToPoint,spatial,POINT(6.823235745099416 51.05725685732391);9,1741115828196,1741115849559,0,0,21363
+thread-3,flightClosestToPoint,spatial,POINT(8.29624770078117 51.47090027645459);9,1741115837648,1741115849654,0,0,12006
+thread-5,flightClosestToPoint,spatial,POINT(8.502729993710172 51.93777548322759);1,1741115841395,1741115850852,0,0,9457
+thread-6,flightClosestToPoint,spatial,POINT(7.253462160855607 51.640194771626646);8,1741115833473,1741115852006,0,0,18533
+thread-0,flightClosestToPoint,spatial,POINT(6.384469327614754 50.852952217742);8,1741115844222,1741115852101,0,0,7879
+thread-0,flightClosestToPoint,spatial,POINT(8.72056801331808 52.15679918694522);1,1741115852101,1741115854126,0,0,2025
+thread-5,flightClosestToPoint,spatial,POINT(6.9110611906870645 52.17101149973304);4,1741115850852,1741115854192,0,0,3340
+thread-2,flightClosestToPoint,spatial,POINT(7.541018220705203 51.81974897880886);4,1741115841705,1741115857485,0,0,15780
+thread-5,flightClosestToPoint,spatial,POINT(8.532403634496944 50.91526729034736);4,1741115854192,1741115857852,0,0,3660
+thread-7,flightClosestToPoint,spatial,POINT(8.255432175910038 51.70193785076266);4,1741115845151,1741115858380,0,0,13229
+thread-3,flightClosestToPoint,spatial,POINT(8.331580692720422 51.043750275295565);3,1741115849654,1741115859243,0,0,9589
+thread-2,flightClosestToPoint,spatial,POINT(8.146722644527113 50.53833639849991);6,1741115857485,1741115859340,0,0,1855
+thread-4,flightClosestToPoint,spatial,POINT(7.294995626504241 51.95196993409135);7,1741115846749,1741115860355,0,0,13606
+thread-3,flightClosestToPoint,spatial,POINT(6.4175419179575295 51.922362618434775);7,1741115859243,1741115862691,0,0,3448
+thread-1,flightClosestToPoint,spatial,POINT(6.284932089664843 51.05264681083674);4,1741115849559,1741115863164,0,0,13605
+thread-3,flightClosestToPoint,spatial,POINT(8.079268502286332 50.55773935321251);7,1741115862691,1741115864878,0,0,2187
+thread-3,flightClosestToPoint,spatial,POINT(8.240436691585334 50.59516659474898);4,1741115864878,1741115867010,0,0,2132
+thread-5,flightClosestToPoint,spatial,POINT(8.303687844003896 51.38732539511759);6,1741115857852,1741115869570,0,0,11718
+thread-7,flightClosestToPoint,spatial,POINT(7.905651435326943 51.08198283125901);9,1741115858380,1741115872188,0,0,13808
+thread-4,flightClosestToPoint,spatial,POINT(7.334024047081745 52.01694349892642);7,1741115860355,1741115873252,0,0,12897
+thread-6,flightClosestToPoint,spatial,POINT(6.710866489241959 51.177934608754605);5,1741115852006,1741115874011,0,0,22005
+thread-2,flightClosestToPoint,spatial,POINT(6.369151058426435 51.32055007645433);1,1741115859340,1741115874205,0,0,14865
+thread-0,flightClosestToPoint,spatial,POINT(6.868844284508487 51.0942933693966);2,1741115854126,1741115875958,0,0,21832
+thread-1,flightClosestToPoint,spatial,POINT(8.179771061355186 51.67213116216118);7,1741115863164,1741115876571,0,0,13407
+thread-6,flightClosestToPoint,spatial,POINT(6.954927899013756 52.10601999162348);5,1741115874011,1741115880332,0,0,6321
+thread-4,flightClosestToPoint,spatial,POINT(6.726434473487114 51.83389207818965);3,1741115873252,1741115880636,0,0,7384
+thread-7,flightClosestToPoint,spatial,POINT(6.356860588799146 51.62633269185703);6,1741115872188,1741115881152,0,0,8964
+thread-1,flightClosestToPoint,spatial,POINT(7.752118405764543 50.799996344705214);7,1741115876571,1741115881975,0,0,5404
+thread-5,flightClosestToPoint,spatial,POINT(7.786669965290988 51.80577774405978);8,1741115869570,1741115884987,0,0,15417
+thread-3,flightClosestToPoint,spatial,POINT(7.660279787257361 51.01941304124326);9,1741115867010,1741115886332,0,0,19322
+thread-0,flightClosestToPoint,spatial,POINT(7.590526278735641 50.92126183076843);9,1741115875958,1741115890426,0,0,14468
+thread-5,flightClosestToPoint,spatial,POINT(8.051388745791398 50.983343009510165);2,1741115884987,1741115896370,0,0,11383
+thread-4,flightClosestToPoint,spatial,POINT(7.439780032546612 51.75864329529086);8,1741115880636,1741115896551,0,0,15915
+thread-2,flightClosestToPoint,spatial,POINT(7.354861284924307 51.0658469956753);1,1741115874205,1741115897358,0,0,23153
+thread-1,flightClosestToPoint,spatial,POINT(7.047482441223934 50.90870269273885);3,1741115881975,1741115897643,0,0,15668
+thread-6,flightClosestToPoint,spatial,POINT(7.423888548127062 50.95560049408467);8,1741115880332,1741115897660,0,0,17328
+thread-3,flightClosestToPoint,spatial,POINT(8.285735909289413 51.37042275102303);9,1741115886332,1741115898143,0,0,11811
+thread-0,flightClosestToPoint,spatial,POINT(7.855879627471511 51.00204029283132);3,1741115890426,1741115902443,0,0,12017
+thread-7,flightClosestToPoint,spatial,POINT(7.598587609776171 51.08476146209082);2,1741115881152,1741115903102,0,0,21950
+thread-5,flightClosestToPoint,spatial,POINT(8.71601869733075 51.693673360848265);2,1741115896370,1741115905508,0,0,9138
+thread-4,flightClosestToPoint,spatial,POINT(8.386510772289906 51.488670063000455);5,1741115896551,1741115907151,0,0,10600
+thread-7,flightClosestToPoint,spatial,POINT(6.315809572479916 50.645555769868686);9,1741115903102,1741115907441,0,0,4339
+thread-6,flightClosestToPoint,spatial,POINT(6.586585224480957 50.85783061884413);3,1741115897660,1741115908713,0,0,11053
+thread-3,flightClosestToPoint,spatial,POINT(8.33871894975842 51.88699237080006);9,1741115898143,1741115909234,0,0,11091
+thread-6,flightClosestToPoint,spatial,POINT(6.814005924507588 52.18570566252504);4,1741115908713,1741115911151,0,0,2438
+thread-1,flightClosestToPoint,spatial,POINT(7.138170373742985 50.87638016360412);7,1741115897643,1741115911334,0,0,13691
+thread-7,flightClosestToPoint,spatial,POINT(7.711692838153764 50.75150319475968);6,1741115907441,1741115912548,0,0,5107
+thread-5,flightClosestToPoint,spatial,POINT(6.423686754893378 50.74722759353039);2,1741115905508,1741115912952,0,0,7444
+thread-2,flightClosestToPoint,spatial,POINT(7.772652374312962 51.61299878177952);2,1741115897358,1741115914634,0,0,17276
+thread-0,flightClosestToPoint,spatial,POINT(7.580397043116771 51.952805372878274);8,1741115902443,1741115916851,0,0,14408
+thread-3,flightClosestToPoint,spatial,POINT(8.614615166577838 51.88788450245513);5,1741115909234,1741115918799,0,0,9565
+thread-7,flightClosestToPoint,spatial,POINT(8.020797028884669 50.89421731672878);1,1741115912548,1741115919166,0,0,6618
+thread-4,flightClosestToPoint,spatial,POINT(7.913157978133287 51.39540210018528);6,1741115907151,1741115921394,0,0,14243
+thread-3,flightClosestToPoint,spatial,POINT(6.409381597453141 50.53562025131222);9,1741115918799,1741115922876,0,0,4077
+thread-7,flightClosestToPoint,spatial,POINT(8.378054323409323 50.916620560254295);2,1741115919166,1741115924834,0,0,5668
+thread-7,flightClosestToPoint,spatial,POINT(7.867981501886685 50.60182574994947);4,1741115924834,1741115927553,0,0,2719
+thread-5,flightClosestToPoint,spatial,POINT(7.801456688471156 51.1065683549008);7,1741115912952,1741115927717,0,0,14765
+thread-6,flightClosestToPoint,spatial,POINT(6.747240026422297 51.364101638944724);7,1741115911151,1741115928424,0,0,17273
+thread-2,flightClosestToPoint,spatial,POINT(6.227856886391517 51.27902595198086);3,1741115914634,1741115928779,0,0,14145
+thread-1,flightClosestToPoint,spatial,POINT(6.878392599825868 50.978139717152054);6,1741115911334,1741115929613,0,0,18279
+thread-6,flightClosestToPoint,spatial,POINT(8.310835918650817 51.3352087237443);3,1741115928424,1741115939272,0,0,10848
+thread-0,flightClosestToPoint,spatial,POINT(6.847281966057806 51.16057344856218);1,1741115916851,1741115939899,0,0,23048
+thread-7,flightClosestToPoint,spatial,POINT(7.15607094756215 52.01481863755062);1,1741115927553,1741115940278,0,0,12725
+thread-2,flightClosestToPoint,spatial,POINT(8.281882512049831 51.18359381922778);8,1741115928779,1741115941656,0,0,12877
+thread-5,flightClosestToPoint,spatial,POINT(7.892216884430305 51.847929816490414);2,1741115927718,1741115941739,0,0,14021
+thread-4,flightClosestToPoint,spatial,POINT(7.123099498919143 51.28095287025686);7,1741115921394,1741115943645,0,0,22251
+thread-1,flightClosestToPoint,spatial,POINT(6.990000347869311 50.88429733358319);3,1741115929613,1741115944469,0,0,14856
+thread-3,flightClosestToPoint,spatial,POINT(7.231501245910337 51.05752805712751);9,1741115922876,1741115945330,0,0,22454
+thread-1,flightClosestToPoint,spatial,POINT(8.20846377529048 52.21683322561912);1,1741115944469,1741115946145,0,0,1676
+thread-6,flightClosestToPoint,spatial,POINT(8.46474855886364 51.227367973247105);3,1741115939272,1741115950824,0,0,11552
+thread-2,flightClosestToPoint,spatial,POINT(6.307763621093025 51.56507322813146);8,1741115941656,1741115951114,0,0,9458
+thread-7,flightClosestToPoint,spatial,POINT(6.369466522473118 51.25604563163321);1,1741115940278,1741115956578,0,0,16300
+thread-4,flightClosestToPoint,spatial,POINT(8.000105733344013 51.774210620800986);5,1741115943645,1741115957206,0,0,13561
+thread-2,flightClosestToPoint,spatial,POINT(6.8948976361112555 50.62192209692235);8,1741115951114,1741115957930,0,0,6816
+thread-3,flightClosestToPoint,spatial,POINT(8.04070555925291 51.50196265945073);8,1741115945330,1741115958748,0,0,13418
+thread-1,flightClosestToPoint,spatial,POINT(7.138038379723879 51.96240640618252);5,1741115946145,1741115959839,0,0,13694
+thread-0,flightClosestToPoint,spatial,POINT(7.434451137635409 51.094432989293416);1,1741115939899,1741115962578,0,0,22679
+thread-5,flightClosestToPoint,spatial,POINT(7.150321554907651 51.24070986545585);3,1741115941739,1741115963666,0,0,21927
+thread-5,flightClosestToPoint,spatial,POINT(6.267169418461537 51.902729707895034);2,1741115963666,1741115966408,0,0,2742
+thread-7,flightClosestToPoint,spatial,POINT(8.390024891952265 51.527764049382036);3,1741115956578,1741115967162,0,0,10584
+thread-6,flightClosestToPoint,spatial,POINT(6.953795581794737 50.94985069799379);7,1741115950824,1741115968240,0,0,17416
+thread-3,flightClosestToPoint,spatial,POINT(8.479590090330937 51.33109913913083);5,1741115958748,1741115968567,0,0,9819
+thread-0,flightClosestToPoint,spatial,POINT(6.623326634634558 51.82508407611078);6,1741115962578,1741115969490,0,0,6912
+thread-2,flightClosestToPoint,spatial,POINT(8.573508967596105 51.657005272140005);5,1741115957930,1741115969713,0,0,11783
+thread-1,flightClosestToPoint,spatial,POINT(8.156174675127474 51.36391141728933);1,1741115959839,1741115972658,0,0,12819
+thread-3,flightClosestToPoint,spatial,POINT(8.298850910351183 50.92142090772599);9,1741115968567,1741115974499,0,0,5932
+thread-4,flightClosestToPoint,spatial,POINT(7.312259689514897 51.70897390770047);5,1741115957206,1741115974621,0,0,17415
+thread-6,flightClosestToPoint,spatial,POINT(6.913888434423404 50.653367712952424);7,1741115968240,1741115975550,0,0,7310
+thread-3,flightClosestToPoint,spatial,POINT(8.661834741561755 50.64855334473202);9,1741115974499,1741115975922,0,0,1423
+thread-7,flightClosestToPoint,spatial,POINT(7.340996349299865 50.905767570407356);3,1741115967162,1741115982739,0,0,15577
+thread-5,flightClosestToPoint,spatial,POINT(7.121209846500023 51.51390327197941);5,1741115966408,1741115985746,0,0,19338
+thread-1,flightClosestToPoint,spatial,POINT(8.203400935250258 51.61875793544059);6,1741115972659,1741115985827,0,0,13168
+thread-0,flightClosestToPoint,spatial,POINT(7.679893995251584 51.64522752674534);6,1741115969490,1741115987770,0,0,18280
+thread-6,flightClosestToPoint,spatial,POINT(8.201966023533089 51.62049894307168);7,1741115975550,1741115988427,0,0,12877
+thread-4,flightClosestToPoint,spatial,POINT(6.800617040351134 51.58858859071984);7,1741115974621,1741115990047,0,0,15426
+thread-3,flightClosestToPoint,spatial,POINT(7.799973640194145 51.88612880402572);3,1741115975922,1741115990583,0,0,14661
+thread-2,flightClosestToPoint,spatial,POINT(6.701494189766773 51.130038448157755);4,1741115969713,1741115991074,0,0,21361
+thread-5,flightClosestToPoint,spatial,POINT(7.715848745852696 50.799754377820065);9,1741115985746,1741115991247,0,0,5501
+thread-3,flightClosestToPoint,spatial,POINT(8.645946197385188 50.82855174779592);7,1741115990583,1741115993352,0,0,2769
+thread-2,flightClosestToPoint,spatial,POINT(6.658523169813158 52.12423829071545);2,1741115991074,1741115993641,0,0,2567
+thread-3,flightClosestToPoint,spatial,POINT(6.226760874033652 52.18999863555716);4,1741115993352,1741115994380,0,0,1028
+thread-4,flightClosestToPoint,spatial,POINT(8.709867752345602 51.27964808286648);5,1741115990047,1741115995399,0,0,5352
+thread-0,flightClosestToPoint,spatial,POINT(7.150270406790976 50.755310613566145);2,1741115987770,1741115996081,0,0,8311
+thread-1,flightClosestToPoint,spatial,POINT(6.3865072455845775 51.267200543352395);7,1741115985827,1741116002148,0,0,16321
+thread-4,flightClosestToPoint,spatial,POINT(7.005328552583304 50.72370657105297);2,1741115995399,1741116003212,0,0,7813
+thread-5,flightClosestToPoint,spatial,POINT(8.07045844593313 51.55155652675059);9,1741115991247,1741116004112,0,0,12865
+thread-7,flightClosestToPoint,spatial,POINT(7.417099632538473 51.06926351819437);6,1741115982739,1741116005165,0,0,22426
+thread-6,flightClosestToPoint,spatial,POINT(7.450375974848403 51.72263089934484);3,1741115988427,1741116005903,0,0,17476
+thread-3,flightClosestToPoint,spatial,POINT(8.318607153392076 51.219061458138924);1,1741115994380,1741116006991,0,0,12611
+thread-2,flightClosestToPoint,spatial,POINT(6.8887473007447255 51.750028554239734);2,1741115993641,1741116008024,0,0,14383
+thread-6,flightClosestToPoint,spatial,POINT(8.614140932655022 50.795644349628084);4,1741116005903,1741116008579,0,0,2676
+thread-5,flightClosestToPoint,spatial,POINT(8.66527585152545 51.47049944541781);5,1741116004112,1741116010844,0,0,6732
+thread-6,flightClosestToPoint,spatial,POINT(6.768989541169444 52.08657492369469);8,1741116008579,1741116012189,0,0,3610
+thread-7,flightClosestToPoint,spatial,POINT(6.444098076139313 50.75423245632122);1,1741116005165,1741116012672,0,0,7507
+thread-5,flightClosestToPoint,spatial,POINT(7.685758537817018 50.60526782615153);2,1741116010844,1741116014511,0,0,3667
+thread-4,flightClosestToPoint,spatial,POINT(8.243958298396844 51.43218598157207);5,1741116003212,1741116015398,0,0,12186
+thread-1,flightClosestToPoint,spatial,POINT(8.043128196075067 51.73132209928175);9,1741116002148,1741116015650,0,0,13502
+thread-4,flightClosestToPoint,spatial,POINT(7.393170682262175 52.211573311363274);2,1741116015398,1741116018625,0,0,3227
+thread-3,flightClosestToPoint,spatial,POINT(8.329802912617659 51.105474549420684);3,1741116006991,1741116018649,0,0,11658
+thread-0,flightClosestToPoint,spatial,POINT(7.325035421573123 51.216832941792234);7,1741115996081,1741116018738,0,0,22657
+thread-0,flightClosestToPoint,spatial,POINT(8.379480933499444 50.66965378295133);3,1741116018738,1741116021213,0,0,2475
+thread-4,flightClosestToPoint,spatial,POINT(6.358822246014684 50.77540460636252);4,1741116018625,1741116025006,0,0,6381
+thread-7,flightClosestToPoint,spatial,POINT(8.070422110640997 51.435802827872386);3,1741116012672,1741116025694,0,0,13022
+thread-1,flightClosestToPoint,spatial,POINT(8.325727255328513 51.924806539555);6,1741116015650,1741116026556,0,0,10906
+thread-2,flightClosestToPoint,spatial,POINT(7.295835923855999 51.50910045698911);6,1741116008024,1741116026851,0,0,18827
+thread-6,flightClosestToPoint,spatial,POINT(6.744466715939531 51.50817964892547);2,1741116012190,1741116027081,0,0,14891
+thread-3,flightClosestToPoint,spatial,POINT(7.021382781571382 50.7551939684993);9,1741116018649,1741116027663,0,0,9014
+thread-5,flightClosestToPoint,spatial,POINT(7.897405369025247 51.31396764441144);6,1741116014511,1741116029285,0,0,14774
+thread-7,flightClosestToPoint,spatial,POINT(8.327542696480474 50.97821296369686);7,1741116025694,1741116034199,0,0,8505
+thread-2,flightClosestToPoint,spatial,POINT(6.401423936936605 51.79042933838272);1,1741116026851,1741116034406,0,0,7555
+thread-3,flightClosestToPoint,spatial,POINT(8.44797395849144 51.5376158307924);5,1741116027663,1741116038678,0,0,11015
+thread-0,flightClosestToPoint,spatial,POINT(7.04428607333743 50.9419097869735);7,1741116021213,1741116038797,0,0,17584
+thread-5,flightClosestToPoint,spatial,POINT(8.414695328107655 51.86100912433328);1,1741116029285,1741116040349,0,0,11064
+thread-4,flightClosestToPoint,spatial,POINT(6.3611391092530445 51.12497572816608);5,1741116025006,1741116040819,0,0,15813
+thread-2,flightClosestToPoint,spatial,POINT(6.532557800944917 51.6005243012357);4,1741116034406,1741116045889,0,0,11483
+thread-1,flightClosestToPoint,spatial,POINT(7.608914003534683 51.47690773594895);4,1741116026556,1741116046083,0,0,19527
+thread-0,flightClosestToPoint,spatial,POINT(8.585289822158297 51.708944856527026);5,1741116038797,1741116050287,0,0,11490
+thread-3,flightClosestToPoint,spatial,POINT(7.8119249351305635 51.02463635628785);2,1741116038678,1741116051115,0,0,12437
+thread-6,flightClosestToPoint,spatial,POINT(7.181531799006117 51.19678539376245);3,1741116027082,1741116051629,0,0,24547
+thread-4,flightClosestToPoint,spatial,POINT(6.477243570600089 51.59115833825935);8,1741116040819,1741116051641,0,0,10822
+thread-7,flightClosestToPoint,spatial,POINT(7.036917668648431 50.979158278796056);7,1741116034199,1741116052818,0,0,18619
+thread-5,flightClosestToPoint,spatial,POINT(7.6580815967578895 51.94337199812358);2,1741116040349,1741116054810,0,0,14461
+thread-2,flightClosestToPoint,spatial,POINT(8.527125961947968 51.176924406567124);8,1741116045889,1741116055295,0,0,9406
+thread-4,flightClosestToPoint,spatial,POINT(8.496733805071436 50.984455512447546);3,1741116051641,1741116056512,0,0,4871
+thread-1,flightClosestToPoint,spatial,POINT(8.59088377507757 51.79012116517963);3,1741116046083,1741116056523,0,0,10440
+thread-3,flightClosestToPoint,spatial,POINT(7.322344161658263 50.74931405893536);7,1741116051115,1741116058802,0,0,7687
+thread-4,flightClosestToPoint,spatial,POINT(7.977014774443346 52.14029858654672);4,1741116056512,1741116059171,0,0,2659
+thread-6,flightClosestToPoint,spatial,POINT(8.278032304435486 51.196147862601364);1,1741116051629,1741116064710,0,0,13081
+thread-7,flightClosestToPoint,spatial,POINT(7.973754004645478 51.64996832802137);4,1741116052818,1741116066574,0,0,13756
+thread-0,flightClosestToPoint,spatial,POINT(7.4650465699197746 50.95219265173484);1,1741116050287,1741116067267,0,0,16980
+thread-6,flightClosestToPoint,spatial,POINT(8.629630701270614 51.38101126317183);7,1741116064710,1741116071289,0,0,6579
+thread-1,flightClosestToPoint,spatial,POINT(6.475721396211831 51.17161957423876);2,1741116056523,1741116074910,0,0,18387
+thread-2,flightClosestToPoint,spatial,POINT(6.880984912389251 51.27180370449989);5,1741116055295,1741116075544,0,0,20249
+thread-5,flightClosestToPoint,spatial,POINT(7.396846207965083 51.13157953640294);6,1741116054810,1741116078206,0,0,23396
+thread-2,flightClosestToPoint,spatial,POINT(6.283452029491215 51.93059512573458);3,1741116075544,1741116078293,0,0,2749
+thread-4,flightClosestToPoint,spatial,POINT(7.472277981539054 51.48723905341775);9,1741116059171,1741116079412,0,0,20241
+thread-3,flightClosestToPoint,spatial,POINT(7.145905239447451 51.27325481351522);2,1741116058802,1741116080725,0,0,21923
+thread-4,flightClosestToPoint,spatial,POINT(6.221775300454272 52.101151163578166);8,1741116079412,1741116080768,0,0,1356
+thread-7,flightClosestToPoint,spatial,POINT(7.434161584620537 51.76400150337007);3,1741116066574,1741116082094,0,0,15520
+thread-0,flightClosestToPoint,spatial,POINT(7.850911125088313 51.72953013991747);6,1741116067267,1741116082438,0,0,15171
+thread-5,flightClosestToPoint,spatial,POINT(6.532705257712361 50.539313289601175);2,1741116078206,1741116082993,0,0,4787
+thread-6,flightClosestToPoint,spatial,POINT(7.446101729016559 51.917203076707544);5,1741116071289,1741116085347,0,0,14058
+thread-0,flightClosestToPoint,spatial,POINT(6.273272095186923 50.70188576369281);8,1741116082438,1741116086603,0,0,4165
+thread-1,flightClosestToPoint,spatial,POINT(7.605074146059395 52.00458238984598);1,1741116074911,1741116088347,0,0,13436
+thread-2,flightClosestToPoint,spatial,POINT(6.4699582453170175 51.63384448410121);1,1741116078293,1741116088436,0,0,10143
+thread-7,flightClosestToPoint,spatial,POINT(8.388439296547446 51.03168106263574);9,1741116082094,1741116091346,0,0,9252
+thread-3,flightClosestToPoint,spatial,POINT(7.017757698230905 52.02521920663217);7,1741116080725,1741116092704,0,0,11979
+thread-4,flightClosestToPoint,spatial,POINT(7.251022443603934 50.86797448371563);5,1741116080768,1741116093785,0,0,13017
+thread-7,flightClosestToPoint,spatial,POINT(6.6631346547389345 51.9842659069858);3,1741116091346,1741116095686,0,0,4340
+thread-3,flightClosestToPoint,spatial,POINT(8.368101090793626 52.07350714108652);3,1741116092704,1741116096190,0,0,3486
+thread-6,flightClosestToPoint,spatial,POINT(6.944293444188616 50.8284645669398);7,1741116085347,1741116097544,0,0,12197
+thread-5,flightClosestToPoint,spatial,POINT(6.396403176951833 51.051281372605);3,1741116082993,1741116097904,0,0,14911
+thread-6,flightClosestToPoint,spatial,POINT(6.657355216034855 52.231590488296035);3,1741116097544,1741116099360,0,0,1816
+thread-0,flightClosestToPoint,spatial,POINT(6.361219924930401 51.16064591206755);2,1741116086603,1741116102480,0,0,15877
+thread-4,flightClosestToPoint,spatial,POINT(8.657342645293614 51.71024859077869);5,1741116093785,1741116103753,0,0,9968
+thread-5,flightClosestToPoint,spatial,POINT(6.829526989628748 51.954930032889386);2,1741116097904,1741116105296,0,0,7392
+thread-2,flightClosestToPoint,spatial,POINT(6.896574204531334 51.51104665521624);5,1741116088436,1741116105353,0,0,16917
+thread-1,flightClosestToPoint,spatial,POINT(7.536555661204002 51.50593573110915);1,1741116088347,1741116106065,0,0,17718
+thread-7,flightClosestToPoint,spatial,POINT(7.904831959479572 51.85355849624512);4,1741116095686,1741116106773,0,0,11087
+thread-6,flightClosestToPoint,spatial,POINT(8.178889753775039 51.58312364667706);8,1741116099360,1741116107365,0,0,8005
+thread-3,flightClosestToPoint,spatial,POINT(6.832932595348499 51.00707940013611);5,1741116096190,1741116107835,0,0,11645

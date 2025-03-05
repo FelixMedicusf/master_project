@@ -1,0 +1,242 @@
+start: Mon Feb 17 23:46:40 UTC 2025, end: Tue Feb 18 00:03:45 UTC 2025, duration (s): 1025. SUT: MobilityDB, #threads: 16, #nodes: 1, queries executed: 240. Seed: 1200
+threadName,queryName,queryType,parameterValues,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency
+thread-3,locationOfAirplaneAtInstant,temporal,timestamptz'2023-12-02 07:30:06',1739836000370,1739836000480,0,0,110
+thread-3,locationOfAirplaneAtInstant,temporal,timestamptz'2023-10-26 15:07:44',1739836000481,1739836000584,0,0,103
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-26 01:47:21',1739836000364,1739836000721,0,0,357
+thread-9,airportUtilizationInPeriod,temporal,tstzspan'[2023-10-18 18:56:36/ 2023-10-19 10:58:59]',1739836000372,1739836000730,0,0,358
+thread-7,locationOfAirplaneAtInstant,temporal,timestamptz'2023-05-08 05:11:15',1739836000721,1739836000818,0,0,97
+thread-9,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-26 15:42:57',1739836000730,1739836000993,0,0,263
+thread-10,flightsCloseToMainCitiesLowAltitude,spatial,860;60,1739836000365,1739836001109,0,0,744
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,590;50,1739836000365,1739836001196,0,0,831
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-20 13:15:54/ 2023-04-20 15:18:17]';'Krs Essen',1739836000362,1739836003408,0,0,3046
+thread-13,flightClosestToPoint,spatial,POINT(8.617955469182291 50.84094551540161);1,1739836000361,1739836007817,0,0,7456
+thread-14,countActiveFlightsInPeriod,temporal,tstzspan'[2023-06-11 13:37:29/ 2023-06-16 18:21:46]',1739836000363,1739836008092,0,0,7729
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-25';'Gem Erndtebrueck',1739836000367,1739836008608,0,0,8241
+thread-13,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-23 01:50:53/ 2023-11-28 11:06:58]';'Gem Monschau';1050,1739836007817,1739836010671,0,0,2854
+thread-13,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-18 16:35:24',1739836010671,1739836010839,0,0,168
+thread-13,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-24 02:15:03/ 2023-05-26 04:08:03]';'Gem Ladbergen';1200,1739836010839,1739836013586,0,0,2747
+thread-10,countActiveFlightsInPeriod,temporal,tstzspan'[2023-02-23 08:49:38/ 2023-03-09 21:12:51]',1739836001109,1739836015018,0,0,13909
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-02';'Gem Schwerte',1739836000584,1739836017844,0,0,17260
+thread-3,airportUtilizationInPeriod,temporal,tstzspan'[2023-06-19 10:42:52/ 2023-06-20 02:15:35]',1739836017845,1739836019696,0,0,1851
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-12-06';'Gem Huerth',1739836019696,1739836026421,0,0,6725
+thread-3,locationOfAirplaneAtInstant,temporal,timestamptz'2023-06-03 20:37:15',1739836026421,1739836026494,0,0,73
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-20 17:00:51/ 2023-11-25 23:32:37]';'Luedenscheid';50,1739836000818,1739836034185,0,0,33367
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-30 19:05:06/ 2023-07-31 18:22:47]';'Krs Guetersloh',1739836015018,1739836039561,0,0,24543
+thread-7,flightClosestToPoint,spatial,POINT(6.526595372615659 50.70912028301068);3,1739836034185,1739836057545,0,0,23360
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-23 17:10:28/ 2023-12-02 09:32:27]';'Kempen';30,1739836039561,1739836093501,0,0,53940
+thread-10,flightsCloseToMainCitiesLowAltitude,spatial,860;30,1739836093501,1739836093958,0,0,457
+thread-10,countActiveFlightsInPeriod,temporal,tstzspan'[2023-07-30 19:12:04/ 2023-08-03 17:02:08]',1739836093958,1739836097420,0,0,3462
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-23 04:24:49/ 2023-04-04 21:22:47]';'Buende';70,1739836000365,1739836109958,0,0,109593
+thread-5,flightClosestToPoint,spatial,POINT(7.851420341818455 50.75873473701872);6,1739836109958,1739836124765,0,0,14807
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-30 17:38:05/ 2023-11-12 05:59:50]';'Geseke';70,1739836057545,1739836148285,0,0,90740
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-03 21:28:49/ 2023-03-09 13:29:21]';'Krs Staedteregion Aachen',1739836000365,1739836148874,0,0,148509
+thread-7,flightsCloseToMainCitiesLowAltitude,spatial,1260;40,1739836148285,1739836148882,0,0,597
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-06-09 11:26:07',1739836148874,1739836148979,0,0,105
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-29 05:13:56',1739836148882,1739836149130,0,0,248
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-06';'Gem Wassenberg',1739836149130,1739836153608,0,0,4478
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-03 18:34:52/ 2023-12-11 23:05:26]';'Krs Koeln',1739836000365,1739836182879,0,0,182514
+thread-11,flightsCloseToMainCitiesLowAltitude,spatial,1120;40,1739836182880,1739836183625,0,0,745
+thread-7,flightClosestToPoint,spatial,POINT(8.472748812150819 51.556183684329575);6,1739836153608,1739836192802,0,0,39194
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-21 01:33:52/ 2023-09-25 15:11:04]';'Krs Mettmann',1739836001196,1739836196302,0,0,195106
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-08 03:23:32/ 2023-08-13 07:55:25]';'Wassenberg';40,1739836148979,1739836198834,0,0,49855
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-10-31 17:48:25/ 2023-11-02 04:58:58]',1739836198834,1739836199789,0,0,955
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-11-30 20:34:46/ 2023-12-01 21:37:55]',1739836199789,1739836200504,0,0,715
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-06-04 06:31:42/ 2023-06-05 06:28:06]',1739836200504,1739836202191,0,0,1687
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-11 16:45:50/ 2023-04-14 13:25:15]';'Paderborn';40,1739836183625,1739836208494,0,0,24869
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-13 20:35:03/ 2023-11-24 20:29:56]';'Gem Sprockhoevel';970,1739836202191,1739836222301,0,0,20110
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-23 22:38:54/ 2023-04-01 18:44:36]';'Oerlinghausen';50,1739836192802,1739836255347,0,0,62545
+thread-7,airportUtilizationInPeriod,temporal,tstzspan'[2023-11-20 08:19:18/ 2023-11-20 23:55:07]',1739836255347,1739836256136,0,0,789
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-09 10:52:01/ 2023-08-20 02:00:13]';'Krs Muenster',1739836013586,1739836270167,0,0,256581
+thread-13,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-29 19:23:14',1739836270167,1739836270462,0,0,295
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-08 14:04:58/ 2023-04-18 04:36:32]';'Wermelskirchen';60,1739836196302,1739836270484,0,0,74182
+thread-15,flightClosestToPoint,spatial,POINT(7.337014904970483 52.014502809491624);2,1739836222301,1739836271674,0,0,49373
+thread-15,flightsCloseToMainCitiesLowAltitude,spatial,1280;30,1739836271674,1739836272270,0,0,596
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-26 01:16:01/ 2023-08-06 11:10:10]';'Krs Hagen',1739836000993,1739836284507,0,0,283514
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-17 21:38:23/ 2023-03-04 08:42:27]';'Gem Mettmann';660,1739836256136,1739836285133,0,0,28997
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-22 14:12:53/ 2023-06-24 00:22:27]';'Krs Herne',1739836272270,1739836286876,0,0,14606
+thread-15,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-09 20:38:14',1739836286876,1739836287146,0,0,270
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-18 01:03:56/ 2023-03-01 15:35:25]';'Gem Buende';710,1739836287146,1739836290965,0,0,3819
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-09-17 22:02:15/ 2023-09-19 07:48:36]',1739836290965,1739836293353,0,0,2388
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-04 01:35:00/ 2023-01-06 17:07:38]';'Ratingen';80,1739836284507,1739836294404,0,0,9897
+thread-7,countActiveFlightsInPeriod,temporal,tstzspan'[2023-03-14 01:19:31/ 2023-03-24 22:43:33]',1739836285133,1739836294646,0,0,9513
+thread-3,countFlightsInCounties,spatial,'Krs Gelsenkirchen',1739836026494,1739836308058,0,0,281564
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-23 19:17:51/ 2023-04-25 00:34:24]';'Krs Rhein-Erft-Kreis',1739836270462,1739836319260,0,0,48798
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-08 20:36:34/ 2023-03-10 12:43:10]';'Krs Staedteregion Aachen',1739836270484,1739836320429,0,0,49945
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1020;40,1739836320429,1739836320878,0,0,449
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-16 06:20:16/ 2023-04-17 19:11:51]';'Krs Duisburg',1739836294404,1739836329154,0,0,34750
+thread-15,flightClosestToPoint,spatial,POINT(6.93404750711013 50.786932676852075);3,1739836293353,1739836333995,0,0,40642
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-04 19:47:28/ 2023-09-17 07:12:00]';'Gem Freudenberg';580,1739836320878,1739836337602,0,0,16724
+thread-1,airportUtilizationInPeriod,temporal,tstzspan'[2023-06-14 00:12:54/ 2023-06-15 15:43:24]',1739836337602,1739836340403,0,0,2801
+thread-1,locationOfAirplaneAtInstant,temporal,timestamptz'2023-12-28 22:55:12',1739836340404,1739836340448,0,0,44
+thread-1,airportUtilizationInPeriod,temporal,tstzspan'[2023-04-16 04:46:26/ 2023-04-17 11:47:12]',1739836340448,1739836341515,0,0,1067
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,520;30,1739836341515,1739836341971,0,0,456
+thread-1,airportUtilizationInPeriod,temporal,tstzspan'[2023-07-02 18:54:27/ 2023-07-04 03:56:25]',1739836341971,1739836344918,0,0,2947
+thread-1,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-28 12:42:40',1739836344918,1739836345308,0,0,390
+thread-1,countActiveFlightsInPeriod,temporal,tstzspan'[2023-05-02 03:29:39/ 2023-05-13 13:00:30]',1739836345308,1739836358872,0,0,13564
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-01 16:35:55/ 2023-07-01 21:09:03]';'Krs Warendorf',1739836358872,1739836366133,0,0,7261
+thread-13,flightClosestToPoint,spatial,POINT(7.8450206478843665 51.952116267452055);9,1739836319260,1739836371447,0,0,52187
+thread-13,flightsCloseToMainCitiesLowAltitude,spatial,500;40,1739836371447,1739836372014,0,0,567
+thread-13,locationOfAirplaneAtInstant,temporal,timestamptz'2023-03-27 15:06:26',1739836372014,1739836372132,0,0,118
+thread-1,countActiveFlightsInPeriod,temporal,tstzspan'[2023-07-12 22:00:45/ 2023-07-21 01:40:29]',1739836366133,1739836375330,0,0,9197
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-25 22:38:16/ 2023-10-25 23:15:32]';'Krs Guetersloh',1739836375330,1739836375636,0,0,306
+thread-3,flightClosestToPoint,spatial,POINT(7.0102465414271995 50.988426887926444);3,1739836308058,1739836380708,0,0,72650
+thread-6,countFlightsInCounties,spatial,'Krs Solingen',1739836000370,1739836385943,0,0,385573
+thread-12,countFlightsInCounties,spatial,'Krs Unna',1739836003408,1739836387379,0,0,383971
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-02';'Gem Dahlem',1739836385943,1739836387502,0,0,1559
+thread-6,airportUtilizationInPeriod,temporal,tstzspan'[2023-10-23 20:26:11/ 2023-10-25 02:04:26]',1739836387502,1739836390269,0,0,2767
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-14 09:22:56/ 2023-02-21 23:45:50]';'Gem Marl';910,1739836380708,1739836394283,0,0,13575
+thread-6,countActiveFlightsInPeriod,temporal,tstzspan'[2023-05-14 13:31:44/ 2023-05-17 22:09:28]',1739836390269,1739836394790,0,0,4521
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-15 05:39:03/ 2023-09-19 00:55:38]';'Gem Mechernich';1260,1739836394790,1739836399074,0,0,4284
+thread-6,locationOfAirplaneAtInstant,temporal,timestamptz'2023-09-23 04:32:21',1739836399074,1739836399153,0,0,79
+thread-4,countFlightsInCounties,spatial,'Krs Mettmann',1739836000364,1739836404110,0,0,403746
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-20 22:02:19/ 2023-08-22 07:00:54]';'Krs Wuppertal',1739836372132,1739836407330,0,0,35198
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-03 07:12:31/ 2023-05-15 22:38:38]';'Gem Straelen';580,1739836394283,1739836407632,0,0,13349
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-10 18:04:57/ 2023-12-11 17:01:49]';'Krs Muelheim a.d. Ruhr',1739836399153,1739836409641,0,0,10488
+thread-6,countActiveFlightsInPeriod,temporal,tstzspan'[2023-01-04 13:09:50/ 2023-01-15 12:43:37]',1739836409641,1739836414374,0,0,4733
+thread-4,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-31 02:57:54/ 2023-07-31 16:20:06]';'Krs Leverkusen',1739836404110,1739836415542,0,0,11432
+thread-4,locationOfAirplaneAtInstant,temporal,timestamptz'2023-06-29 12:28:25',1739836415542,1739836415659,0,0,117
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-03';'Gem Kleve',1739836414374,1739836417672,0,0,3298
+thread-4,airportUtilizationInPeriod,temporal,tstzspan'[2023-08-25 14:41:56/ 2023-08-27 07:00:56]',1739836415659,1739836418660,0,0,3001
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-19 14:16:11/ 2023-05-27 04:32:59]';'Krs Wesel',1739836000362,1739836419957,0,0,419595
+thread-5,countFlightsInCounties,spatial,'Krs Kleve',1739836124765,1739836421499,0,0,296734
+thread-13,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-02 13:22:26/ 2023-11-11 02:39:36]';'Gem Kirchhundem';1160,1739836407330,1739836421935,0,0,14605
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-03';'Gem Bocholt',1739836417672,1739836426461,0,0,8789
+thread-3,flightClosestToPoint,spatial,POINT(7.945435642687332 50.87908778064796);1,1739836407632,1739836428184,0,0,20552
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-18';'Gem Rheda-Wiedenbrueck',1739836421935,1739836431608,0,0,9673
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-02 04:39:31/ 2023-05-13 05:54:06]';'Gem Blomberg';570,1739836428184,1739836435397,0,0,7213
+thread-3,countActiveFlightsInPeriod,temporal,tstzspan'[2023-12-31 09:51:04/ 2023-12-31 23:59:59]',1739836435397,1739836436228,0,0,831
+thread-10,countFlightsInCounties,spatial,'Krs Duisburg',1739836097420,1739836439495,0,0,342075
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-24 03:31:33/ 2023-08-05 17:18:10]';'Krs Coesfeld',1739836008092,1739836446651,0,0,438559
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-19 18:07:06/ 2023-04-28 09:37:41]';'Wuppertal';50,1739836375636,1739836448105,0,0,72469
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-08 00:34:00/ 2023-12-08 06:12:32]';'Krs Ennepe-Ruhr-Kreis',1739836448105,1739836450547,0,0,2442
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-31 19:49:54/ 2023-04-02 15:03:16]';'Krs Duisburg',1739836421499,1739836457496,0,0,35997
+thread-5,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-14 10:41:09',1739836457496,1739836457751,0,0,255
+thread-5,countActiveFlightsInPeriod,temporal,tstzspan'[2023-01-13 08:46:04/ 2023-01-15 22:06:39]',1739836457751,1739836458637,0,0,886
+thread-8,countFlightsInCounties,spatial,'Krs Wuppertal',1739836008608,1739836460133,0,0,451525
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-10';'Gem Lindlar',1739836450547,1739836465248,0,0,14701
+thread-1,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-26 15:29:26',1739836465248,1739836465626,0,0,378
+thread-1,locationOfAirplaneAtInstant,temporal,timestamptz'2023-09-04 06:34:16',1739836465626,1739836465747,0,0,121
+thread-8,countActiveFlightsInPeriod,temporal,tstzspan'[2023-04-14 14:43:32/ 2023-04-28 13:34:39]',1739836460133,1739836467529,0,0,7396
+thread-8,locationOfAirplaneAtInstant,temporal,timestamptz'2023-06-09 21:48:56',1739836467529,1739836467658,0,0,129
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-07';'Gem Holzwickede',1739836458637,1739836471097,0,0,12460
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-03';'Gem Niederkassel',1739836465747,1739836476059,0,0,10312
+thread-1,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-10 08:44:10',1739836476059,1739836476404,0,0,345
+thread-1,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-09 10:29:07',1739836476404,1739836476746,0,0,342
+thread-5,countActiveFlightsInPeriod,temporal,tstzspan'[2023-10-02 09:49:46/ 2023-10-15 10:10:30]',1739836471097,1739836481099,0,0,10002
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-30 05:53:53/ 2023-02-12 13:35:40]';'Krs Solingen',1739836333995,1739836485711,0,0,151716
+thread-10,flightClosestToPoint,spatial,POINT(6.689171753362993 51.409074270972475);3,1739836439495,1739836496052,0,0,56557
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-25 23:46:08/ 2023-09-01 08:50:27]';'Marsberg';40,1739836436228,1739836500288,0,0,64060
+thread-3,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-01 11:43:37',1739836500288,1739836500575,0,0,287
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-12-31';'Gem Hattingen',1739836500575,1739836509613,0,0,9038
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-14 07:59:09/ 2023-06-20 16:56:40]';'Krs Recklinghausen',1739836208494,1739836511010,0,0,302516
+thread-5,flightClosestToPoint,spatial,POINT(7.793692838565949 52.104469186095066);3,1739836481099,1739836511328,0,0,30229
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,540;30,1739836511328,1739836511800,0,0,472
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1030;50,1739836511800,1739836512580,0,0,780
+thread-5,flightsCloseToMainCitiesLowAltitude,spatial,1330;90,1739836512580,1739836513987,0,0,1407
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-28 07:18:11/ 2023-04-10 04:17:52]';'Krs Remscheid',1739836387379,1739836551858,0,0,164479
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-13 08:46:23/ 2023-03-16 17:42:31]';'Krs Hagen',1739836485711,1739836552270,0,0,66559
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-09-02 00:23:37',1739836552270,1739836552322,0,0,52
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-21 05:13:10/ 2023-04-22 19:03:46]';'Krs Wuppertal',1739836511010,1739836552795,0,0,41785
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-01-01 05:17:42/ 2023-01-03 04:32:56]',1739836552322,1739836552934,0,0,612
+thread-11,airportUtilizationInPeriod,temporal,tstzspan'[2023-05-01 18:50:05/ 2023-05-02 08:34:58]',1739836552795,1739836553336,0,0,541
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-10 00:55:05/ 2023-03-16 03:02:18]';'Kleve';90,1739836509613,1739836553666,0,0,44053
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-11 21:12:39/ 2023-05-15 21:05:55]';'Krs Mettmann',1739836418660,1739836554933,0,0,136273
+thread-11,countActiveFlightsInPeriod,temporal,tstzspan'[2023-06-13 04:41:36/ 2023-06-15 09:11:33]',1739836553336,1739836556479,0,0,3143
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-09';'Gem Brueggen',1739836552934,1739836557273,0,0,4339
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-10 18:27:00/ 2023-01-17 06:21:21]';'Gem Meschede';1260,1739836553666,1739836557685,0,0,4019
+thread-3,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-07 19:44:57',1739836557685,1739836557940,0,0,255
+thread-3,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-20 02:14:15',1739836557940,1739836558231,0,0,291
+thread-15,countActiveFlightsInPeriod,temporal,tstzspan'[2023-06-18 08:04:08/ 2023-06-24 17:21:25]',1739836557273,1739836564397,0,0,7124
+thread-4,countActiveFlightsInPeriod,temporal,tstzspan'[2023-09-18 23:51:16/ 2023-09-29 02:10:22]',1739836554933,1739836565042,0,0,10109
+thread-8,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-01 12:31:25/ 2023-05-07 06:56:38]';'Krs Essen',1739836467658,1739836576064,0,0,108406
+thread-0,countFlightsInCounties,spatial,'Krs Maerkischer Kreis',1739836000369,1739836578699,0,0,578330
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-15 09:39:33/ 2023-12-16 13:36:47]';'Krs Muenster',1739836564397,1739836585934,0,0,21537
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-05-18 22:12:56/ 2023-05-19 03:25:53]',1739836585935,1739836586299,0,0,364
+thread-15,countActiveFlightsInPeriod,temporal,tstzspan'[2023-04-07 20:25:40/ 2023-04-12 19:45:05]',1739836586299,1739836590779,0,0,4480
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-26 16:46:59/ 2023-10-11 06:49:45]';'Tecklenburg';30,1739836476746,1739836596219,0,0,119473
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,760;40,1739836596219,1739836596794,0,0,575
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-23 14:23:29/ 2023-10-03 09:59:28]';'Krs Kleve',1739836294646,1739836597636,0,0,302990
+thread-7,airportUtilizationInPeriod,temporal,tstzspan'[2023-02-08 05:04:25/ 2023-02-09 05:43:49]',1739836597636,1739836598908,0,0,1272
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-12-11 06:49:29/ 2023-12-16 01:19:40]';'Gem Havixbeck';1460,1739836596794,1739836603011,0,0,6217
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1060;70,1739836603011,1739836603455,0,0,444
+thread-1,flightsCloseToMainCitiesLowAltitude,spatial,1010;40,1739836603455,1739836603900,0,0,445
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-11 07:11:38/ 2023-01-12 11:49:02]';'Krs Dueren',1739836590779,1739836609095,0,0,18316
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-02-17 01:34:07',1739836609095,1739836609146,0,0,51
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-05-08 18:45:04',1739836609146,1739836609225,0,0,79
+thread-11,flightClosestToPoint,spatial,POINT(8.207417451281213 51.15965123301186);7,1739836556479,1739836609847,0,0,53368
+thread-11,locationOfAirplaneAtInstant,temporal,timestamptz'2023-05-06 23:55:47',1739836609847,1739836609913,0,0,66
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-30 13:42:00/ 2023-01-31 10:02:46]';'Krs Ennepe-Ruhr-Kreis',1739836603900,1739836612181,0,0,8281
+thread-1,countActiveFlightsInPeriod,temporal,tstzspan'[2023-11-22 20:46:54/ 2023-11-26 20:39:04]',1739836612182,1739836615411,0,0,3229
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-01 09:30:53/ 2023-09-03 02:08:35]';'Krs Wesel',1739836513987,1739836617071,0,0,103084
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-17';'Gem Lienen',1739836609225,1739836617181,0,0,7956
+thread-15,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-30 02:13:42',1739836617181,1739836617471,0,0,290
+thread-15,flightsCloseToMainCitiesLowAltitude,spatial,1020;20,1739836617471,1739836617949,0,0,478
+thread-8,flightClosestToPoint,spatial,POINT(8.330595098585265 51.46699525097574);5,1739836576064,1739836618496,0,0,42432
+thread-8,airportUtilizationInPeriod,temporal,tstzspan'[2023-07-21 06:29:38/ 2023-07-22 23:38:35]',1739836618496,1739836622312,0,0,3816
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-19';'Gem Juelich',1739836617949,1739836629657,0,0,11708
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-09-20 11:36:20',1739836629657,1739836629722,0,0,65
+thread-15,countActiveFlightsInPeriod,temporal,tstzspan'[2023-08-06 23:24:05/ 2023-08-09 05:57:14]',1739836629722,1739836632391,0,0,2669
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-08 14:44:33/ 2023-10-09 22:49:16]';'Krs Wuppertal',1739836609913,1739836645805,0,0,35892
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-12 16:07:02/ 2023-03-24 05:25:41]';'Gem Havixbeck';1470,1739836632391,1739836646462,0,0,14071
+thread-0,flightClosestToPoint,spatial,POINT(7.383694609833323 51.462423725530805);1,1739836578699,1739836650785,0,0,72086
+thread-0,flightsCloseToMainCitiesLowAltitude,spatial,1380;80,1739836650785,1739836651307,0,0,522
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-16 07:08:11',1739836651307,1739836651585,0,0,278
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-20 12:36:15/ 2023-12-03 08:54:29]';'Wipperfuerth';20,1739836598908,1739836676841,0,0,77933
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-26';'Gem Koenigswinter',1739836676841,1739836684380,0,0,7539
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-13 23:05:16/ 2023-09-27 19:29:18]';'Barntrup';20,1739836565042,1739836693618,0,0,128576
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-22';'Gem Kamen',1739836684380,1739836695266,0,0,10886
+thread-11,flightClosestToPoint,spatial,POINT(7.868157936235431 51.108133703715914);4,1739836645805,1739836697415,0,0,51610
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-16 16:54:10/ 2023-06-19 21:32:32]';'Krs Gelsenkirchen',1739836651585,1739836711105,0,0,59520
+thread-11,flightClosestToPoint,spatial,POINT(7.06451964779312 50.625225165490185);5,1739836697415,1739836714086,0,0,16671
+thread-11,flightsCloseToMainCitiesLowAltitude,spatial,960;90,1739836714086,1739836714879,0,0,793
+thread-13,countFlightsInCounties,spatial,'Krs Siegen-Wittgenstein',1739836431608,1739836718746,0,0,287138
+thread-0,countActiveFlightsInPeriod,temporal,tstzspan'[2023-02-23 17:59:49/ 2023-03-09 13:16:56]',1739836711105,1739836723303,0,0,12198
+thread-0,flightsCloseToMainCitiesLowAltitude,spatial,970;80,1739836723303,1739836723765,0,0,462
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-24 22:32:36/ 2023-09-02 04:54:08]';'Werl';30,1739836646462,1739836725477,0,0,79015
+thread-15,airportUtilizationInPeriod,temporal,tstzspan'[2023-03-31 16:28:22/ 2023-04-01 14:09:33]',1739836725477,1739836726876,0,0,1399
+thread-15,locationOfAirplaneAtInstant,temporal,timestamptz'2023-10-11 12:22:11',1739836726876,1739836726935,0,0,59
+thread-15,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-04 11:34:46',1739836726935,1739836727121,0,0,186
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-01 13:35:53/ 2023-09-04 06:45:22]';'Gem Rietberg';1480,1739836723765,1739836727985,0,0,4220
+thread-0,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-18 10:39:40',1739836727985,1739836728318,0,0,333
+thread-13,flightClosestToPoint,spatial,POINT(7.459265361757897 50.711438702857365);2,1739836718746,1739836733795,0,0,15049
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-30 01:39:07/ 2023-09-05 17:41:06]';'Gem Beckum';510,1739836727121,1739836738574,0,0,11453
+thread-4,flightClosestToPoint,spatial,POINT(8.039463610183645 51.44592807700788);8,1739836693618,1739836740611,0,0,46993
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-10 14:58:31',1739836740611,1739836740834,0,0,223
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-05 07:22:28/ 2023-11-18 21:43:26]';'Gem Bad Laasphe';1440,1739836738574,1739836752052,0,0,13478
+thread-14,countFlightsInCounties,spatial,'Krs Leverkusen',1739836446652,1739836789499,0,0,342847
+thread-6,countFlightsInCounties,spatial,'Krs Viersen',1739836426461,1739836800325,0,0,373864
+thread-10,countFlightsInCounties,spatial,'Krs Remscheid',1739836496052,1739836818764,0,0,322712
+thread-10,locationOfAirplaneAtInstant,temporal,timestamptz'2023-09-16 07:25:15',1739836818765,1739836818866,0,0,101
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-09 07:27:46/ 2023-10-12 21:23:33]';'Salzkotten';40,1739836789499,1739836821053,0,0,31554
+thread-10,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-10';'Gem Muelheim an der Ruhr',1739836818866,1739836829106,0,0,10240
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-02 15:58:08/ 2023-02-07 21:17:28]';'Krs Coesfeld',1739836695266,1739836840513,0,0,145247
+thread-6,flightClosestToPoint,spatial,POINT(8.373555167905801 51.17143634543442);6,1739836800325,1739836845104,0,0,44779
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-03 23:16:21/ 2023-01-17 16:57:19]';'Krs Duisburg',1739836733795,1739836849153,0,0,115358
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-24 12:04:54/ 2023-01-31 06:36:27]';'Erkrath';80,1739836829106,1739836853772,0,0,24666
+thread-13,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-28 10:05:06/ 2023-02-02 14:30:34]';'Gem Dorsten';1040,1739836849153,1739836854014,0,0,4861
+thread-13,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-12 02:36:41',1739836854014,1739836854340,0,0,326
+thread-5,countFlightsInCounties,spatial,'Krs Oberhausen',1739836617071,1739836855599,0,0,238528
+thread-10,countActiveFlightsInPeriod,temporal,tstzspan'[2023-01-10 04:05:12/ 2023-01-19 05:44:33]',1739836853772,1739836857094,0,0,3322
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-12 09:34:50/ 2023-02-14 11:08:34]';'Gem Isselburg';940,1739836855599,1739836857613,0,0,2014
+thread-10,airportUtilizationInPeriod,temporal,tstzspan'[2023-10-24 17:40:17/ 2023-10-25 06:13:55]',1739836857094,1739836858188,0,0,1094
+thread-10,locationOfAirplaneAtInstant,temporal,timestamptz'2023-05-23 02:13:15',1739836858188,1739836858303,0,0,115
+thread-10,flightsCloseToMainCitiesLowAltitude,spatial,1210;20,1739836858303,1739836858775,0,0,472
+thread-10,locationOfAirplaneAtInstant,temporal,timestamptz'2023-03-19 06:07:10',1739836858775,1739836858814,0,0,39
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-18 06:16:15/ 2023-10-20 02:55:16]';'Krs Herne',1739836840513,1739836859748,0,0,19235
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-17 21:55:08/ 2023-01-21 02:41:24]';'Gem Bedburg';970,1739836857613,1739836861547,0,0,3934
+thread-7,airportUtilizationInPeriod,temporal,tstzspan'[2023-04-27 12:06:29/ 2023-04-29 10:31:37]',1739836859748,1739836862092,0,0,2344
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-26 21:45:44/ 2023-07-01 08:28:52]';'Detmold';90,1739836821053,1739836867710,0,0,46657
+thread-10,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-21';'Gem Stolberg (Rhld.)',1739836858814,1739836870625,0,0,11811
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-21';'Gem Kempen',1739836861547,1739836871175,0,0,9628
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-05 05:58:31/ 2023-10-19 18:48:32]';'Viersen';40,1739836752052,1739836882246,0,0,130194
+thread-13,flightClosestToPoint,spatial,POINT(8.557427932847972 51.504683595194805);3,1739836854340,1739836886393,0,0,32053
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-21 09:34:28/ 2023-10-31 10:48:04]';'Krs Wesel',1739836329154,1739836889380,0,0,560226
+thread-12,countFlightsInCounties,spatial,'Krs Duisburg',1739836551858,1739836891178,0,0,339320
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-13 14:52:20/ 2023-02-20 08:11:08]';'Krs Mettmann',1739836740834,1739836907482,0,0,166648
+thread-0,countFlightsInCounties,spatial,'Krs Euskirchen',1739836728318,1739836943641,0,0,215323
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-17 20:36:34/ 2023-05-01 09:13:37]';'Krs Unna',1739836419957,1739836947337,0,0,527380
+thread-8,countFlightsInCounties,spatial,'Krs Wuppertal',1739836622312,1739836965855,0,0,343543
+thread-3,countFlightsInCounties,spatial,'Krs Rhein-Sieg-Kreis',1739836558231,1739836971671,0,0,413440
+thread-1,countFlightsInCounties,spatial,'Krs Dueren',1739836615411,1739836983164,0,0,367753
+thread-11,countFlightsInCounties,spatial,'Krs Wuppertal',1739836714879,1739836992300,0,0,277421
+thread-6,countFlightsInCounties,spatial,'Krs Heinsberg',1739836845105,1739837025528,0,0,180423

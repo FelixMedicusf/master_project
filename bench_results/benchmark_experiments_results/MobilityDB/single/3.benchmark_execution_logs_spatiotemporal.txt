@@ -1,0 +1,602 @@
+start: Wed Mar 05 19:12:37 UTC 2025, end: Wed Mar 05 19:47:14 UTC 2025, duration (s): 2077. SUT: MobilityDB, #threads: 16, #nodes: 1, queries executed: 600. Seed: 1500
+threadName,queryName,queryType,parameterValues,startFirstQuery,endFirstQuery,startSecQuery,endSecQuery,latency
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-25 04:50:28/ 2023-02-06 10:54:45]';'Krs Bonn',1741201957696,1741202010256,0,0,52560
+thread-6,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-19 01:06:09/ 2023-08-24 13:31:54]';'Krs Bielefeld',1741201957695,1741202018906,0,0,61211
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-25 22:00:48/ 2023-12-04 04:30:58]';'Krs Herford',1741201957696,1741202021197,0,0,63501
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-16 20:51:36/ 2023-08-22 09:27:36]';'Krs Leverkusen',1741201957695,1741202050800,0,0,93105
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-28 04:48:32/ 2023-12-08 23:54:52]';'Krs Gelsenkirchen',1741201957696,1741202098592,0,0,140896
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-13 05:22:01/ 2023-06-19 15:32:01]';'Krs Siegen-Wittgenstein',1741201957696,1741202101778,0,0,144082
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-27 00:25:13/ 2023-05-08 04:14:37]';'Krs Essen',1741201957695,1741202134754,0,0,177059
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-16 01:09:24/ 2023-02-25 17:20:16]';'Krs Dortmund',1741201957696,1741202159922,0,0,202226
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-04 08:17:03/ 2023-09-17 00:02:08]';'Krs Minden-Luebbecke',1741202021197,1741202161315,0,0,140118
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-01 15:34:08/ 2023-12-10 01:34:15]';'Krs Mettmann',1741201957698,1741202167801,0,0,210103
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-06 05:00:10/ 2023-02-10 01:32:07]';'Krs Coesfeld',1741202098592,1741202211243,0,0,112651
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-19 17:02:10/ 2023-11-26 18:43:49]';'Krs Minden-Luebbecke',1741202159922,1741202217842,0,0,57920
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-18 14:38:27/ 2023-12-27 17:39:32]';'Krs Maerkischer Kreis',1741201957698,1741202237597,0,0,279899
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-03 07:38:16/ 2023-03-13 19:27:52]';'Krs Gelsenkirchen',1741202101778,1741202250576,0,0,148798
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-19 16:49:53/ 2023-06-26 23:13:13]';'Krs Steinfurt',1741202050800,1741202257635,0,0,206835
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-03 15:04:51/ 2023-09-11 08:11:19]';'Krs Mettmann',1741201957695,1741202261165,0,0,303470
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-12 11:57:39/ 2023-06-18 05:59:54]';'Krs Bonn',1741202211243,1741202266650,0,0,55407
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-01 15:39:38/ 2023-04-08 11:56:30]';'Krs Hamm',1741202161315,1741202276157,0,0,114842
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-01 02:47:40/ 2023-03-10 03:04:56]';'Krs Moenchengladbach',1741202167801,1741202282110,0,0,114309
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-17 03:26:11/ 2023-02-26 09:47:20]';'Krs Paderborn',1741202134754,1741202283736,0,0,148982
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-14 10:26:20/ 2023-11-26 06:32:38]';'Krs Coesfeld',1741201957696,1741202288860,0,0,331164
+thread-6,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-29 13:35:30/ 2023-09-08 20:04:42]';'Krs Hagen',1741202018906,1741202289123,0,0,270217
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-03 09:38:52/ 2023-03-11 20:44:16]';'Krs Ennepe-Ruhr-Kreis',1741201957695,1741202290725,0,0,333030
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-01 07:24:17/ 2023-10-11 02:33:04]';'Krs Euskirchen',1741201957695,1741202292966,0,0,335271
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-25 06:01:07/ 2023-07-27 15:54:24]';'Krs Soest',1741202237597,1741202309528,0,0,71931
+thread-8,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-01 00:44:47/ 2023-04-08 09:55:38]';'Krs Dueren',1741201957697,1741202314167,0,0,356470
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-04 15:32:06/ 2023-08-12 01:42:46]';'Krs Borken',1741202010257,1741202315298,0,0,305041
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-16 01:48:20/ 2023-01-28 11:05:36]';'Krs Leverkusen',1741202261165,1741202330704,0,0,69539
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-20 03:34:25/ 2023-01-29 15:14:41]';'Krs Duisburg',1741202282110,1741202350223,0,0,68113
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-09 14:17:22/ 2023-05-18 05:12:24]';'Krs Bonn',1741202290725,1741202374855,0,0,84130
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-16 00:34:02/ 2023-01-22 06:03:50]';'Krs Krefeld',1741202350223,1741202377426,0,0,27203
+thread-8,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-26 04:20:02/ 2023-07-30 03:23:11]';'Krs Hamm',1741202314167,1741202393629,0,0,79462
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-08 11:33:09/ 2023-11-12 02:15:28]';'Krs Kleve',1741202309528,1741202400133,0,0,90605
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-04 01:22:18/ 2023-12-12 15:59:05]';'Krs Essen',1741202288860,1741202408751,0,0,119891
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-23 07:13:48/ 2023-12-04 22:15:49]';'Krs Herford',1741202315298,1741202410973,0,0,95675
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-17 18:11:44/ 2023-09-24 17:24:53]';'Krs Olpe',1741202266650,1741202450276,0,0,183626
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-14 01:21:57/ 2023-02-22 03:33:08]';'Krs Borken',1741202217842,1741202458322,0,0,240480
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-21 19:21:47/ 2023-02-02 05:35:13]';'Krs Coesfeld',1741202330705,1741202468557,0,0,137852
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-04 21:53:00/ 2023-01-19 02:07:42]';'Krs Gelsenkirchen',1741202408751,1741202501745,0,0,92994
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-08 03:05:51/ 2023-07-16 15:32:40]';'Krs Moenchengladbach',1741202377426,1741202515881,0,0,138455
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-14 16:56:42/ 2023-01-29 15:12:19]';'Krs Rhein-Erft-Kreis',1741202276157,1741202519861,0,0,243704
+thread-3,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-19 06:13:07/ 2023-09-30 07:00:56]';'Krs Rhein-Erft-Kreis',1741201957698,1741202527660,0,0,569962
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-16 08:01:36/ 2023-01-18 09:30:26]';'Krs Wesel',1741202501745,1741202531640,0,0,29895
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-01 04:15:28/ 2023-05-10 01:19:50]';'Krs Leverkusen',1741202400133,1741202548590,0,0,148457
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-04 13:56:13/ 2023-02-17 07:45:50]';'Krs Moenchengladbach',1741202410973,1741202554861,0,0,143888
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-26 05:27:40/ 2023-10-02 12:42:30]';'Krs Remscheid',1741202515881,1741202604267,0,0,88386
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-13 05:44:16/ 2023-07-26 20:27:03]';'Krs Steinfurt',1741202250576,1741202623358,0,0,372782
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-12 13:52:23/ 2023-06-22 16:07:27]';'Krs Warendorf',1741202257635,1741202629519,0,0,371884
+thread-6,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-14 19:15:33/ 2023-04-29 13:24:35]';'Krs Lippe',1741202289123,1741202646283,0,0,357160
+thread-3,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-23 21:00:12/ 2023-10-05 10:09:14]';'Krs Minden-Luebbecke',1741202527660,1741202647520,0,0,119860
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-20 10:07:20/ 2023-09-03 04:01:26]';'Krs Guetersloh',1741202292966,1741202652149,0,0,359183
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-28 14:06:49/ 2023-02-01 07:12:35]';'Krs Unna',1741202629519,1741202673733,0,0,44214
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-08 16:03:36/ 2023-12-18 08:42:24]';'Krs Maerkischer Kreis',1741202374855,1741202684521,0,0,309666
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-16 13:54:35/ 2023-10-27 22:01:50]';'Krs Solingen',1741202468558,1741202685708,0,0,217150
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-10 11:42:06/ 2023-06-15 13:19:22]';'Krs Mettmann',1741202531640,1741202726314,0,0,194674
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-16 08:25:26/ 2023-08-19 03:59:17]';'Krs Borken',1741202604267,1741202731372,0,0,127105
+thread-8,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-18 13:35:24/ 2023-08-29 19:10:13]';'Krs Duesseldorf',1741202393629,1741202738805,0,0,345176
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-26 12:49:53/ 2023-10-31 15:04:51]';'Krs Solingen',1741202652149,1741202742150,0,0,90001
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-23 23:48:19/ 2023-02-04 21:55:47]';'Krs Muelheim a.d. Ruhr',1741202685709,1741202742213,0,0,56504
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-11 22:15:57/ 2023-08-18 02:03:16]';'Krs Maerkischer Kreis',1741202450276,1741202759428,0,0,309152
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-09 10:24:43/ 2023-10-15 19:01:58]';'Krs Hagen',1741202623358,1741202778672,0,0,155314
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-02-07 07:45:05/ 2023-02-11 08:19:06]';'Krs Hamm',1741202726314,1741202787247,0,0,60933
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-05 10:02:06/ 2023-07-18 14:35:51]';'Krs Staedteregion Aachen',1741202283736,1741202789593,0,0,505857
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-19 03:17:07/ 2023-01-27 22:16:01]';'Krs Olpe',1741202742213,1741202821389,0,0,79176
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-08 20:06:27/ 2023-09-19 15:32:15]';'Krs Koeln',1741202458322,1741202824948,0,0,366626
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-08 22:35:31/ 2023-10-17 03:00:51]';'Krs Staedteregion Aachen',1741202519861,1741202827027,0,0,307166
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-21 06:42:33/ 2023-10-30 00:10:07]';'Krs Siegen-Wittgenstein',1741202673734,1741202833044,0,0,159310
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-03 15:19:10/ 2023-09-06 12:57:24]';'Krs Rheinisch-Bergischer Kreis',1741202684521,1741202840940,0,0,156419
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-01 01:01:01/ 2023-01-01 22:25:54]';'Krs Kleve',1741202840940,1741202840989,0,0,49
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-28 17:02:44/ 2023-06-03 17:28:23]';'Krs Herford',1741202778672,1741202847700,0,0,69028
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-13 12:27:09/ 2023-11-15 16:46:09]';'Krs Rheinisch-Bergischer Kreis',1741202789593,1741202871249,0,0,81656
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-10 10:43:20/ 2023-04-20 22:19:40]';'Krs Hamm',1741202742150,1741202930130,0,0,187980
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-02 15:04:59/ 2023-12-10 03:50:23]';'Krs Kleve',1741202759428,1741202931580,0,0,172152
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-16 06:15:41/ 2023-12-24 09:07:26]';'Krs Hagen',1741202821389,1741202953531,0,0,132142
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-24 16:11:00/ 2023-10-01 15:39:52]';'Krs Oberbergischer Kreis',1741202548590,1741202954504,0,0,405914
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-29 06:14:02/ 2023-08-05 08:34:32]';'Krs Gelsenkirchen',1741202840989,1741202970781,0,0,129792
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-07 20:44:53/ 2023-10-12 03:45:21]';'Krs Rhein-Erft-Kreis',1741202787247,1741202976829,0,0,189582
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-21 23:13:58/ 2023-12-27 20:31:03]';'Krs Bottrop',1741202931580,1741202984394,0,0,52814
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-14 16:37:13/ 2023-11-19 15:03:13]';'Krs Bielefeld',1741202954504,1741202990394,0,0,35890
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-11-20 08:42:27/ 2023-11-25 05:09:45]';'Krs Minden-Luebbecke',1741202970781,1741203009720,0,0,38939
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-23 08:02:05/ 2023-12-31 23:59:59]';'Krs Soest',1741202827027,1741203026767,0,0,199740
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-10-08 01:02:10/ 2023-10-18 01:49:41]';'Krs Unna',1741202554861,1741203046546,0,0,491685
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-03 07:23:33/ 2023-07-06 04:39:09]';'Krs Rheinisch-Bergischer Kreis',1741202930130,1741203079614,0,0,149484
+thread-6,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-29 23:27:11/ 2023-08-10 20:12:16]';'Krs Coesfeld',1741202646283,1741203092582,0,0,446299
+thread-4,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-04-10 16:18:08/ 2023-04-17 03:17:59]';'Krs Maerkischer Kreis',1741202833044,1741203097444,0,0,264400
+thread-7,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-03 02:04:26/ 2023-12-06 15:06:31]';'Krs Rhein-Kreis Neuss',1741203009720,1741203097511,0,0,87791
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-25 09:05:43',1741203097444,1741203097763,0,0,319
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-25 06:39:57',1741203097511,1741203097895,0,0,384
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-04 15:28:39',1741203097763,1741203098054,0,0,291
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-23 04:41:55',1741203097895,1741203098113,0,0,218
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-29 00:48:32',1741203098113,1741203098250,0,0,137
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-15 16:08:03',1741203098054,1741203098346,0,0,292
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-12 11:31:00',1741203098250,1741203098479,0,0,229
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-22 00:42:08',1741203098346,1741203098552,0,0,206
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-06 17:24:55',1741203098479,1741203098659,0,0,180
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-16 23:54:31',1741203098552,1741203098670,0,0,118
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-01 10:04:41',1741203098670,1741203098886,0,0,216
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-24 15:52:11',1741203098659,1741203098915,0,0,256
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-02 02:45:18',1741203098886,1741203099079,0,0,193
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-03 22:32:06',1741203098915,1741203099093,0,0,178
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-09 06:10:11',1741203099079,1741203099319,0,0,240
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-25 07:53:31',1741203099319,1741203099406,0,0,87
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-12 01:32:45',1741203099093,1741203099412,0,0,319
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-23 17:04:24',1741203099406,1741203099624,0,0,218
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-10 08:09:54',1741203099412,1741203099734,0,0,322
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-11 18:17:02',1741203099624,1741203099835,0,0,211
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-06-15 06:10:56',1741203099734,1741203099966,0,0,232
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-25 05:12:09',1741203099835,1741203100071,0,0,236
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-15 01:32:45',1741203099966,1741203100115,0,0,149
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-22 12:31:42',1741203100071,1741203100211,0,0,140
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-24 16:00:53',1741203100115,1741203100371,0,0,256
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-01 23:05:10',1741203100211,1741203100395,0,0,184
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-02-15 00:00:59',1741203100371,1741203100517,0,0,146
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-24 21:54:50',1741203100517,1741203100689,0,0,172
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-07 07:01:53',1741203100395,1741203100730,0,0,335
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-12 05:26:13',1741203100689,1741203100922,0,0,233
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-27 15:09:33',1741203100730,1741203100925,0,0,195
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-27 23:07:17',1741203100922,1741203101060,0,0,138
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-02-06 07:41:06',1741203100925,1741203101101,0,0,176
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-20 23:34:59',1741203101060,1741203101199,0,0,139
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-08 13:19:10',1741203101101,1741203101335,0,0,234
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-20 13:30:57',1741203101200,1741203101408,0,0,208
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-05 07:19:10',1741203101335,1741203101566,0,0,231
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-05 12:15:32',1741203101566,1741203101684,0,0,118
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-24 14:43:04',1741203101409,1741203101698,0,0,289
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-01 05:52:04',1741203101684,1741203101892,0,0,208
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-29 11:45:08',1741203101698,1741203101919,0,0,221
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-26 00:48:34',1741203101919,1741203102000,0,0,81
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-16 14:04:35',1741203101892,1741203102077,0,0,185
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-24 15:09:32',1741203102000,1741203102182,0,0,182
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-16 05:54:14',1741203102077,1741203102371,0,0,294
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-31 21:03:43',1741203102182,1741203102416,0,0,234
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-15 15:17:51',1741203102372,1741203102515,0,0,143
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-02-01 06:08:11',1741203102515,1741203102616,0,0,101
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-05 11:34:17',1741203102416,1741203102641,0,0,225
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-01 03:15:15',1741203102616,1741203102643,0,0,27
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-06 11:49:06',1741203102641,1741203102821,0,0,180
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-25 10:12:39',1741203102643,1741203102912,0,0,269
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-31 18:31:05',1741203102912,1741203102995,0,0,83
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-29 18:04:33',1741203102821,1741203103072,0,0,251
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-25 19:44:29',1741203102995,1741203103078,0,0,83
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-09 08:43:06',1741203103072,1741203103321,0,0,249
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-10 09:48:40',1741203103078,1741203103338,0,0,260
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-21 22:11:53',1741203103338,1741203103451,0,0,113
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-17 09:27:44',1741203103321,1741203103539,0,0,218
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-28 21:13:10',1741203103539,1741203103647,0,0,108
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-07-28 15:43:50',1741203103451,1741203103688,0,0,237
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-08 21:48:59',1741203103688,1741203103839,0,0,151
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-11 10:15:47',1741203103647,1741203103906,0,0,259
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-07 04:26:28',1741203103840,1741203104091,0,0,251
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-27 13:15:51',1741203103906,1741203104096,0,0,190
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-10 21:52:48',1741203104091,1741203104275,0,0,184
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-07 09:02:28',1741203104096,1741203104355,0,0,259
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-27 12:39:22',1741203104355,1741203104457,0,0,102
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-04 23:52:53',1741203104275,1741203104496,0,0,221
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-27 00:38:25',1741203104457,1741203104604,0,0,147
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-09 06:02:02',1741203104496,1741203104712,0,0,216
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-08 23:42:29',1741203104604,1741203104818,0,0,214
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-06 13:44:42',1741203104712,1741203104835,0,0,123
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-13 14:44:57',1741203104818,1741203104997,0,0,179
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-08 11:12:13',1741203104835,1741203105099,0,0,264
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-23 21:57:19',1741203105099,1741203105208,0,0,109
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-17 00:07:52',1741203104997,1741203105217,0,0,220
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-16 23:24:39',1741203105208,1741203105406,0,0,198
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-27 08:27:57',1741203105217,1741203105457,0,0,240
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-04-04 18:14:04',1741203105406,1741203105586,0,0,180
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-06 02:02:19',1741203105457,1741203105629,0,0,172
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-12-12 01:36:46',1741203105629,1741203105756,0,0,127
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-10-29 10:25:06',1741203105586,1741203105762,0,0,176
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-05 05:46:53',1741203105766,1741203105911,0,0,145
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-09 04:53:14',1741203105756,1741203105958,0,0,202
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-02-11 23:08:53',1741203105958,1741203106081,0,0,123
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-02 19:28:36',1741203105911,1741203106089,0,0,178
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-28 01:52:38',1741203106081,1741203106159,0,0,78
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-19 05:24:30',1741203106089,1741203106238,0,0,149
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-17 04:05:14',1741203106238,1741203106318,0,0,80
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-13 09:32:48',1741203106159,1741203106364,0,0,205
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-06 00:47:48',1741203106364,1741203106524,0,0,160
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-09-27 05:37:41',1741203106318,1741203106576,0,0,258
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-01-10 18:02:48',1741203106576,1741203106732,0,0,156
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-02 21:32:09',1741203106524,1741203106854,0,0,330
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-11-29 07:29:53',1741203106732,1741203106885,0,0,153
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-03-05 22:15:38',1741203106854,1741203107029,0,0,175
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-03 09:59:19',1741203106885,1741203107109,0,0,224
+thread-7,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-08-25 21:41:14',1741203107029,1741203107212,0,0,183
+thread-4,countFlightsAtInstantInDistricts,spatiotemporal,timestamptz'2023-05-07 22:41:36',1741203107109,1741203107313,0,0,204
+thread-14,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-20 11:41:02/ 2023-07-02 17:02:36]';'Krs Siegen-Wittgenstein',1741202871249,1741203134256,0,0,263007
+thread-2,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-25 08:57:24/ 2023-04-07 10:02:02]';'Krs Viersen',1741202824948,1741203136488,0,0,311540
+thread-12,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-01-26 19:03:31/ 2023-01-29 23:37:27]';'Krs Rhein-Erft-Kreis',1741203079614,1741203138556,0,0,58942
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-21 04:20:08/ 2023-01-28 03:55:46]';'Neuenrade';70,1741203136488,1741203159335,0,0,22847
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-30 11:04:49/ 2023-08-04 20:31:49]';'Frechen';90,1741203107313,1741203161471,0,0,54158
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-21 15:23:00/ 2023-01-30 04:06:54]';'Selm';70,1741203138556,1741203166311,0,0,27755
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-22 23:12:10/ 2023-10-31 08:14:52]';'Bad Laasphe';50,1741203107213,1741203186334,0,0,79121
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-13 19:27:19/ 2023-03-17 10:30:36]';'Baesweiler';20,1741203166311,1741203194477,0,0,28166
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-12 16:35:59/ 2023-01-25 11:15:35]';'Kaarst';80,1741203161471,1741203207729,0,0,46258
+thread-10,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-09 11:56:29/ 2023-05-24 04:32:19]';'Krs Euskirchen',1741202731372,1741203232353,0,0,500981
+thread-11,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-08 13:28:43/ 2023-05-16 08:08:33]';'Krs Lippe',1741203046546,1741203245635,0,0,199089
+thread-8,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-05-31 17:10:07/ 2023-06-12 09:44:02]';'Krs Recklinghausen',1741202738805,1741203265388,0,0,526583
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-25 22:43:59/ 2023-09-08 20:55:03]';'Troisdorf';50,1741203134256,1741203276585,0,0,142329
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-05-15 13:41:39/ 2023-05-20 19:13:52]';'Wuelfrath';40,1741203232353,1741203282779,0,0,50426
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-05-27 00:25:20/ 2023-06-05 22:07:39]';'Bad Muenstereifel';80,1741203186334,1741203283519,0,0,97185
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-21 12:46:54/ 2023-07-05 04:12:05]';'Rhede';20,1741203159335,1741203296582,0,0,137247
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-22 13:32:05/ 2023-12-25 04:56:16]';'Menden';80,1741203283519,1741203299130,0,0,15611
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-21 16:04:59/ 2023-02-24 08:24:03]';'Marl';20,1741203282779,1741203300753,0,0,17974
+thread-5,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-03-21 03:59:02/ 2023-04-03 16:24:29]';'Krs Lippe',1741203026767,1741203315599,0,0,288832
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-22 05:37:02/ 2023-02-05 17:20:35]';'Schleiden';20,1741203265388,1741203322075,0,0,56687
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-23 13:20:00/ 2023-09-06 23:16:08]';'Moenchengladbach';70,1741203207729,1741203325385,0,0,117656
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-18 15:38:22/ 2023-12-01 19:43:08]';'Monheim am Rhein';40,1741203245635,1741203335815,0,0,90180
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-08 00:34:20/ 2023-01-12 06:21:42]';'Medebach';30,1741203325385,1741203336235,0,0,10850
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-08 15:44:22/ 2023-09-23 11:00:32]';'Arnsberg';60,1741203194477,1741203341087,0,0,146610
+thread-9,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-07-27 18:29:24/ 2023-08-07 07:43:52]';'Krs Rhein-Kreis Neuss',1741202990394,1741203349127,0,0,358733
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-22 17:09:19/ 2023-04-29 01:51:44]';'Erkelenz';50,1741203296582,1741203350609,0,0,54027
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-22 13:32:10/ 2023-03-25 07:04:01]';'Oberhausen';80,1741203341087,1741203362626,0,0,21539
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-18 06:53:39/ 2023-07-26 05:49:29]';'Soest';40,1741203299130,1741203370148,0,0,71018
+thread-1,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-12-16 15:45:54/ 2023-12-27 22:41:37]';'Krs Wesel',1741202976829,1741203378940,0,0,402111
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-19 08:21:02/ 2023-07-26 05:59:32]';'Overath';50,1741203335815,1741203381796,0,0,45981
+thread-3,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-24 18:34:50/ 2023-09-07 08:10:57]';'Krs Dueren',1741202647520,1741203382627,0,0,735107
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-31 15:14:59/ 2023-09-04 21:46:30]';'Detmold';70,1741203349127,1741203383346,0,0,34219
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-16 05:36:28/ 2023-07-29 02:08:31]';'Selm';90,1741203276585,1741203395091,0,0,118506
+thread-0,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-04 08:41:21/ 2023-06-14 23:39:06]';'Krs Rheinisch-Bergischer Kreis',1741202847700,1741203405270,0,0,557570
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-12 17:42:54/ 2023-12-18 11:27:28]';'Alsdorf';70,1741203370149,1741203408612,0,0,38463
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-20 00:40:08/ 2023-07-22 12:20:38]';'Bottrop';70,1741203395091,1741203414308,0,0,19217
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-22 20:45:19/ 2023-10-02 21:40:49]';'Bad Driburg';20,1741203322075,1741203421638,0,0,99563
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-13 21:57:12/ 2023-11-27 08:01:04]';'Hueckeswagen';30,1741203336235,1741203428179,0,0,91944
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-28 06:42:36/ 2023-08-08 20:03:04]';'Meinerzhagen';20,1741203315599,1741203431364,0,0,115765
+thread-13,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-08-12 17:39:44/ 2023-08-21 19:07:27]';'Krs Maerkischer Kreis',1741202984394,1741203431420,0,0,447026
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-12 01:49:59/ 2023-08-17 14:54:21]';'Petershagen';80,1741203383346,1741203432779,0,0,49433
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-04 18:46:29/ 2023-01-18 20:12:38]';'Menden';30,1741203381796,1741203432803,0,0,51007
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-09 10:26:05/ 2023-11-14 04:15:49]';'Unna';20,1741203405270,1741203438927,0,0,33657
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-19 06:50:21/ 2023-07-29 16:00:26]';'Versmold';20,1741203362626,1741203439993,0,0,77367
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-02 09:26:11/ 2023-06-16 18:09:26]';'Borken';30,1741203300753,1741203440628,0,0,139875
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-21 09:58:33/ 2023-06-25 06:54:45]';'Winterberg';50,1741203414308,1741203455034,0,0,40726
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-19 05:26:07/ 2023-08-24 13:24:47]';'Euskirchen';80,1741203408612,1741203460021,0,0,51409
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-14 06:00:28/ 2023-08-25 03:54:28]';'Salzkotten';30,1741203350609,1741203465588,0,0,114979
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-20 18:50:04/ 2023-02-03 00:24:44]';'Hueckeswagen';30,1741203421638,1741203467316,0,0,45678
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-06 10:59:37/ 2023-01-19 23:40:36]';'Hennef';80,1741203428179,1741203468796,0,0,40617
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-02 07:43:56/ 2023-01-13 16:26:33]';'Gevelsberg';40,1741203438927,1741203472022,0,0,33095
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-17 04:32:54/ 2023-03-28 22:34:23]';'Brakel';20,1741203382627,1741203474318,0,0,91691
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-03 19:44:48/ 2023-12-10 08:53:53]';'Troisdorf';70,1741203432779,1741203474510,0,0,41731
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-28 16:16:30/ 2023-03-30 16:27:45]';'Detmold';40,1741203468796,1741203490543,0,0,21747
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-15 01:52:14/ 2023-09-29 07:21:45]';'Muenster';20,1741203378940,1741203507749,0,0,128809
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-29 17:11:25/ 2023-10-09 00:47:14]';'Sundern';50,1741203431420,1741203511044,0,0,79624
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-12 00:33:06/ 2023-02-24 00:30:18]';'Sassenberg';50,1741203432803,1741203516120,0,0,83317
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-18 19:40:07/ 2023-12-25 22:08:35]';'Hoerstel';40,1741203472022,1741203519339,0,0,47317
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-05 13:06:09/ 2023-07-15 07:11:03]';'Olsberg';20,1741203439993,1741203522479,0,0,82486
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-29 10:44:40/ 2023-09-05 03:40:05]';'Luenen';50,1741203460022,1741203528379,0,0,68357
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-03 14:57:35/ 2023-08-13 22:50:31]';'Rahden';70,1741203440628,1741203535878,0,0,95250
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-09 14:23:03/ 2023-04-21 14:00:38]';'Herten';80,1741203431364,1741203536489,0,0,105125
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-28 23:08:56/ 2023-10-04 07:41:28]';'Bedburg';60,1741203511044,1741203542516,0,0,31472
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-24 23:59:14/ 2023-04-04 11:08:31]';'Enger';90,1741203474510,1741203548969,0,0,74459
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-09 03:37:10/ 2023-06-13 10:06:50]';'Isselburg';30,1741203507749,1741203551223,0,0,43474
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-08 23:47:45/ 2023-11-19 08:50:30]';'Meschede';70,1741203490543,1741203563286,0,0,72743
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-28 13:56:23/ 2023-10-13 04:13:43]';'Sendenhorst';60,1741203455034,1741203565812,0,0,110778
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-13 11:57:17/ 2023-07-23 19:55:12]';'Gronau';50,1741203465588,1741203568821,0,0,103233
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-21 17:59:30/ 2023-11-03 05:01:12]';'Schmallenberg';50,1741203467316,1741203571742,0,0,104426
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-01 08:18:09/ 2023-01-13 09:52:02]';'Hueckelhoven';20,1741203542516,1741203583704,0,0,41188
+thread-15,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-09-20 14:12:48/ 2023-10-04 13:12:54]';'Krs Unna',1741202953531,1741203584366,0,0,630835
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-01 07:20:51/ 2023-11-10 13:40:08]';'Ahlen';20,1741203516120,1741203586281,0,0,70161
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-15 00:13:20/ 2023-03-29 14:09:38]';'Bedburg';70,1741203474318,1741203587560,0,0,113242
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-27 19:35:56/ 2023-05-01 18:41:05]';'Bergisch Gladbach';40,1741203568821,1741203593115,0,0,24294
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-18 18:47:28/ 2023-02-21 12:08:43]';'Hilchenbach';60,1741203584366,1741203596729,0,0,12363
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-24 17:40:59/ 2023-05-02 08:03:38]';'Neuss';20,1741203536490,1741203596997,0,0,60507
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-13 18:09:20/ 2023-01-20 23:10:42]';'Bocholt';90,1741203571742,1741203602962,0,0,31220
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-18 11:45:37/ 2023-02-25 20:08:40]';'Baesweiler';40,1741203551223,1741203603162,0,0,51939
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-07 09:05:12/ 2023-01-20 02:55:29]';'Dueren';80,1741203586281,1741203624870,0,0,38589
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-11-25 20:33:11/ 2023-11-29 22:03:50]';'Erkelenz';30,1741203596997,1741203624920,0,0,27923
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-02 21:13:39/ 2023-06-08 04:14:25]';'Borken';20,1741203593115,1741203633562,0,0,40447
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-18 16:53:54/ 2023-08-22 09:28:15]';'Kempen';80,1741203602962,1741203639832,0,0,36870
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-05-07 18:37:34/ 2023-05-20 10:46:23]';'Waltrop';50,1741203519339,1741203641237,0,0,121898
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-03 23:40:47/ 2023-07-10 23:13:04]';'Ennigerloh';50,1741203583704,1741203641937,0,0,58233
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-05 20:05:36/ 2023-03-11 03:50:51]';'Erkelenz';70,1741203603162,1741203641943,0,0,38781
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-31 11:53:50/ 2023-04-11 08:27:39]';'Wuerselen';30,1741203563286,1741203650795,0,0,87509
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-08 02:45:40/ 2023-07-10 14:56:26]';'Niederkassel';60,1741203641237,1741203659313,0,0,18076
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-21 11:58:57/ 2023-04-01 22:04:39]';'Emmerich';80,1741203587560,1741203662568,0,0,75008
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-02 08:14:19/ 2023-06-14 15:58:22]';'Monschau';60,1741203535878,1741203666678,0,0,130800
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-21 07:57:54/ 2023-01-29 06:12:51]';'Kerpen';40,1741203641943,1741203668507,0,0,26564
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-20 05:35:00/ 2023-09-28 05:57:49]';'Werne';60,1741203596729,1741203671846,0,0,75117
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-10 18:51:48/ 2023-06-15 09:00:11]';'Warendorf';40,1741203633562,1741203672667,0,0,39105
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-30 01:11:31/ 2023-07-14 13:32:53]';'Aachen';20,1741203548969,1741203673881,0,0,124912
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-08 14:33:30/ 2023-09-23 08:52:57]';'Borgentreich';70,1741203522479,1741203675466,0,0,152987
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-07-02 10:03:40/ 2023-07-15 01:36:43]';'Velbert';80,1741203565812,1741203678314,0,0,112502
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-24 02:26:59/ 2023-09-07 23:24:25]';'Kamp-Lintfort';50,1741203528379,1741203680743,0,0,152364
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-05-10 21:08:24/ 2023-05-15 15:25:25]';'Borgholzhausen';80,1741203639832,1741203686670,0,0,46838
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-28 21:50:12/ 2023-03-07 21:28:57]';'Monschau';90,1741203641937,1741203692558,0,0,50621
+thread-15,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-14 18:27:39/ 2023-09-16 21:56:28]';'Verl';80,1741203671846,1741203695773,0,0,23927
+thread-11,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-03-31 14:18:41/ 2023-04-11 21:53:13]';'Bad Oeynhausen';60,1741203624870,1741203696361,0,0,71491
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-12 02:26:14/ 2023-06-14 19:35:40]';'Gem Wachtendonk';1430,1741203696361,1741203700756,0,0,4395
+thread-10,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-03 14:24:49/ 2023-12-08 17:41:19]';'Petershagen';80,1741203666678,1741203702409,0,0,35731
+thread-8,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-01-18 04:56:29/ 2023-01-24 16:45:02]';'Rheinberg';60,1741203686670,1741203704106,0,0,17436
+thread-14,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-25 14:51:09/ 2023-03-02 11:49:21]';'Lemgo';30,1741203678314,1741203709849,0,0,31535
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-08 05:49:54/ 2023-10-20 02:42:14]';'Gem Bad Honnef';750,1741203700756,1741203710725,0,0,9969
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-22 08:41:07/ 2023-10-05 19:44:26]';'Gem Bad Honnef';970,1741203702409,1741203712227,0,0,9818
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-13 23:07:54/ 2023-09-18 10:18:30]';'Gem Waldfeucht';1280,1741203712227,1741203715664,0,0,3437
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-28 08:15:52/ 2023-09-30 20:17:47]';'Gem Waltrop';660,1741203709849,1741203715807,0,0,5958
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-10 12:14:22/ 2023-10-12 20:04:45]';'Gem Horstmar';1050,1741203715807,1741203719194,0,0,3387
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-04 07:06:23/ 2023-10-06 10:08:05]';'Gem Werl';860,1741203715664,1741203720507,0,0,4843
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-20 21:55:48/ 2023-09-29 17:04:09]';'Gem Radevormwald';520,1741203695773,1741203721862,0,0,26089
+thread-0,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-05 09:12:23/ 2023-02-18 05:36:37]';'Oberhausen';50,1741203659313,1741203722499,0,0,63186
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-23 18:40:45/ 2023-02-25 19:43:44]';'Gem Radevormwald';1040,1741203719194,1741203723397,0,0,4203
+thread-3,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-05 03:52:25/ 2023-02-18 07:48:20]';'Solingen';60,1741203662568,1741203723468,0,0,60900
+thread-4,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-02-09 08:50:55/ 2023-02-20 11:15:09]';'Freudenberg';60,1741203650795,1741203723983,0,0,73188
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-30 20:36:48/ 2023-02-03 19:59:45]';'Gem Huenxe';610,1741203720507,1741203724972,0,0,4465
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-20 17:45:35/ 2023-09-26 15:41:17]';'Gem Westerkappeln';620,1741203724972,1741203726217,0,0,1245
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-05 15:48:14/ 2023-02-12 09:26:03]';'Gem Ochtrup';540,1741203723983,1741203726757,0,0,2774
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-02 19:28:00/ 2023-07-08 02:45:41]';'Gem Recke';1240,1741203726757,1741203727471,0,0,714
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-14 11:12:07/ 2023-08-24 06:17:24]';'Gem Ruethen';1120,1741203704106,1741203728369,0,0,24263
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-12 07:19:10/ 2023-04-16 08:19:41]';'Gem Herzebrock-Clarholz';800,1741203721862,1741203729882,0,0,8020
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-10 05:59:01/ 2023-02-19 19:09:58]';'Gem Xanten';860,1741203723468,1741203731006,0,0,7538
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-28 05:54:59/ 2023-12-01 00:23:32]';'Gem Halle (Westf.)';1270,1741203727471,1741203731055,0,0,3584
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-17 08:21:17/ 2023-11-30 03:56:24]';'Gem Sundern (Sauerland)';990,1741203710725,1741203734420,0,0,23695
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-26 00:17:11/ 2023-04-09 02:56:54]';'Gem Recke';1260,1741203731055,1741203734613,0,0,3558
+thread-1,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-18 19:12:42/ 2023-10-26 12:01:00]';'Sassenberg';90,1741203668508,1741203735658,0,0,67150
+thread-2,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-12-15 18:42:27/ 2023-12-26 14:08:24]';'Breckerfeld';50,1741203672667,1741203736131,0,0,63464
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-28 00:08:13/ 2023-04-02 03:47:54]';'Gem Gummersbach';1100,1741203723397,1741203736809,0,0,13412
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-04 16:44:36/ 2023-01-10 12:24:50]';'Gem Borchen';1020,1741203735658,1741203738003,0,0,2345
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-24 16:13:52/ 2023-10-30 16:22:15]';'Gem Moehnesee';990,1741203726217,1741203739316,0,0,13099
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-01 05:58:27/ 2023-01-14 09:25:41]';'Gem Erftstadt';1190,1741203729882,1741203739710,0,0,9828
+thread-5,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-06-25 04:12:45/ 2023-07-07 20:50:53]';'Hamminkeln';20,1741203624920,1741203742022,0,0,117102
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-27 23:36:28/ 2023-07-09 22:49:44]';'Gem Attendorn';1300,1741203722499,1741203742163,0,0,19664
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-20 09:48:38/ 2023-04-26 01:45:33]';'Gem Herne';1090,1741203728369,1741203743519,0,0,15150
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-26 15:36:26/ 2023-07-09 22:33:21]';'Gem Lennestadt';760,1741203731006,1741203744097,0,0,13091
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-03 00:14:18/ 2023-09-07 05:55:03]';'Gem Nottuln';800,1741203734613,1741203744448,0,0,9835
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-24 06:37:11/ 2023-09-29 23:15:32]';'Gem Sonsbeck';620,1741203738003,1741203744879,0,0,6876
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-08 22:09:32/ 2023-02-23 01:27:48]';'Gem Nettetal';1310,1741203734420,1741203745985,0,0,11565
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-26 04:14:26/ 2023-05-30 00:07:16]';'Gem Werl';740,1741203739316,1741203747474,0,0,8158
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-09 09:43:08/ 2023-02-15 12:49:16]';'Gem Huellhorst';1490,1741203747474,1741203748013,0,0,539
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-09 13:05:04/ 2023-06-13 20:11:02]';'Gem Siegburg';980,1741203739710,1741203748310,0,0,8600
+thread-9,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-09-29 20:07:12/ 2023-10-08 21:57:31]';'Bad Driburg';20,1741203673882,1741203748352,0,0,74470
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-06 12:19:36/ 2023-02-15 19:08:21]';'Gem Heimbach';1160,1741203744879,1741203748605,0,0,3726
+thread-7,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-08-01 21:33:41/ 2023-08-09 15:22:18]';'Hilchenbach';40,1741203680743,1741203748749,0,0,68006
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-15 17:03:41/ 2023-05-23 02:49:07]';'Gem Ostbevern';1230,1741203736131,1741203750336,0,0,14205
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-21 18:45:10/ 2023-09-26 02:16:01]';'Gem Voerde (Niederrhein)';1400,1741203744448,1741203750445,0,0,5997
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-06 23:12:42/ 2023-01-21 13:44:57]';'Gem Nettersheim';1130,1741203745985,1741203750868,0,0,4883
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-21 14:19:14/ 2023-05-24 11:21:57]';'Gem Warendorf';680,1741203750445,1741203754745,0,0,4300
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-20 22:38:34/ 2023-05-24 12:00:18]';'Gem Herdecke';1030,1741203748749,1741203754806,0,0,6057
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-30 13:33:20/ 2023-05-12 18:55:48]';'Gem Alsdorf';670,1741203736809,1741203757529,0,0,20720
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-15 02:45:51/ 2023-07-22 21:55:08]';'Gem Geilenkirchen';1230,1741203743519,1741203758690,0,0,15171
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-04 15:29:18/ 2023-08-17 05:59:19]';'Gem Willebadessen';810,1741203742163,1741203759244,0,0,17081
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-26 16:40:14/ 2023-06-01 13:11:01]';'Gem Leopoldshoehe';790,1741203754806,1741203759591,0,0,4785
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-27 20:46:12/ 2023-07-04 21:36:31]';'Gem Kamp-Lintfort';970,1741203750336,1741203759663,0,0,9327
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-19 04:18:50/ 2023-04-30 18:00:03]';'Gem Erftstadt';1030,1741203744097,1741203759698,0,0,15601
+thread-6,flightsInCountyInPeriod,spatiotemporal,tstzspan'[2023-06-09 10:31:53/ 2023-06-23 12:11:47]';'Krs Rhein-Erft-Kreis',1741203092582,1741203760310,0,0,667728
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-25 01:49:55/ 2023-07-02 06:18:23]';'Gem Kamen';1200,1741203748013,1741203760707,0,0,12694
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-30 12:25:09/ 2023-11-05 16:01:24]';'Gem Guetersloh';790,1741203750868,1741203760931,0,0,10063
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-31 15:16:15/ 2023-04-14 00:36:48]';'Gem Schlo?Holte-Stukenbrock';1270,1741203742022,1741203760975,0,0,18953
+thread-12,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-04-24 17:57:11/ 2023-05-07 06:10:16]';'Kaarst';90,1741203675466,1741203761828,0,0,86362
+thread-9,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-21 07:14:17/ 2023-11-04 23:34:47]';'Gem Bad Laasphe';530,1741203748352,1741203762444,0,0,14092
+thread-12,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-05 06:32:45/ 2023-10-08 19:43:01]';'Gem Hiddenhausen';1480,1741203761828,1741203763961,0,0,2133
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-24 16:04:20/ 2023-08-30 22:00:49]';'Gem Herne';1220,1741203748310,1741203765547,0,0,17237
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-18 15:43:54/ 2023-03-23 00:31:58]';'Gem Boenen';1210,1741203759244,1741203769140,0,0,9896
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-07 04:26:12/ 2023-06-19 21:45:30]';'Gem Ahaus';710,1741203748605,1741203769453,0,0,20848
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-22 14:55:25/ 2023-07-04 09:53:16]';'Gem Korschenbroich';1390,1741203754745,1741203772177,0,0,17432
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-28 08:30:35/ 2023-12-05 22:23:46]';'Gem Neuss';1070,1741203765547,1741203772818,0,0,7271
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-20 06:55:49/ 2023-06-30 12:06:33]';'Gem Krefeld';530,1741203759591,1741203773768,0,0,14177
+thread-9,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-12-02 06:58:07/ 2023-12-09 18:03:39]';'Gem Mettmann';870,1741203762444,1741203774478,0,0,12034
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-29 12:03:16/ 2023-07-10 21:57:11]';'Gem Oer-Erkenschwick';920,1741203760310,1741203774589,0,0,14279
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-25 22:05:44/ 2023-12-09 20:58:25]';'Gem Viersen';1000,1741203758690,1741203774669,0,0,15979
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-27 10:08:20/ 2023-03-12 20:58:23]';'Gem Rheda-Wiedenbrueck';1350,1741203757529,1741203778339,0,0,20810
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-03 06:41:01/ 2023-02-08 17:46:23]';'Gem Lienen';1160,1741203774590,1741203778739,0,0,4149
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-02-22 00:34:24/ 2023-03-02 20:06:30]';'Gem Hoexter';1400,1741203774669,1741203778865,0,0,4196
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-12-01 21:09:43/ 2023-12-13 11:53:59]';'Gem Gummersbach';530,1741203760975,1741203780217,0,0,19242
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-27 22:04:46/ 2023-05-08 07:16:49]';'Gem Preu?sch Oldendorf';1490,1741203778739,1741203780477,0,0,1738
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-01 01:01:01/ 2023-01-05 08:09:38]';'Gem Rheurdt';1230,1741203780477,1741203780899,0,0,422
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-04 16:01:53/ 2023-04-12 14:21:36]';'Gem Heimbach';1220,1741203769453,1741203782017,0,0,12564
+thread-13,inCityRadiusInPeriod,spatiotemporal,tstzspan'[2023-10-08 17:44:46/ 2023-10-21 01:40:43]';'Ennigerloh';50,1741203692558,1741203782141,0,0,89583
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-13 20:36:01/ 2023-01-18 04:30:00]';'Gem Marienmuenster';1230,1741203780217,1741203782185,0,0,1968
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-01 01:01:01/ 2023-01-08 04:22:57]';'Gem Siegen';1400,1741203778339,1741203782260,0,0,3921
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-19 21:11:58/ 2023-08-27 23:47:06]';'Gem Marl';870,1741203760707,1741203782436,0,0,21729
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-13 07:27:45/ 2023-09-24 08:33:07]';'Gem Heinsberg';1410,1741203760931,1741203782718,0,0,21787
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-20 15:18:15/ 2023-11-01 11:54:42]';'Gem Marsberg';720,1741203769140,1741203783421,0,0,14281
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-12-31 04:35:26/ 2023-12-31 23:59:59]';'Gem Bielefeld';890,1741203782719,1741203783760,0,0,1041
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-10 06:01:36/ 2023-01-19 18:33:28]';'Gem Roedinghausen';1200,1741203782260,1741203784324,0,0,2064
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-15 21:49:52/ 2023-10-17 23:03:16]';'Gem Lichtenau';1210,1741203782017,1741203784328,0,0,2311
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-04 19:16:13/ 2023-10-14 10:31:32]';'Gem Steinhagen';1370,1741203773769,1741203785101,0,0,11332
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-29 23:15:56/ 2023-07-10 14:11:57]';'Gem Medebach';730,1741203782436,1741203785475,0,0,3039
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-17 18:50:48/ 2023-01-24 18:58:21]';'Gem Gummersbach';1020,1741203778865,1741203785695,0,0,6830
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-05 10:18:25/ 2023-07-07 21:05:25]';'Gem Titz';790,1741203784324,1741203786959,0,0,2635
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-03 07:08:22/ 2023-09-17 18:52:12]';'Gem Grefrath';610,1741203759663,1741203787467,0,0,27804
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-01 01:01:01/ 2023-01-08 03:04:40]';'Gem Hille';830,1741203786959,1741203787533,0,0,574
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-21 01:02:50/ 2023-07-24 09:36:26]';'Gem Leopoldshoehe';880,1741203785475,1741203788092,0,0,2617
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-09 11:58:21/ 2023-07-23 23:04:35]';'Gem Bottrop';860,1741203759698,1741203789268,0,0,29570
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-11-09 14:33:33/ 2023-11-14 14:20:16]';'Gem Bad Laasphe';860,1741203783421,1741203789670,0,0,6249
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-07 20:48:15/ 2023-09-22 10:50:37]';'Gem Geilenkirchen';1040,1741203772177,1741203789680,0,0,17503
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-12-09 04:15:20/ 2023-12-19 16:48:27]';'Gem Heiligenhaus';810,1741203772818,1741203791806,0,0,18988
+thread-7,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-29 08:35:24/ 2023-10-03 13:55:19]';'Gem Drolshagen';1020,1741203785101,1741203792429,0,0,7328
+thread-6,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-28 06:58:53/ 2023-09-09 12:57:07]';'Gem Buende';1020,1741203780899,1741203792431,0,0,11532
+thread-9,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-27 16:51:29/ 2023-10-12 12:55:41]';'Gem Bad Wuennenberg';1160,1741203774478,1741203792964,0,0,18486
+thread-14,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-03-08 21:27:47/ 2023-03-14 13:01:13]';'Gem Goch';1010,1741203787533,1741203793922,0,0,6389
+thread-4,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-01-02 00:37:23/ 2023-01-08 20:18:40]';'Gem Meerbusch';1390,1741203789680,1741203794066,0,0,4386
+thread-12,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-04-26 05:53:23/ 2023-05-09 16:28:39]';'Gem Radevormwald';1090,1741203763961,1741203795936,0,0,31975
+thread-13,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-08 00:25:55/ 2023-05-14 22:21:15]';'Gem Geilenkirchen';610,1741203782141,1741203795952,0,0,13811
+thread-11,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-08 21:42:46/ 2023-07-16 12:32:06]';'Gem Dormagen';770,1741203783760,1741203796117,0,0,12357
+thread-5,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-21 04:00:27/ 2023-08-03 01:19:04]';'Gem ?ach-Palenberg';580,1741203782185,1741203797659,0,0,15474
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-25';'Gem Oelde',1741203795936,1741203797675,0,0,1739
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-24';'Gem Siegburg',1741203793922,1741203798029,0,0,4107
+thread-3,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-04 00:59:54/ 2023-05-10 16:55:09]';'Gem Breckerfeld';1480,1741203789268,1741203799396,0,0,10128
+thread-15,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-09-26 06:34:45/ 2023-09-30 07:32:09]';'Gem Bestwig';720,1741203791806,1741203799664,0,0,7858
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-24';'Gem Wesel',1741203792431,1741203801569,0,0,9138
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-07';'Gem Ennigerloh',1741203797675,1741203802055,0,0,4380
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-14';'Gem Rheine',1741203797659,1741203802217,0,0,4558
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-29';'Gem Luenen',1741203792964,1741203803392,0,0,10428
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-03';'Gem Bochum',1741203792429,1741203804345,0,0,11916
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-17';'Gem Steinhagen',1741203799396,1741203804710,0,0,5314
+thread-0,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-10-21 18:49:39/ 2023-11-02 04:39:24]';'Gem ?ach-Palenberg';1370,1741203789670,1741203805116,0,0,15446
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-12';'Gem Monschau',1741203802217,1741203805739,0,0,3522
+thread-1,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-07-29 02:07:37/ 2023-08-11 21:42:59]';'Gem Steinhagen';660,1741203784328,1741203805919,0,0,21591
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-10';'Gem Waltrop',1741203796117,1741203807552,0,0,11435
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-09';'Gem Bueren',1741203798029,1741203807670,0,0,9641
+thread-8,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-05-16 04:14:48/ 2023-05-24 14:47:58]';'Gem Bedburg';1280,1741203785695,1741203807740,0,0,22045
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-19';'Gem Kalletal',1741203805116,1741203808448,0,0,3332
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-14';'Gem Duelmen',1741203801569,1741203808595,0,0,7026
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-29';'Gem Lippstadt',1741203799664,1741203808756,0,0,9092
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-17';'Gem Warburg',1741203802055,1741203809786,0,0,7731
+thread-2,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-06-12 08:35:53/ 2023-06-19 09:28:23]';'Gem Mettmann';790,1741203787467,1741203810638,0,0,23171
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-24';'Gem Gummersbach',1741203794066,1741203811035,0,0,16969
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-03';'Gem Noervenich',1741203808448,1741203811476,0,0,3028
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-19';'Gem Lemgo',1741203804710,1741203811610,0,0,6900
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-24';'Gem Tecklenburg',1741203805739,1741203811984,0,0,6245
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-15';'Gem Hilden',1741203807740,1741203812911,0,0,5171
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-22';'Gem Huellhorst',1741203810638,1741203812965,0,0,2327
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-19';'Gem Balve',1741203804345,1741203813483,0,0,9138
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-02';'Gem Selfkant',1741203811984,1741203813650,0,0,1666
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-06';'Gem Uedem',1741203808756,1741203813829,0,0,5073
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-03';'Gem Hiddenhausen',1741203813650,1741203815989,0,0,2339
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-07';'Gem Dorsten',1741203795952,1741203816026,0,0,20074
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-18';'Gem Marl',1741203803392,1741203817121,0,0,13729
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-01';'Gem Wachtendonk',1741203811476,1741203819585,0,0,8109
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-22';'Gem Werne',1741203809786,1741203820006,0,0,10220
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-26';'Gem Bad Lippspringe',1741203813829,1741203820221,0,0,6392
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-12';'Gem Schalksmuehle',1741203807670,1741203820299,0,0,12629
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-14';'Gem Luebbecke',1741203820007,1741203821279,0,0,1272
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-03';'Gem Herten',1741203811035,1741203822129,0,0,11094
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-22';'Gem Gummersbach',1741203805920,1741203822498,0,0,16578
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-24';'Gem Selfkant',1741203820299,1741203822655,0,0,2356
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-28';'Gem Beckum',1741203807552,1741203822971,0,0,15419
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-09';'Gem Vettwei?',1741203817121,1741203823560,0,0,6439
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-31';'Gem Burbach',1741203822129,1741203823591,0,0,1462
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-08';'Gem Bedburg-Hau',1741203819585,1741203823889,0,0,4304
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-12-05';'Gem Essen',1741203812911,1741203824271,0,0,11360
+thread-10,flightDurationInMunicipalityLowAltitudeInPeriod,spatiotemporal,tstzspan'[2023-08-12 17:30:57/ 2023-08-25 22:14:20]';'Gem Reken';560,1741203788092,1741203824534,0,0,36442
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-31';'Gem Erwitte',1741203812965,1741203824679,0,0,11714
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-02';'Gem Tecklenburg',1741203820221,1741203825970,0,0,5749
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-23';'Gem Reichshof',1741203815989,1741203826164,0,0,10175
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-27';'Gem Bochum',1741203808595,1741203826295,0,0,17700
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-15';'Gem Meschede',1741203811610,1741203827406,0,0,15796
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-07';'Gem Reichshof',1741203823560,1741203827417,0,0,3857
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-14';'Gem Sankt Augustin',1741203821279,1741203827614,0,0,6335
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-25';'Gem Dormagen',1741203816026,1741203827980,0,0,11954
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-17';'Gem Beelen',1741203822498,1741203828405,0,0,5907
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-27';'Gem Leopoldshoehe',1741203823889,1741203829092,0,0,5203
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-14';'Gem Hoexter',1741203822971,1741203829564,0,0,6593
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-21';'Gem Siegburg',1741203822655,1741203829888,0,0,7233
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-09';'Gem Hoevelhof',1741203827417,1741203829945,0,0,2528
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-25';'Gem Haan',1741203813483,1741203830502,0,0,17019
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-23';'Gem Bedburg-Hau',1741203826164,1741203831164,0,0,5000
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-29';'Gem Bocholt',1741203826295,1741203831720,0,0,5425
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-29';'Gem Ratingen',1741203829092,1741203834210,0,0,5118
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-09';'Gem Wachtberg',1741203831720,1741203834325,0,0,2605
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-03';'Gem Schieder-Schwalenberg',1741203829564,1741203834612,0,0,5048
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-27';'Gem Eschweiler',1741203824271,1741203835237,0,0,10966
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-21';'Gem Gladbeck',1741203823591,1741203836053,0,0,12462
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-22';'Gem Herzebrock-Clarholz',1741203827614,1741203836172,0,0,8558
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-28';'Gem Schlangen',1741203830502,1741203836750,0,0,6248
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-12-15';'Gem Rheinberg',1741203831164,1741203837375,0,0,6211
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-13';'Gem Wuelfrath',1741203829888,1741203838800,0,0,8912
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-01';'Gem Barntrup',1741203834325,1741203839030,0,0,4705
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-12';'Gem Erftstadt',1741203824679,1741203839371,0,0,14692
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-08';'Gem Zuelpich',1741203827980,1741203840150,0,0,12170
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-26';'Gem Wesel',1741203828405,1741203840594,0,0,12189
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-13';'Gem Beelen',1741203836053,1741203840614,0,0,4561
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-28';'Gem Dinslaken',1741203834210,1741203842274,0,0,8064
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-06';'Gem Eslohe (Sauerland)',1741203827406,1741203842557,0,0,15151
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-25';'Gem Bornheim',1741203839030,1741203842733,0,0,3703
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-28';'Gem Luegde',1741203837375,1741203844278,0,0,6903
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-01-18';'Gem Schieder-Schwalenberg',1741203839371,1741203844330,0,0,4959
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-31';'Gem Huerth',1741203834612,1741203844894,0,0,10282
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-08';'Gem Olfen',1741203835237,1741203845040,0,0,9803
+thread-10,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-22';'Gem Wipperfuerth',1741203824534,1741203846191,0,0,21657
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-11-07';'Gem Wuppertal',1741203825970,1741203846509,0,0,20539
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-22';'Gem Heinsberg',1741203838800,1741203846835,0,0,8035
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-10-07';'Gem Havixbeck',1741203840614,1741203847248,0,0,6634
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-12-10';'Gem Kierspe',1741203840594,1741203848464,0,0,7870
+thread-10,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-29';'Gem Hiddenhausen',1741203846191,1741203849541,0,0,3350
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-27';'Gem Luedinghausen',1741203840150,1741203850507,0,0,10357
+thread-15,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-08';'Gem Swisttal',1741203846509,1741203853368,0,0,6859
+thread-14,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-02-03';'Gem Frechen',1741203846835,1741203853625,0,0,6790
+thread-9,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-24';'Gem Wipperfuerth',1741203829945,1741203854588,0,0,24643
+thread-2,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-04';'Gem Delbrueck',1741203844330,1741203854783,0,0,10453
+thread-4,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-05-03';'Gem Nideggen',1741203847248,1741203854963,0,0,7715
+thread-7,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-11';'Gem Bottrop',1741203836750,1741203855082,0,0,18332
+thread-11,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-03-17';'Gem Velen',1741203844894,1741203855583,0,0,10689
+thread-13,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-06-24';'Gem Halle (Westf.)',1741203850507,1741203855692,0,0,5185
+thread-8,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-08-06';'Gem Odenthal',1741203845040,1741203856404,0,0,11364
+thread-6,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-07-22';'Gem Remscheid',1741203842733,1741203856545,0,0,13812
+thread-10,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-13';'Gem Rheinberg',1741203849541,1741203858903,0,0,9362
+thread-3,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-24';'Gem Solingen',1741203842557,1741203859222,0,0,16665
+thread-5,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-29';'Gem Hueckeswagen',1741203844278,1741203859592,0,0,15314
+thread-1,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-28';'Gem Olpe',1741203848464,1741203859827,0,0,11363
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-12 09:57:31/ 2023-11-12 18:31:45]';'Krs Bottrop',1741203854588,1741203860917,0,0,6329
+thread-0,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-04-10';'Gem Hagen',1741203842274,1741203863259,0,0,20985
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-21 22:43:22/ 2023-01-23 02:26:47]';'Krs Hagen',1741203860917,1741203863946,0,0,3029
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-09 16:43:52/ 2023-10-09 21:40:38]';'Krs Duisburg',1741203859827,1741203865474,0,0,5647
+thread-12,averageHourlyFlightsDuringDayInMunicipality,spatiotemporal,'2023-09-04';'Gem Dortmund',1741203836172,1741203869792,0,0,33620
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-12 02:08:31/ 2023-12-13 18:19:55]';'Krs Remscheid',1741203855583,1741203870758,0,0,15175
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-06 18:50:05/ 2023-12-07 03:23:22]';'Krs Rheinisch-Bergischer Kreis',1741203863946,1741203872233,0,0,8287
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-24 12:51:10/ 2023-01-24 17:29:03]';'Krs Krefeld',1741203872233,1741203873551,0,0,1318
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-22 07:58:19/ 2023-07-22 15:24:15]';'Krs Staedteregion Aachen',1741203858903,1741203874545,0,0,15642
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-21 15:15:18/ 2023-04-23 12:48:07]';'Krs Bielefeld',1741203859592,1741203875730,0,0,16138
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-09 19:24:31/ 2023-01-10 15:40:56]';'Krs Hoexter',1741203873551,1741203876292,0,0,2741
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-13 07:55:30/ 2023-04-14 04:26:06]';'Krs Essen',1741203865474,1741203881690,0,0,16216
+thread-14,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-06 22:36:22/ 2023-06-08 16:35:49]';'Krs Solingen',1741203853625,1741203888318,0,0,34693
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-12 20:29:23/ 2023-09-14 11:33:50]';'Krs Hamm',1741203856404,1741203888924,0,0,32520
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-20 05:52:43/ 2023-09-21 15:19:00]';'Krs Essen',1741203853368,1741203889075,0,0,35707
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-14 21:02:45/ 2023-10-14 21:47:23]';'Krs Siegen-Wittgenstein',1741203888924,1741203889259,0,0,335
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-21 06:21:17/ 2023-11-22 15:13:12]';'Krs Muelheim a.d. Ruhr',1741203881690,1741203893965,0,0,12275
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-19 18:57:34/ 2023-11-20 04:18:11]';'Krs Kleve',1741203889075,1741203895468,0,0,6393
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-27 04:23:57/ 2023-01-27 08:21:55]';'Krs Bielefeld',1741203895468,1741203895587,0,0,119
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-08 13:01:30/ 2023-09-09 10:55:06]';'Krs Herne',1741203889259,1741203898254,0,0,8995
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-04 17:31:16/ 2023-04-05 23:53:08]';'Krs Warendorf',1741203856545,1741203900763,0,0,44218
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-10 09:20:49/ 2023-09-11 03:31:28]';'Krs Coesfeld',1741203874546,1741203901091,0,0,26545
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-02-02 07:31:04/ 2023-02-02 17:30:03]';'Krs Herne',1741203898254,1741203902144,0,0,3890
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-02 02:52:31/ 2023-01-02 04:47:56]';'Krs Viersen',1741203902144,1741203902149,0,0,5
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-22 10:00:25/ 2023-12-23 12:54:09]';'Krs Remscheid',1741203895587,1741203906685,0,0,11098
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-16 00:52:10/ 2023-04-16 22:10:15]';'Krs Borken',1741203875730,1741203908812,0,0,33082
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-17 13:50:30/ 2023-03-18 21:20:54]';'Krs Ennepe-Ruhr-Kreis',1741203854783,1741203909186,0,0,54403
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-07 21:32:39/ 2023-10-08 00:19:40]';'Krs Herne',1741203909186,1741203909587,0,0,401
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-15 08:00:02/ 2023-04-15 08:53:15]';'Krs Moenchengladbach',1741203908812,1741203909823,0,0,1011
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-30 07:46:16/ 2023-07-01 11:23:36]';'Krs Rheinisch-Bergischer Kreis',1741203855082,1741203916191,0,0,61109
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-07 14:20:45/ 2023-11-09 08:29:29]';'Krs Soest',1741203870758,1741203916254,0,0,45496
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-18 18:01:11/ 2023-05-19 11:36:30]';'Krs Mettmann',1741203900763,1741203919110,0,0,18347
+thread-14,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-14 15:04:18/ 2023-10-15 13:51:55]';'Krs Warendorf',1741203888318,1741203919184,0,0,30866
+thread-4,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-08 05:22:27/ 2023-05-09 19:57:21]';'Krs Euskirchen',1741203854963,1741203919815,0,0,64852
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-15 15:48:29/ 2023-01-16 17:37:14]';'Krs Herford',1741203916191,1741203919875,0,0,3684
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-26 11:40:28/ 2023-03-26 15:30:15]';'Krs Ennepe-Ruhr-Kreis',1741203909823,1741203920092,0,0,10269
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-16 07:52:25/ 2023-01-16 11:25:17]';'Krs Leverkusen',1741203920092,1741203920110,0,0,18
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-12 04:36:31/ 2023-06-12 22:05:10]';'Krs Olpe',1741203893965,1741203921054,0,0,27089
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-04 05:52:11/ 2023-05-05 14:31:01]';'Krs Bochum',1741203901091,1741203925219,0,0,24128
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-19 13:50:01/ 2023-11-21 08:53:30]';'Krs Ennepe-Ruhr-Kreis',1741203855692,1741203925908,0,0,70216
+thread-0,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-26 10:12:46/ 2023-09-28 03:53:50]';'Krs Euskirchen',1741203863259,1741203926139,0,0,62880
+thread-3,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-22 17:03:15/ 2023-09-24 16:12:31]';'Krs Staedteregion Aachen',1741203859222,1741203931269,0,0,72047
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-06 02:36:18/ 2023-05-07 11:24:42]';'Krs Unna',1741203869792,1741203931747,0,0,61955
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-02-18 13:58:51/ 2023-02-19 04:31:18]';'Krs Hamm',1741203925908,1741203932439,0,0,6531
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-12 20:39:18/ 2023-03-13 02:43:00]';'Krs Maerkischer Kreis',1741203931747,1741203934930,0,0,3183
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-03 03:16:11/ 2023-10-04 22:07:26]';'Krs Kleve',1741203876292,1741203935309,0,0,59017
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-08 12:26:45/ 2023-11-10 11:04:24]';'Krs Bochum',1741203909587,1741203935605,0,0,26018
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-31 21:37:24/ 2023-06-01 11:47:56]';'Krs Coesfeld',1741203919110,1741203939754,0,0,20644
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-02-22 01:45:06/ 2023-02-22 12:30:59]';'Krs Moenchengladbach',1741203935605,1741203941862,0,0,6257
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-07 18:25:50/ 2023-03-08 01:29:56]';'Krs Steinfurt',1741203939754,1741203943637,0,0,3883
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-13 12:08:00/ 2023-09-14 16:16:29]';'Krs Solingen',1741203920110,1741203944532,0,0,24422
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-01 04:06:39/ 2023-05-02 16:54:31]';'Krs Gelsenkirchen',1741203916254,1741203946879,0,0,30625
+thread-14,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-01 20:08:11/ 2023-11-03 10:08:43]';'Krs Siegen-Wittgenstein',1741203919184,1741203947724,0,0,28540
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-02-18 19:28:50/ 2023-02-20 15:13:45]';'Krs Leverkusen',1741203932439,1741203952101,0,0,19662
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-14 01:13:53/ 2023-01-15 23:23:01]';'Krs Steinfurt',1741203934930,1741203956188,0,0,21258
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-23 12:44:54/ 2023-04-25 00:09:32]';'Krs Herne',1741203944532,1741203957908,0,0,13376
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-05 07:43:59/ 2023-06-06 13:07:08]';'Krs Hagen',1741203921054,1741203961051,0,0,39997
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-06 04:58:27/ 2023-08-07 17:20:47]';'Krs Guetersloh',1741203919875,1741203961320,0,0,41445
+thread-4,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-01 02:12:36/ 2023-04-02 17:56:36]';'Krs Heinsberg',1741203919815,1741203962588,0,0,42773
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-09 05:05:50/ 2023-06-10 23:32:41]';'Krs Dortmund',1741203906685,1741203963538,0,0,56853
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-29 02:56:57/ 2023-06-30 00:11:30]';'Krs Wuppertal',1741203935309,1741203963896,0,0,28587
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-07 21:55:49/ 2023-01-07 22:48:03]';'Krs Maerkischer Kreis',1741203963538,1741203963948,0,0,410
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-22 09:08:03/ 2023-11-23 10:49:34]';'Krs Herford',1741203957908,1741203967108,0,0,9200
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-27 16:25:15/ 2023-04-28 19:45:24]';'Krs Remscheid',1741203961320,1741203968310,0,0,6990
+thread-14,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-16 01:22:49/ 2023-10-17 10:32:30]';'Krs Bottrop',1741203947724,1741203971474,0,0,23750
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-26 05:37:18/ 2023-10-28 04:01:21]';'Krs Heinsberg',1741203925219,1741203972562,0,0,47343
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-15 17:01:52/ 2023-06-15 19:31:39]';'Krs Duesseldorf',1741203968310,1741203973794,0,0,5484
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-01 10:28:23/ 2023-04-02 05:39:00]';'Krs Duisburg',1741203963896,1741203977556,0,0,13660
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-05 00:51:09/ 2023-11-05 02:27:36]';'Krs Paderborn',1741203977556,1741203977847,0,0,291
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-18 08:38:15/ 2023-11-19 15:31:42]';'Krs Mettmann',1741203943637,1741203979621,0,0,35984
+thread-0,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-06 04:08:42/ 2023-10-06 16:04:50]';'Krs Rhein-Sieg-Kreis',1741203926139,1741203980574,0,0,54435
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-13 01:49:24/ 2023-09-14 15:28:54]';'Krs Krefeld',1741203961051,1741203983962,0,0,22911
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-26 19:47:01/ 2023-05-28 18:39:23]';'Krs Recklinghausen',1741203902149,1741203984088,0,0,81939
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-01 16:56:24/ 2023-01-02 12:18:18]';'Krs Solingen',1741203984089,1741203984111,0,0,22
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-01-13 02:07:02/ 2023-01-14 14:29:23]';'Krs Paderborn',1741203963948,1741203984192,0,0,20244
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-16 05:24:12/ 2023-11-16 15:27:10]';'Krs Olpe',1741203973794,1741203985778,0,0,11984
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-02-28 12:33:21/ 2023-03-02 02:20:32]';'Krs Minden-Luebbecke',1741203977847,1741203989916,0,0,12069
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-06 12:58:31/ 2023-03-07 05:50:49]';'Krs Bottrop',1741203984111,1741203991526,0,0,7415
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-21 11:14:20/ 2023-04-22 08:08:15]';'Krs Rhein-Erft-Kreis',1741203956188,1741203991628,0,0,35440
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-28 04:40:53/ 2023-08-28 08:55:11]';'Krs Krefeld',1741203989916,1741203993274,0,0,3358
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-09 19:49:42/ 2023-06-11 18:53:31]';'Krs Krefeld',1741203967108,1741203996694,0,0,29586
+thread-0,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-24 16:57:53/ 2023-12-25 17:10:31]';'Krs Coesfeld',1741203980574,1741203999045,0,0,18471
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-24 00:02:36/ 2023-09-24 23:58:45]';'Krs Rheinisch-Bergischer Kreis',1741203952101,1741204002111,0,0,50010
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-24 21:21:17/ 2023-11-25 18:20:42]';'Krs Siegen-Wittgenstein',1741203991526,1741204002317,0,0,10791
+thread-3,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-03-08 13:00:11/ 2023-03-10 08:59:32]';'Krs Maerkischer Kreis',1741203931269,1741204002851,0,0,71582
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-11-13 15:21:38/ 2023-11-13 16:34:19]';'Krs Oberhausen',1741204002317,1741204003250,0,0,933
+thread-2,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-24 18:12:30/ 2023-08-25 22:19:05]';'Krs Ennepe-Ruhr-Kreis',1741203941862,1741204004934,0,0,63072
+thread-6,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-02 20:23:06/ 2023-04-04 05:26:09]';'Krs Duisburg',1741203979621,1741204006400,0,0,26779
+thread-7,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-27 06:29:25/ 2023-08-28 04:05:21]';'Krs Paderborn',1741203985778,1741204009368,0,0,23590
+thread-3,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-03 08:36:43/ 2023-07-03 22:33:11]';'Krs Herford',1741204002851,1741204010865,0,0,8014
+thread-5,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-02 06:07:52/ 2023-12-04 05:25:00]';'Krs Hoexter',1741203996694,1741204013281,0,0,16587
+thread-0,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-04 05:27:42/ 2023-05-05 14:06:47]';'Krs Oberhausen',1741203999045,1741204014505,0,0,15460
+thread-14,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-05-22 12:38:51/ 2023-05-23 10:31:24]';'Krs Ennepe-Ruhr-Kreis',1741203971474,1741204014672,0,0,43198
+thread-11,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-09-13 12:26:28/ 2023-09-15 06:36:29]';'Krs Recklinghausen',1741203946879,1741204018192,0,0,71313
+thread-4,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-08-21 07:26:05/ 2023-08-22 12:17:04]';'Krs Rhein-Erft-Kreis',1741203962588,1741204019283,0,0,56695
+thread-15,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-10-12 20:24:09/ 2023-10-13 20:25:17]';'Krs Recklinghausen',1741203984192,1741204021486,0,0,37294
+thread-12,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-07-14 02:41:18/ 2023-07-14 21:35:42]';'Krs Soest',1741203991628,1741204022048,0,0,30420
+thread-13,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-06-04 08:21:52/ 2023-06-04 16:30:24]';'Krs Rhein-Sieg-Kreis',1741204002111,1741204024225,0,0,22114
+thread-1,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-12-15 18:17:36/ 2023-12-17 17:24:25]';'Krs Rheinisch-Bergischer Kreis',1741203983962,1741204024886,0,0,40924
+thread-8,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-03 01:12:32/ 2023-04-04 23:24:30]';'Krs Viersen',1741204003250,1741204031481,0,0,28231
+thread-9,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-15 06:13:32/ 2023-04-17 00:18:06]';'Krs Recklinghausen',1741203993274,1741204032619,0,0,39345
+thread-10,flightsWithLocalOriginDestinationInPeriodInCounty,spatiotemporal,tstzspan'[2023-04-06 08:25:13/ 2023-04-08 02:36:44]';'Krs Oberbergischer Kreis',1741203972562,1741204034559,0,0,61997

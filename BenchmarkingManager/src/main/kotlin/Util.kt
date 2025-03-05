@@ -11,7 +11,7 @@ fun splitFlightPointDatasetByFlightId(){
     for (i in 1..< 11) {
         try {
             val lineNumber = (ceil(totalLines.toDouble() / 10 * i)).toInt()
-            // Open the file and retrieve the specific line
+
             val line = File(filePath).useLines { lines ->
                 lines.drop(lineNumber - 1).firstOrNull() // Drop lines until the target and get the first remaining
             }
@@ -34,7 +34,7 @@ fun splitFlightPointDatasetByFlightId(){
 
     println()
     val lastLine = File(filePath).useLines { lines ->
-        lines.lastOrNull() // Retrieves the last line, or null if the file is empty
+        lines.lastOrNull()
     }
 
     println("last line: $lastLine")

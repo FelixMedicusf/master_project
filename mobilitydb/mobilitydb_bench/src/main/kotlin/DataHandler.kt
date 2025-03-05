@@ -348,7 +348,7 @@ class DFSDataHandler(databaseName: String) {
                 ), 
                 tgeogpointseq(
                     array_agg(tgeogpoint(Geom, timestamp) ORDER BY timestamp)
-                    FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'step'
+                    FILTER (WHERE pointtype = 'o' AND track IS NOT NULL), 'linear'
                 )
             FROM interpolatedflightpoints WHERE flightid >= 736845861
             GROUP BY flightId, track, airplaneType, origin, destination;
@@ -559,7 +559,7 @@ class DFSDataHandler(databaseName: String) {
 
     fun createIndexes(){
 
-        createFlightPointsIndex()
+        //createFlightPointsIndex()
         createFlightTripsIndex()
         createStaticTablesIndexes()
         println("Finished index creation.")
@@ -654,12 +654,12 @@ class DFSDataHandler(databaseName: String) {
 
 fun main() {
     val handler = DFSDataHandler("aviation_data")
-    handler.processStaticData()
-    handler.insertFlightPoints()
-    handler.interpolateFlightPoints()
+//    handler.processStaticData()
+//    handler.insertFlightPoints()
+//    handler.interpolateFlightPoints()
 //    handler.createGeographies()
 //    handler.createFlightTrips()
 //    handler.createTrajectoryColumn()
-//    handler.createIndexes()
+    handler.createIndexes()
 
 }
